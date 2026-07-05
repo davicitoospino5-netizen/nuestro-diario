@@ -3,383 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tus Poemas</title>
+    <title>Nuestro Diario</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e2d5a">
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
-            background-color: #f4efe6;
-            color: #1e2d5a;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            overflow-y: auto !important;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .notebook-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image: linear-gradient(#e6decb 1px, transparent 1px);
-            background-size: 100% 28px;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.4;
-        }
-
-        /* BOTÓN FLOTANTE: Pétalo cayendo */
-        .menu-btn {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            width: 44px;
-            height: 54px;
-            z-index: 100;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
-            outline: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .menu-btn.active {
-            transform: translateY(6px) rotate(25px) scale(0.95);
-        }
-
-        /* PANEL LATERAL (SIDEBAR) */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -280px;
-            width: 280px;
-            height: 100vh;
-            background-color: #f4efe6;
-            box-shadow: -5px 0 25px rgba(30, 45, 90, 0.08);
-            border-left: 1px solid rgba(30, 45, 90, 0.15);
-            z-index: 90;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 90px 24px 40px 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar.open {
-            right: 0;
-        }
-
-        .sidebar-title {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(30, 45, 90, 0.5);
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(30, 45, 90, 0.1);
-            padding-bottom: 8px;
-            margin-top: 15px;
-        }
-
-        .menu-options {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .menu-item {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 12px 0;
-            color: rgba(30, 45, 90, 0.7);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid rgba(30, 45, 90, 0.04);
-        }
-
-        .menu-item:hover, .menu-item.active {
-            color: #1e2d5a;
-            font-weight: 600;
-            padding-left: 6px;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(30, 45, 90, 0.05);
-            z-index: 80;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* CONTENEDOR PRINCIPAL Y VISTAS */
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 60px 24px 60px 24px;
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .view-section {
-            display: none;
-            width: 100%;
-        }
-
-        .view-section.active-view {
-            display: block;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            width: 100%;
-        }
-
-        .logo-container {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 12px auto;
-        }
-
-        .app-title {
-            font-size: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #1e2d5a;
-            margin: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            opacity: 0.8;
-        }
-
-        .section-heading {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 0 0 25px 0;
-            text-align: left;
-            border-bottom: 1px dashed rgba(30, 45, 90, 0.2);
-            padding-bottom: 10px;
-        }
-
-        /* LÍNEA DE TIEMPO POEMAS */
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; background-color: #f4efe6; color: #1e2d5a; font-family: 'Georgia', serif; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
+        .notebook-lines { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(#e6decb 1px, transparent 1px); background-size: 100% 28px; pointer-events: none; z-index: 1; opacity: 0.4; }
+        .menu-btn { position: fixed; top: 24px; right: 24px; width: 44px; height: 54px; z-index: 100; cursor: pointer; background: none; border: none; padding: 0; outline: none; display: flex; flex-direction: column; align-items: center; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .menu-btn.active { transform: translateY(6px) rotate(25px) scale(0.95); }
+        .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; background-color: #f4efe6; box-shadow: -5px 0 25px rgba(30, 45, 90, 0.08); border-left: 1px solid rgba(30, 45, 90, 0.15); z-index: 90; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 90px 24px 40px 24px; display: flex; flex-direction: column; }
+        .sidebar.open { right: 0; }
+        .sidebar-title { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(30, 45, 90, 0.5); margin-bottom: 20px; border-bottom: 1px solid rgba(30, 45, 90, 0.1); padding-bottom: 8px; margin-top: 15px; }
+        .menu-options { list-style: none; padding: 0; margin: 0; }
+        .menu-item { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 0; color: rgba(30, 45, 90, 0.7); cursor: pointer; transition: all 0.2s ease; border-bottom: 1px solid rgba(30, 45, 90, 0.04); }
+        .menu-item:hover, .menu-item.active { color: #1e2d5a; font-weight: 600; padding-left: 6px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(30, 45, 90, 0.05); z-index: 80; opacity: 0; visibility: hidden; transition: all 0.4s ease; }
+        .overlay.show { opacity: 1; visibility: visible; }
+        .app-container { width: 100%; max-width: 480px; margin: 0 auto; padding: 60px 24px; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+        .view-section { display: none; width: 100%; }
+        .view-section.active-view { display: block; }
+        header { text-align: center; margin-bottom: 40px; width: 100%; }
+        .logo-container { width: 70px; height: 70px; margin: 0 auto 12px auto; }
+        .app-title {  font-size: 0.8rem; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; color: #1e2d5a; margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; opacity: 0.8; }
+        .section-heading { font-size: 1.4rem; font-weight: 600; margin: 0 0 25px 0; text-align: left; border-bottom: 1px dashed rgba(30, 45, 90, 0.2); padding-bottom: 10px; }
         .timeline { position: relative; width: 100%; }
-        .timeline::before {
-            content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 1px; background-color: rgba(30, 45, 90, 0.25);
-        }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 1px; background-color: rgba(30, 45, 90, 0.25); }
         .poem-card { position: relative; padding-left: 50px; margin-bottom: 45px; }
-        .timeline-node {
-            position: absolute; left: 11px; top: 2px; width: 18px; height: 18px; background-color: #f4efe6; z-index: 3; display: flex; align-items: center; justify-content: center;
-        }
+        .timeline-node { position: absolute; left: 11px; top: 2px; width: 18px; height: 18px; background-color: #f4efe6; z-index: 3; display: flex; align-items: center; justify-content: center; }
         .poem-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(30, 45, 90, 0.6); margin-bottom: 6px; }
         .poem-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 12px 0; }
         .poem-text { font-size: 1.05rem; line-height: 1.8; white-space: pre-line; margin: 0; font-style: italic; }
-
-        /* SECCIÓN 1: WIDGETS */
-        .widget-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            width: 100%;
-        }
-        .widget-card {
-            background-color: rgba(230, 222, 203, 0.25);
-            border: 1px solid rgba(30, 45, 90, 0.15);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-        .widget-card h3 {
-            margin: 0 0 10px 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(30, 45, 90, 0.6);
-        }
-        .counter-number {
-            font-size: 2.2rem;
-            font-weight: 600;
-            margin: 5px 0;
-        }
-
-        /* SECCIÓN 2: EL RINCÓN DE FER (NOTAS Y CARTAS) */
-        #view-notas .text-box {
-            background-color: rgba(230, 222, 203, 0.3);
-            border: 1px dashed rgba(138, 109, 81, 0.4);
-            color: #5c4a37;
-        }
-        #view-notas .text-box:focus {
-            border-color: #8a6d51;
-            background-color: rgba(230, 222, 203, 0.5);
-        }
-        .note-input-area {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .text-box {
-            width: 100%;
-            padding: 12px;
-            font-family: 'Georgia', serif;
-            font-size: 1rem;
-            background-color: rgba(230, 222, 203, 0.15);
-            border: 1px solid rgba(30, 45, 90, 0.15);
-            border-radius: 8px;
-            color: #1e2d5a;
-            outline: none;
-            resize: none;
-        }
-        .btn-premium {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background-color: #1e2d5a;
-            color: #f4efe6;
-            border: none;
-            padding: 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
+        .widget-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; }
+        .widget-card { background-color: rgba(230, 222, 203, 0.25); border: 1px solid rgba(30, 45, 90, 0.15); border-radius: 12px; padding: 20px; text-align: center; }
+        .widget-card h3 { margin: 0 0 10px 0; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(30, 45, 90, 0.6); }
+        .counter-number { font-size: 2.2rem; font-weight: 600; margin: 5px 0; }
+        #view-notas .text-box { background-color: rgba(230, 222, 203, 0.3); border: 1px dashed rgba(138, 109, 81, 0.4); color: #5c4a37; }
+        #view-notas .text-box:focus { border-color: #8a6d51; background-color: rgba(230, 222, 203, 0.5); }
+        .note-input-area { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .text-box { width: 100%; padding: 12px; font-family: 'Georgia', serif; font-size: 1rem; background-color: rgba(230, 222, 203, 0.15); border: 1px solid rgba(30, 45, 90, 0.15); border-radius: 8px; color: #1e2d5a; outline: none; resize: none; }
+        .btn-premium { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; background-color: #1e2d5a; color: #f4efe6; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: opacity 0.2s; width: 100%; }
         .btn-premium:hover { opacity: 0.9; }
-        
-        .notes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .fer-letter-card {
-            background-color: #fdfbf7;
-            border: 1px solid rgba(138, 109, 81, 0.2);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(138, 109, 81, 0.05);
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .fer-letter-card::before {
-            content: '🍂';
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 0.9rem;
-            opacity: 0.5;
-        }
-        .fer-letter-title {
-            font-family: 'Georgia', serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #8a6d51;
-            margin: 0 0 8px 0;
-        }
-        .fer-letter-text {
-            font-style: italic;
-            line-height: 1.6;
-            color: #5c4a37;
-            white-space: pre-line;
-            margin: 0 0 12px 0;
-        }
-        .fer-letter-date {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(138, 109, 81, 0.6);
-        }
-
-        /* SECCIÓN 3: DIBUJO ARTE */
-        .canvas-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        #drawing-canvas {
-            background-color: #f4efe6;
-            border: 1px solid rgba(30, 45, 90, 0.2);
-            border-radius: 12px;
-            box-shadow: inset 0 0 10px rgba(230, 222, 203, 0.5);
-            cursor: crosshair;
-            touch-action: none;
-        }
-        .canvas-controls {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-        }
-        .btn-secondary {
-            flex: 1;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background-color: transparent;
-            border: 1px solid #1e2d5a;
-            color: #1e2d5a;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            width: 100%;
-            margin-top: 30px;
-        }
-        .gallery-item {
-            width: 100%;
-            border-radius: 8px;
-            border: 1px solid rgba(30, 45, 90, 0.15);
-            overflow: hidden;
-            background-color: rgba(230, 222, 203, 0.2);
-        }
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(30, 45, 90, 0.4);
-            width: 100%;
-        }
+        .btn-secondary { width: 100%; padding: 10px; background: transparent; border: 1px solid #1e2d5a; color: #1e2d5a; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 6px; cursor: pointer; }
+        .notes-list { display: flex; flex-direction: column; gap: 16px; }
+        .fer-letter-card { background-color: #fdfbf7; border: 1px solid rgba(138, 109, 81, 0.2); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(138, 109, 81, 0.05); margin-bottom: 20px; position: relative; }
+        .fer-letter-card::before { content: '🍂'; position: absolute; top: 15px; right: 15px; font-size: 0.9rem; opacity: 0.5; }
+        .fer-letter-title { font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 600; color: #8a6d51; margin: 0 0 8px 0; }
+        .fer-letter-text { font-style: italic; line-height: 1.6; color: #5c4a37; white-space: pre-line; margin: 0 0 12px 0; }
+        .fer-letter-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(138, 109, 81, 0.6); }
+        .canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        #drawing-canvas { background-color: #f4efe6; border: 1px solid rgba(30, 45, 90, 0.2); border-radius: 12px; box-shadow: inset 0 0 10px rgba(230, 222, 203, 0.5); cursor: crosshair; touch-action: none; }
+        .canvas-controls { display: flex; gap: 10px; width: 100%; }
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; margin-top: 30px; }
+        .gallery-item { width: 100%; border-radius: 8px; border: 1px solid rgba(30, 45, 90, 0.15); overflow: hidden; background-color: rgba(230, 222, 203, 0.2); }
+        .gallery-item img { width: 100%; height: auto; display: block; }
+        footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; }
     </style>
 </head>
 <body>
@@ -438,7 +116,7 @@
                 <div class="widget-card">
                     <h3>Sintonía del Día</h3>
                     <div style="margin-top:10px;">
-                        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EJK5xHvVELuly?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EJK5xHvVELuly?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
@@ -453,6 +131,7 @@
                 <input type="text" id="note-title" class="text-box" style="font-weight: 600;" placeholder="Título de tu carta o verso...">
                 <textarea id="note-text" class="text-box" rows="5" placeholder="Escribe aquí lo que dicte tu corazón..."></textarea>
                 <button id="add-note-btn" class="btn-premium" style="background-color: #8a6d51; color: #f4efe6;">Guardar en mis susurros</button>
+                <button id="clear-notes-btn" class="btn-secondary" style="margin-top: 10px; color: #8a6d51; border-color: #8a6d51;">Borrar todos los susurros</button>
             </div>
             
             <h3 class="section-heading" style="font-size: 1.1rem; margin-top: 30px; color: #8a6d51; border-bottom: none;">Mis cartas para ti</h3>
@@ -499,13 +178,11 @@
         measurementId: "G-MP49ZYX4WT"
     };
 
-        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
         let poemasGlobales = [];
 
-        // CARGADOR DESDE ARCHIVO POEMAS.TXT
         async function inicializarPoemasYTimeline(filtro = "todos") {
             const container = document.getElementById("timeline-container");
             try {
@@ -517,14 +194,14 @@
                     
                     bloques.forEach(bloque => {
                         if (!bloque.trim()) return;
-                        const lineas = block = bloque.trim().split('\n');
+                        const lineas = bloque.trim().split('\n');
                         let titulo = "Sin título";
                         let fecha = "";
                         let cuerpoLineas = [];
                         
                         lineas.forEach(linea => {
-                            if (linea.startsWith('Título:')) {
-                                titulo = linea.replace('Título:', '').trim();
+                            if (linea.startsWith('Título:') || linea.startsWith('Titulo:')) {
+                                titulo = linea.replace(/T[ií]tulo:/, '').trim();
                             } else if (linea.startsWith('Fecha:')) {
                                 fecha = linea.replace('Fecha:', '').trim();
                             } else {
@@ -576,11 +253,10 @@
             }
         }
 
-        // CONTROLADORES Y MENÚS
         document.addEventListener("DOMContentLoaded", () => {
             inicializarPoemasYTimeline();
-            escucharNotasTiempoReal();   // Firebase: Oído en Notas
-            escucharGaleriaTiempoReal(); // Firebase: Oído en Arte/Lienzo
+            escucharNotasTiempoReal();   
+            escucharGaleriaTiempoReal(); 
 
             const menuToggle = document.getElementById("menu-toggle");
             const sidebarMenu = document.getElementById("sidebar-menu");
@@ -632,8 +308,8 @@
             const diasJuntos = Math.floor((new Date() - fechaInicio) / (1000 * 60 * 60 * 24));
             document.getElementById("love-counter").innerText = diasJuntos;
 
-            // 1. TIEMPO REAL: EL RINCÓN DE FER
             const addNoteBtn = document.getElementById("add-note-btn");
+            const clearNotesBtn = document.getElementById("clear-notes-btn");
             const noteTitle = document.getElementById("note-title");
             const noteText = document.getElementById("note-text");
 
@@ -650,6 +326,13 @@
                     });
                     noteTitle.value = "";
                     noteText.value = "";
+                }
+            });
+
+            clearNotesBtn.addEventListener("click", () => {
+                if (confirm("¿Seguro que quieres borrar todos los susurros? Esta acción no se puede deshacer.")) {
+                    database.ref('cartas_fer').remove()
+                        .catch(error => console.error("Error al borrar: ", error));
                 }
             });
 
@@ -680,7 +363,6 @@
                 });
             }
 
-            // 2. TIEMPO REAL: LIENZO DE DIBUJO E ARTE
             const canvas = document.getElementById("drawing-canvas");
             const ctx = canvas.getContext("2d");
             let dibujando = false;
@@ -704,6 +386,7 @@
                 ctx.moveTo(coords.x, coords.y);
             }
 
+            // Soporte multi-touch e interactivo completo
             function dibujar(e) {
                 if (!dibujando) return;
                 e.preventDefault();
