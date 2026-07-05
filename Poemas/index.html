@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tus Poemas</title>
+    <meta name="theme-color" content="#1e2d5a">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #f4efe6;
+            color: #1e2d5a;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .notebook-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(#e6decb 1px, transparent 1px);
+            background-size: 100% 28px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* BOTÓN FLOTANTE: Pétalo cayendo */
+        .menu-btn {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            width: 44px;
+            height: 54px;
+            z-index: 100;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            outline: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .menu-btn.active {
+            transform: translateY(6px) rotate(25px) scale(0.95);
+        }
+
+        /* PANEL LATERAL (SIDEBAR) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100vh;
+            background-color: #f4efe6;
+            box-shadow: -5px 0 25px rgba(30, 45, 90, 0.08);
+            border-left: 1px solid rgba(30, 45, 90, 0.15);
+            z-index: 90;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 90px 24px 40px 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-title {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(30, 45, 90, 0.5);
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(30, 45, 90, 0.1);
+            padding-bottom: 8px;
+            margin-top: 15px;
+        }
+
+        .menu-options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 12px 0;
+            color: rgba(30, 45, 90, 0.7);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(30, 45, 90, 0.04);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            color: #1e2d5a;
+            font-weight: 600;
+            padding-left: 6px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(30, 45, 90, 0.05);
+            z-index: 80;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* CONTENEDOR PRINCIPAL Y VISTAS */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 60px 24px 60px 24px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .view-section {
+            display: none; /* Ocultas por defecto */
+            width: 100%;
+        }
+
+        .view-section.active-view {
+            display: block; /* Solo se muestra la vista activa */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .logo-container {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 12px auto;
+        }
+
+        .app-title {
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #1e2d5a;
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            opacity: 0.8;
+        }
+
+        /* ELEMENTOS COMUNES DE LA INTERFAZ */
+        .section-heading {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0 0 25px 0;
+            text-align: left;
+            border-bottom: 1px dashed rgba(30, 45, 90, 0.2);
+            padding-bottom: 10px;
+        }
+
+        /* LÍNEA DE TIEMPO POEMAS */
+        .timeline { position: relative; width: 100%; }
+        .timeline::before {
+            content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 1px; background-color: rgba(30, 45, 90, 0.25);
+        }
+        .poem-card { position: relative; padding-left: 50px; margin-bottom: 45px; }
+        .timeline-node {
+            position: absolute; left: 11px; top: 2px; width: 18px; height: 18px; background-color: #f4efe6; z-index: 3; display: flex; align-items: center; justify-content: center;
+        }
+        .poem-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(30, 45, 90, 0.6); margin-bottom: 6px; }
+        .poem-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 12px 0; }
+        .poem-text { font-size: 1.05rem; line-height: 1.8; white-space: pre-line; margin: 0; font-style: italic; }
+
+        /* SECCIÓN 1: WIDGETS */
+        .widget-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+        .widget-card {
+            background-color: rgba(230, 222, 203, 0.25);
+            border: 1px solid rgba(30, 45, 90, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .widget-card h3 {
+            margin: 0 0 10px 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(30, 45, 90, 0.6);
+        }
+        .counter-number {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        /* SECCIÓN 2: NOTAS */
+        .note-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .text-box {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            background-color: rgba(230, 222, 203, 0.15);
+            border: 1px solid rgba(30, 45, 90, 0.15);
+            border-radius: 8px;
+            color: #1e2d5a;
+            outline: none;
+            resize: none;
+        }
+        .btn-premium {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: #1e2d5a;
+            color: #f4efe6;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-premium:hover { opacity: 0.9; }
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .note-item {
+            background-color: transparent;
+            border-left: 2px solid #1e2d5a;
+            padding: 5px 0 5px 16px;
+            text-align: left;
+        }
+        .note-item p { margin: 0 0 6px 0; font-size: 1.05rem; line-height: 1.5; }
+        .note-item span { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; opacity: 0.5; }
+
+        /* SECCIÓN 3: DIBUJO ARTE */
+        .canvas-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        #drawing-canvas {
+            background-color: #f4efe6;
+            border: 1px solid rgba(30, 45, 90, 0.2);
+            border-radius: 12px;
+            box-shadow: inset 0 0 10px rgba(230, 222, 203, 0.5);
+            cursor: crosshair;
+            touch-action: none; /* Vital para dibujo táctil en celular */
+        }
+        .canvas-controls {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .btn-secondary {
+            flex: 1;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: transparent;
+            border: 1px solid #1e2d5a;
+            color: #1e2d5a;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            width: 100%;
+            margin-top: 30px;
+        }
+        .gallery-item {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid rgba(30, 45, 90, 0.15);
+            overflow: hidden;
+            background-color: rgba(230, 222, 203, 0.2);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(30, 45, 90, 0.4);
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="notebook-lines"></div>
+    <div class="overlay" id="menu-overlay"></div>
+
+    <!-- Botón del Pétalo Cayendo -->
+    <button class="menu-btn" id="menu-toggle" aria-label="Abrir menú">
+        <svg viewBox="0 0 40 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="6" r="1" fill="#1e2d5a" opacity="0.3"/>
+            <circle cx="21" cy="11" r="1.2" fill="#1e2d5a" opacity="0.45"/>
+            <circle cx="25" cy="17" r="1.5" fill="#1e2d5a" opacity="0.6"/>
+            <path d="M 25,18 C 22,24 14,26 12,32 C 10,38 13,44 20,44 C 28,44 32,38 30,30 C 29,24 27,20 25,18 Z" stroke="#1e2d5a" stroke-width="1.2" fill="none"/>
+            <path d="M 23,24 C 20,29 18,34 20,41" stroke="#1e2d5a" stroke-width="0.8" opacity="0.4"/>
+        </svg>
+    </button>
+
+    <!-- Menú Lateral Expandido -->
+    <nav class="sidebar" id="sidebar-menu">
+        <div class="sidebar-title">Rincones</div>
+        <ul class="menu-options">
+            <li class="menu-item active" data-view="view-poemas">Poemas Diarios</li>
+            <li class="menu-item" data-view="view-widgets">Tablón de Widgets</li>
+            <li class="menu-item" data-view="view-notas">Notas y Cartas</li>
+            <li class="menu-item" data-view="view-dibujos">Lienzo e Ilustración</li>
+        </ul>
+        
+        <div class="sidebar-title" id="filter-title">Filtrar Poemas</div>
+        <ul class="menu-options" id="poem-filters">
+            <li class="menu-item poem-filter-btn active" data-filter="todos">Todos los versos</li>
+            <li class="menu-item poem-filter-btn" data-filter="este-mes">Este mes</li>
+        </ul>
+    </nav>
+
+    <div class="app-container">
+        <header>
+            <div class="logo-container">
+                <svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50,85 C50,70 48,55 46,42 C44,30 48,22 55,18 C62,15 68,18 64,26 C60,32 50,34 43,30 C36,26 38,16 48,14 C58,12 65,22 60,33 C54,42 42,44 36,36 C32,30 35,22 42,21 C48,20 52,25 49,30 C46,34 40,33 42,27" stroke="#1e2d5a" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1 class="app-title">Nuestro Diario</h1>
+        </header>
+
+        <!-- SECCIÓN DE VISTA 1: POEMAS (TIMELINE) -->
+        <section id="view-poemas" class="view-section active-view">
+            <div class="timeline" id="timeline-container"></div>
+        </section>
+
+        <!-- SECCIÓN DE VISTA 2: WIDGETS -->
+        <section id="view-widgets" class="view-section">
+            <h2 class="section-heading">Detalles</h2>
+            <div class="widget-grid">
+                <div class="widget-card">
+                    <h3>Tiempo Juntos</h3>
+                    <div class="counter-number" id="love-counter">365</div>
+                    <p style="margin:0; font-size:0.85rem; opacity:0.7;">Días compartiendo universos</p>
+                </div>
+                <div class="widget-card">
+                    <h3>Sintonía del Día</h3>
+                    <div style="margin-top:10px;">
+                        <!-- Embed de Spotify modificable -->
+                        <iframe style="border-radius:8px" src="https://open.spotify.com/embed/track/4PTG3Z6ehGkBF3zI7YgGgT?utm_source=generator&theme=0" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE VISTA 3: NOTAS -->
+        <section id="view-notas" class="view-section">
+            <h2 class="section-heading">Notas Escritas</h2>
+            <div class="note-input-area">
+                <textarea id="note-text" class="text-box" rows="3" placeholder="Escribe un pensamiento, un recado o una promesa..."></textarea>
+                <button id="add-note-btn" class="btn-premium">Dejar nota</button>
+            </div>
+            <div class="notes-list" id="notes-container">
+                <!-- Las notas se guardarán aquí -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE VISTA 4: DIBUJO E ILUSTRACIONES -->
+        <section id="view-dibujos" class="view-section">
+            <h2 class="section-heading">Trazos y Lienzo</h2>
+            <div class="canvas-container">
+                <canvas id="drawing-canvas" width="320" height="320"></canvas>
+                <div class="canvas-controls">
+                    <button id="clear-canvas" class="btn-secondary">Limpiar</button>
+                    <button id="save-canvas" class="btn-premium" style="flex:1;">Guardar trazo</button>
+                </div>
+                
+                <div style="width:100%; margin-top:15px; text-align:center;">
+                    <label for="upload-image" class="btn-secondary" style="display:block; width:100%; text-align:center;">
+                        Subir un dibujo/foto
+                    </label>
+                    <input type="file" id="upload-image" accept="image/*" style="display:none;">
+                </div>
+            </div>
+
+            <h3 class="section-heading" style="font-size:1.1rem; margin-top:40px;">Galería de Arte</h3>
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Los dibujos e imágenes se acumularán aquí -->
+            </div>
+        </section>
+
+        <footer>
+            Hecho con amor, para siempre.
+        </footer>
+    </div>
+
+    <script>
+        // BASE DE DATOS DE POEMAS
+        const misPoemas = {
+            "2026-07-05": { titulo: "La tinta de tus ojos", texto: "Escribo en el lienzo de la mañana\ncon trazos del azul que te contiene,\ntu mirada es la calma que me sana\ny el verso más tierno que me sostiene." },
+            "2026-07-04": { titulo: "Línea continua", texto: "Como un trazo eterno que no se detiene,\nmi amor por ti dibuja una silueta,\nun hilo invisible que nos mantiene\nen el dulce universo de este poeta." },
+            "2026-07-03": { titulo: "Refugio beige", texto: "El mundo afuera es un ruido lejano\nmientras grabo tu nombre en este papel,\ncaminar de cerca, tomar tu mano\nes la única paz que me queda fiel." }
+        };
+
+        // LÓGICA DE RENDERIZAR POEMAS
+        function renderizarTimeline(filtro = "todos") {
+            const container = document.getElementById("timeline-container");
+            container.innerHTML = "";
+            const fechasOrdenadas = Object.keys(misPoemas).sort().reverse();
+            const hoy = new Date();
+            const fechaHoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+            const prefijoMesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+
+            fechasOrdenadas.forEach(fecha => {
+                if (fecha <= fechaHoyStr) {
+                    let pasa = filtro === "todos" || (filtro === "este-mes" && fecha.startsWith(prefijoMesActual));
+                    if (pasa) {
+                        const info = misPoemas[fecha];
+                        const partes = fecha.split('-');
+                        const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
+                        const fechaLegible = fObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+                        const card = document.createElement("div");
+                        card.className = "poem-card";
+                        card.innerHTML = `
+                            <div class="timeline-node">
+                                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"><path d="M12,2 C9,7 4,10 4,14 C4,18 7.5,21 12,21 C16.5,21 20,18 20,14 C20,10 15,7 12,2 Z" fill="#1e2d5a"/></svg>
+                            </div>
+                            <div class="poem-date">${fechaLegible}</div>
+                            <h2 class="poem-title">${info.titulo}</h2>
+                            <p class="poem-text">${info.texto}</p>
+                        `;
+                        container.appendChild(card);
+                    }
+                }
+            });
+        }
+
+        // LÓGICA DE NAVEGACIÓN Y MENÚ LATERAL
+        document.addEventListener("DOMContentLoaded", () => {
+            renderizarTimeline();
+            cargarNotas();
+            cargarGaleria();
+
+            const menuToggle = document.getElementById("menu-toggle");
+            const sidebarMenu = document.getElementById("sidebar-menu");
+            const menuOverlay = document.getElementById("menu-overlay");
+            const menuItems = document.querySelectorAll(".menu-item[data-view]");
+            const filterItems = document.querySelectorAll(".poem-filter-btn");
+
+            function toggleMenu() {
+                menuToggle.classList.toggle("active");
+                sidebarMenu.classList.toggle("open");
+                menuOverlay.classList.toggle("show");
+            }
+
+            menuToggle.addEventListener("click", toggleMenu);
+            menuOverlay.addEventListener("click", toggleMenu);
+
+            // Cambio de secciones principales
+            menuItems.forEach(item => {
+                item.addEventListener("click", () => {
+                    menuItems.forEach(i => i.classList.remove("active"));
+                    item.classList.add("active");
+
+                    const targetView = item.getAttribute("data-view");
+                    document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active-view"));
+                    document.getElementById(targetView).classList.add("active-view");
+
+                    // Mostrar u ocultar el filtro de poemas en el menú secundario
+                    const filterTitle = document.getElementById("filter-title");
+                    const poemFilters = document.getElementById("poem-filters");
+                    if(targetView === "view-poemas") {
+                        filterTitle.style.display = "block";
+                        poemFilters.style.display = "block";
+                    } else {
+                        filterTitle.style.display = "none";
+                        poemFilters.style.display = "none";
+                    }
+                    toggleMenu();
+                });
+            });
+
+            // Filtros de poemas
+            filterItems.forEach(item => {
+                item.addEventListener("click", () => {
+                    filterItems.forEach(i => i.classList.remove("active"));
+                    item.classList.add("active");
+                    renderizarTimeline(item.getAttribute("data-filter"));
+                    toggleMenu();
+                });
+            });
+
+            // WIDGET: CONTADOR DE DÍAS CONFIGURABLE (Pon la fecha en que iniciaron en formato AAAA, MM(0-11), DD)
+            const fechaInicio = new Date(2025, 6, 5); // Ejemplo: 5 de Julio de 2025
+            const diasJuntos = Math.floor((new Date() - fechaInicio) / (1000 * 60 * 60 * 24));
+            document.getElementById("love-counter").innerText = diasJuntos;
+
+            // FUNCIONALIDAD: NOTAS DE TEXTO (Guardado local persistente)
+            const addNoteBtn = document.getElementById("add-note-btn");
+            const noteText = document.getElementById("note-text");
+
+            addNoteBtn.addEventListener("click", () => {
+                const text = noteText.value.trim();
+                if(text) {
+                    const notas = JSON.parse(localStorage.getItem("app_notas") || "[]");
+                    notas.unshift({ texto: text, fecha: new Date().toLocaleDateString('es-ES') });
+                    localStorage.setItem("app_notas", JSON.stringify(notas));
+                    noteText.value = "";
+                    cargarNotas();
+                }
+            });
+
+            function cargarNotas() {
+                const container = document.getElementById("notes-container");
+                container.innerHTML = "";
+                const notas = JSON.parse(localStorage.getItem("app_notas") || "[]");
+                notas.forEach(n => {
+                    const el = document.createElement("div");
+                    el.className = "note-item";
+                    el.innerHTML = `<p>${n.texto}</p><span>${n.fecha}</span>`;
+                    container.appendChild(el);
+                });
+            }
+
+            // FUNCIONALIDAD: LIENZO DE DIBUJO (COMPATIBLE CON PC Y MÓVIL TÁCTIL)
+            const canvas = document.getElementById("drawing-canvas");
+            const ctx = canvas.getContext("2d");
+            let dibujando = false;
+
+            // Ajustar pincel
+            ctx.strokeStyle = "#1e2d5a";
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+
+            function obtenerCoordenadas(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clienteX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clienteY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clienteX - rect.left,
+                    y: clienteY - rect.top
+                };
+            }
+
+            function iniciarDibujo(e) {
+                dibujando = true;
+                const coords = obtenerCoordenadas(e);
+                ctx.beginPath();
+                ctx.moveTo(coords.x, coords.y);
+            }
+
+            function dibujar(e) {
+                if (!dibujando) return;
+                e.preventDefault();
+                const coords = obtenerCoordenadas(e);
+                ctx.lineTo(coords.x, coords.y);
+                ctx.stroke();
+            }
+
+            function detenerDibujo() { dibujando = false; }
+
+            // Eventos Mouse (PC)
+            canvas.addEventListener("mousedown", iniciarDibujo);
+            canvas.addEventListener("mousemove", dibujar);
+            window.addEventListener("mouseup", detenerDibujo);
+
+            // Eventos Táctiles (Móvil)
+            canvas.addEventListener("touchstart", iniciarDibujo);
+            canvas.addEventListener("touchmove", dibujar);
+            window.addEventListener("touchend", detenerDibujo);
+
+            // Limpiar Lienzo
+            document.getElementById("clear-canvas").addEventListener("click", () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // Guardar Dibujo del Lienzo en la Galería
+            document.getElementById("save-canvas").addEventListener("click", () => {
+                const dataURL = canvas.toDataURL();
+                guardarImagenEnGaleria(dataURL);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // Subir archivo de dibujo externo
+            document.getElementById("upload-image").addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        guardarImagenEnGaleria(event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            function guardarImagenEnGaleria(uri) {
+                const galeria = JSON.parse(localStorage.getItem("app_galeria") || "[]");
+                galeria.unshift(uri);
+                localStorage.setItem("app_galeria", JSON.stringify(galeria));
+                cargarGaleria();
+            }
+
+            function cargarGaleria() {
+                const container = document.getElementById("gallery-container");
+                container.innerHTML = "";
+                const galeria = JSON.parse(localStorage.getItem("app_galeria") || "[]");
+                galeria.forEach(imgSrc => {
+                    const div = document.createElement("div");
+                    div.className = "gallery-item";
+                    div.innerHTML = `<img src="${imgSrc}" alt="Arte compartido">`;
+                    container.appendChild(div);
+                });
+            }
+        });
+            // Registrar el Service Worker para habilitar la instalación como App
+            if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('App lista para instalar', reg))
+            .catch(err => console.error('Error al registrar la app', err));
+    });
+}
+    </script>
+</body>
+</html>
