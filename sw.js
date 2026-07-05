@@ -1,5 +1,5 @@
 const CACHE_NAME = 'diario-cache-auto-v1';
-const assets = ['./', './index.html', './manifest.json', './poemas.txt'];
+const assets = ['/', '/index.html', '/manifest.json', '/poemas.txt'];
 
 // Instalar el Service Worker y guardar los archivos básicos
 self.addEventListener('install', event => {
