@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tus Poemas</title>
-    <!-- Conexión esencial con el archivo manifest para que funcione como App -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e2d5a">
     <style>
@@ -230,7 +229,16 @@
             margin: 5px 0;
         }
 
-        /* SECCIÓN 2: NOTAS */
+        /* SECCIÓN 2: EL RINCÓN DE FER (NOTAS Y CARTAS) */
+        #view-notas .text-box {
+            background-color: rgba(230, 222, 203, 0.3);
+            border: 1px dashed rgba(138, 109, 81, 0.4);
+            color: #5c4a37;
+        }
+        #view-notas .text-box:focus {
+            border-color: #8a6d51;
+            background-color: rgba(230, 222, 203, 0.5);
+        }
         .note-input-area {
             display: flex;
             flex-direction: column;
@@ -263,19 +271,50 @@
             transition: opacity 0.2s;
         }
         .btn-premium:hover { opacity: 0.9; }
+        
         .notes-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-        .note-item {
-            background-color: transparent;
-            border-left: 2px solid #1e2d5a;
-            padding: 5px 0 5px 16px;
-            text-align: left;
+        .fer-letter-card {
+            background-color: #fdfbf7;
+            border: 1px solid rgba(138, 109, 81, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(138, 109, 81, 0.05);
+            margin-bottom: 20px;
+            position: relative;
         }
-        .note-item p { margin: 0 0 6px 0; font-size: 1.05rem; line-height: 1.5; }
-        .note-item span { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; opacity: 0.5; }
+        .fer-letter-card::before {
+            content: '🍂';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+        .fer-letter-title {
+            font-family: 'Georgia', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #8a6d51;
+            margin: 0 0 8px 0;
+        }
+        .fer-letter-text {
+            font-style: italic;
+            line-height: 1.6;
+            color: #5c4a37;
+            white-space: pre-line;
+            margin: 0 0 12px 0;
+        }
+        .fer-letter-date {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(138, 109, 81, 0.6);
+        }
 
         /* SECCIÓN 3: DIBUJO ARTE */
         .canvas-container {
@@ -348,7 +387,6 @@
     <div class="notebook-lines"></div>
     <div class="overlay" id="menu-overlay"></div>
 
-    <!-- Botón del Pétalo Cayendo -->
     <button class="menu-btn" id="menu-toggle" aria-label="Abrir menú">
         <svg viewBox="0 0 40 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <circle cx="16" cy="6" r="1" fill="#1e2d5a" opacity="0.3"/>
@@ -359,13 +397,12 @@
         </svg>
     </button>
 
-    <!-- Menú Lateral Expandido -->
     <nav class="sidebar" id="sidebar-menu">
         <div class="sidebar-title">Rincones</div>
         <ul class="menu-options">
             <li class="menu-item active" data-view="view-poemas">Poemas Diarios</li>
             <li class="menu-item" data-view="view-widgets">Tablón de Widgets</li>
-            <li class="menu-item" data-view="view-notas">Notas y Cartas</li>
+            <li class="menu-item" data-view="view-notas">El Rincón de Fer 🍂</li>
             <li class="menu-item" data-view="view-dibujos">Lienzo e Ilustración</li>
         </ul>
         
@@ -386,12 +423,10 @@
             <h1 class="app-title">Nuestro Diario</h1>
         </header>
 
-        <!-- SECCIÓN DE VISTA 1: POEMAS (TIMELINE) -->
         <section id="view-poemas" class="view-section active-view">
             <div class="timeline" id="timeline-container">Cargando versos...</div>
         </section>
 
-        <!-- SECCIÓN DE VISTA 2: WIDGETS -->
         <section id="view-widgets" class="view-section">
             <h2 class="section-heading">Detalles</h2>
             <div class="widget-grid">
@@ -403,23 +438,27 @@
                 <div class="widget-card">
                     <h3>Sintonía del Día</h3>
                     <div style="margin-top:10px;">
-                        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EJK5xHvVELuly?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EJK5xHvVELuly?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN DE VISTA 3: NOTAS -->
         <section id="view-notas" class="view-section">
-            <h2 class="section-heading">Notas Escritas</h2>
+            <h2 class="section-heading" style="color: #8a6d51; border-bottom-color: rgba(138, 109, 81, 0.3);">Tu Rincón Secreto (Fer)</h2>
+            <p style="font-style: italic; font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px; color: #8a6d51;">
+                Este es tu espacio, Fer. Cada pensamiento, verso o promesa que dejes aquí se guardará en tu lienzo de susurros...
+            </p>
             <div class="note-input-area">
-                <textarea id="note-text" class="text-box" rows="3" placeholder="Escribe un pensamiento, un recado o una promesa..."></textarea>
-                <button id="add-note-btn" class="btn-premium">Dejar nota</button>
+                <input type="text" id="note-title" class="text-box" style="font-weight: 600;" placeholder="Título de tu carta o verso...">
+                <textarea id="note-text" class="text-box" rows="5" placeholder="Escribe aquí lo que dicte tu corazón..."></textarea>
+                <button id="add-note-btn" class="btn-premium" style="background-color: #8a6d51; color: #f4efe6;">Guardar en mis susurros</button>
             </div>
+            
+            <h3 class="section-heading" style="font-size: 1.1rem; margin-top: 30px; color: #8a6d51; border-bottom: none;">Mis cartas para ti</h3>
             <div class="notes-list" id="notes-container"></div>
         </section>
 
-        <!-- SECCIÓN DE VISTA 4: DIBUJO E ILUSTRACIONES -->
         <section id="view-dibujos" class="view-section">
             <h2 class="section-heading">Trazos y Lienzo</h2>
             <div class="canvas-container">
@@ -446,28 +485,39 @@
         </footer>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
     <script>
-        // VARIABLE GLOBAL DONDE SE GUARDARÁN LOS POEMAS EXTRAÍDOS DEL TXT
+    const firebaseConfig = {
+        apiKey: "AIzaSyBkcbOf9oXR7Gt_DEql_Q09epDhsTsi1yo",
+        authDomain: "nuestro-diario-fer.firebaseapp.com",
+        projectId: "nuestro-diario-fer",
+        storageBucket: "nuestro-diario-fer.firebasestorage.app",
+        messagingSenderId: "440739775091",
+        appId: "1:440739775091:web:aad9afcb1ba42ab6086006",
+        measurementId: "G-MP49ZYX4WT"
+    };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         let poemasGlobales = [];
 
-        // NUEVO SISTEMA: CARGADOR INTELIGENTE DESDE ARCHIVO DE TEXTO PLANO
+        // CARGADOR DESDE ARCHIVO POEMAS.TXT
         async function inicializarPoemasYTimeline(filtro = "todos") {
             const container = document.getElementById("timeline-container");
-            
             try {
-                // Si aún no hemos cargado el archivo .txt, lo descargamos
                 if (poemasGlobales.length === 0) {
                     const respuesta = await fetch('poemas.txt');
-                    if (!respuesta.ok) throw new Error("No se pudo leer el archivo poemas.txt");
+                    if (!respuesta.ok) throw new Error("No se pudo leer poemas.txt");
                     const todoElTexto = await respuesta.text();
-                    
-                    // Separamos los bloques usando el indicador '***'
                     const bloques = todoElTexto.split('***');
                     
                     bloques.forEach(bloque => {
                         if (!bloque.trim()) return;
-                        
-                        const lineas = bloque.trim().split('\n');
+                        const lineas = block = bloque.trim().split('\n');
                         let titulo = "Sin título";
                         let fecha = "";
                         let cuerpoLineas = [];
@@ -484,7 +534,7 @@
                         
                         if (fecha) {
                             poemasGlobales.push({
-                                fecha: fecha.trim(), // Formato esperado en el txt: AAAA-MM-DD (Ej: 2026-07-05)
+                                fecha: fecha.trim(),
                                 titulo: titulo,
                                 texto: cuerpoLineas.join('\n').trim()
                             });
@@ -492,25 +542,15 @@
                     });
                 }
 
-                // Limpiamos el contenedor para pintar
                 container.innerHTML = "";
-                if (poemasGlobales.length === 0) {
-                    container.innerHTML = "<p style='text-align:center; opacity:0.6;'>No hay versos guardados en poemas.txt aún.</p>";
-                    return;
-                }
-
-                // Ordenamos las fechas de forma descendente (el más reciente primero)
                 const poemasOrdenados = [...poemasGlobales].sort((a, b) => b.fecha.localeCompare(a.fecha));
-                
                 const hoy = new Date();
                 const fechaHoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
                 const prefijoMesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
 
                 poemasOrdenados.forEach(poema => {
-                    // Ocultar poemas que tengan fecha del futuro por si acaso
                     if (poema.fecha <= fechaHoyStr) {
                         let pasaFiltro = filtro === "todos" || (filtro === "este-mes" && poema.fecha.startsWith(prefijoMesActual));
-                        
                         if (pasaFiltro) {
                             const partes = poema.fecha.split('-');
                             const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
@@ -530,18 +570,17 @@
                         }
                     }
                 });
-
             } catch (error) {
                 console.error(error);
-                container.innerHTML = "<p style='text-align:center; color:red;'>Error al cargar poemas. Asegúrate de haber creado poemas.txt</p>";
+                container.innerHTML = "<p style='text-align:center; color:red;'>Error al cargar poemas.</p>";
             }
         }
 
-        // LÓGICA DE NAVEGACIÓN Y MENÚ LATERAL
+        // CONTROLADORES Y MENÚS
         document.addEventListener("DOMContentLoaded", () => {
             inicializarPoemasYTimeline();
-            cargarNotas();
-            cargarGaleria();
+            escucharNotasTiempoReal();   // Firebase: Oído en Notas
+            escucharGaleriaTiempoReal(); // Firebase: Oído en Arte/Lienzo
 
             const menuToggle = document.getElementById("menu-toggle");
             const sidebarMenu = document.getElementById("sidebar-menu");
@@ -558,7 +597,6 @@
             menuToggle.addEventListener("click", toggleMenu);
             menuOverlay.addEventListener("click", toggleMenu);
 
-            // Cambio de secciones principales
             menuItems.forEach(item => {
                 item.addEventListener("click", () => {
                     menuItems.forEach(i => i.classList.remove("active"));
@@ -581,7 +619,6 @@
                 });
             });
 
-            // Filtros de poemas
             filterItems.forEach(item => {
                 item.addEventListener("click", () => {
                     filterItems.forEach(i => i.classList.remove("active"));
@@ -591,39 +628,59 @@
                 });
             });
 
-            // WIDGET: CONTADOR DE DÍAS CONFIGURABLE (Aniversario: 18 de Abril de 2026)
             const fechaInicio = new Date(2026, 3, 18); 
             const diasJuntos = Math.floor((new Date() - fechaInicio) / (1000 * 60 * 60 * 24));
             document.getElementById("love-counter").innerText = diasJuntos;
 
-            // FUNCIONALIDAD: NOTAS DE TEXTO
+            // 1. TIEMPO REAL: EL RINCÓN DE FER
             const addNoteBtn = document.getElementById("add-note-btn");
+            const noteTitle = document.getElementById("note-title");
             const noteText = document.getElementById("note-text");
 
             addNoteBtn.addEventListener("click", () => {
+                const title = noteTitle.value.trim() || "Verso de Fer";
                 const text = noteText.value.trim();
+                
                 if(text) {
-                    const notas = JSON.parse(localStorage.getItem("app_notas") || "[]");
-                    notas.unshift({ texto: text, fecha: new Date().toLocaleDateString('es-ES') });
-                    localStorage.setItem("app_notas", JSON.stringify(notas));
+                    database.ref('cartas_fer').push({
+                        titulo: title,
+                        texto: text,
+                        fecha: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }),
+                        timestamp: Date.now()
+                    });
+                    noteTitle.value = "";
                     noteText.value = "";
-                    cargarNotas();
                 }
             });
 
-            function cargarNotas() {
+            function escucharNotasTiempoReal() {
                 const container = document.getElementById("notes-container");
-                container.innerHTML = "";
-                const notas = JSON.parse(localStorage.getItem("app_notas") || "[]");
-                notas.forEach(n => {
-                    const el = document.createElement("div");
-                    el.className = "note-item";
-                    el.innerHTML = `<p>${n.texto}</p><span>${n.fecha}</span>`;
-                    container.appendChild(el);
+                database.ref('cartas_fer').orderByChild('timestamp').on('value', (snapshot) => {
+                    container.innerHTML = "";
+                    const cartas = [];
+                    snapshot.forEach((childSnapshot) => {
+                        cartas.push(childSnapshot.val());
+                    });
+                    cartas.reverse();
+                    
+                    if (cartas.length === 0) {
+                        container.innerHTML = "<p style='text-align:center; opacity:0.5; font-style:italic;'>Aún no hay susurros guardados aquí...</p>";
+                        return;
+                    }
+                    cartas.forEach(c => {
+                        const el = document.createElement("div");
+                        el.className = "fer-letter-card";
+                        el.innerHTML = `
+                            <h4 class="fer-letter-title">${c.titulo}</h4>
+                            <p class="fer-letter-text">${c.texto}</p>
+                            <div class="fer-letter-date">${c.fecha}</div>
+                        `;
+                        container.appendChild(el);
+                    });
                 });
             }
 
-            // FUNCIONALIDAD: LIENZO DE DIBUJO
+            // 2. TIEMPO REAL: LIENZO DE DIBUJO E ARTE
             const canvas = document.getElementById("drawing-canvas");
             const ctx = canvas.getContext("2d");
             let dibujando = false;
@@ -637,10 +694,7 @@
                 const rect = canvas.getBoundingClientRect();
                 const clienteX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clienteY = e.touches ? e.touches[0].clientY : e.clientY;
-                return {
-                    x: clienteX - rect.left,
-                    y: clienteY - rect.top
-                };
+                return { x: clienteX - rect.left, y: clienteY - rect.top };
             }
 
             function iniciarDibujo(e) {
@@ -663,7 +717,6 @@
             canvas.addEventListener("mousedown", iniciarDibujo);
             canvas.addEventListener("mousemove", dibujar);
             window.addEventListener("mouseup", detenerDibujo);
-
             canvas.addEventListener("touchstart", iniciarDibujo);
             canvas.addEventListener("touchmove", dibujar);
             window.addEventListener("touchend", detenerDibujo);
@@ -673,8 +726,8 @@
             });
 
             document.getElementById("save-canvas").addEventListener("click", () => {
-                const dataURL = canvas.toDataURL();
-                guardarImagenEnGaleria(dataURL);
+                const dataURL = canvas.toDataURL('image/png', 0.5);
+                subirImagenAFirebase(dataURL);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
 
@@ -683,33 +736,39 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(event) {
-                        guardarImagenEnGaleria(event.target.result);
+                        subirImagenAFirebase(event.target.result);
                     };
                     reader.readAsDataURL(file);
                 }
             });
 
-            function guardarImagenEnGaleria(uri) {
-                const galeria = JSON.parse(localStorage.getItem("app_galeria") || "[]");
-                galeria.unshift(uri);
-                localStorage.setItem("app_galeria", JSON.stringify(galeria));
-                cargarGaleria();
+            function subirImagenAFirebase(base64Str) {
+                database.ref('galeria_compartida').push({
+                    src: base64Str,
+                    timestamp: Date.now()
+                });
             }
 
-            function cargarGaleria() {
+            function escucharGaleriaTiempoReal() {
                 const container = document.getElementById("gallery-container");
-                container.innerHTML = "";
-                const galeria = JSON.parse(localStorage.getItem("app_galeria") || "[]");
-                galeria.forEach(imgSrc => {
-                    const div = document.createElement("div");
-                    div.className = "gallery-item";
-                    div.innerHTML = `<img src="${imgSrc}" alt="Arte compartido">`;
-                    container.appendChild(div);
+                database.ref('galeria_compartida').orderByChild('timestamp').on('value', (snapshot) => {
+                    container.innerHTML = "";
+                    const imagenes = [];
+                    snapshot.forEach((childSnapshot) => {
+                        imagenes.push(childSnapshot.val());
+                    });
+                    imagenes.reverse();
+
+                    imagenes.forEach(imgData => {
+                        const div = document.createElement("div");
+                        div.className = "gallery-item";
+                        div.innerHTML = `<img src="${imgData.src}" alt="Arte compartido">`;
+                        container.appendChild(div);
+                    });
                 });
             }
         }); 
 
-        // REGISTRAR EL SERVICE WORKER
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
