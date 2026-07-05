@@ -2,16 +2,16 @@
   "short_name": "Nuesta caja de recuerdos",
   "name": "Nuestro Diario",
   "icons": [
-    {
-      "src": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=192&h=192",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=512&h=512",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
+  {
+    "src": "icono.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "icono.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
   ],
   "start_url": "index.html",
   "background_color": "#f4efe6",

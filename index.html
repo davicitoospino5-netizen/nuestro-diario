@@ -388,7 +388,7 @@
 
         <!-- SECCIÓN DE VISTA 1: POEMAS (TIMELINE) -->
         <section id="view-poemas" class="view-section active-view">
-            <div class="timeline" id="timeline-container"></div>
+            <div class="timeline" id="timeline-container">Cargando versos...</div>
         </section>
 
         <!-- SECCIÓN DE VISTA 2: WIDGETS -->
@@ -397,13 +397,13 @@
             <div class="widget-grid">
                 <div class="widget-card">
                     <h3>Tiempo Juntos</h3>
-                    <div class="counter-number" id="love-counter">365</div>
+                    <div class="counter-number" id="love-counter">0</div>
                     <p style="margin:0; font-size:0.85rem; opacity:0.7;">Días compartiendo universos</p>
                 </div>
                 <div class="widget-card">
                     <h3>Sintonía del Día</h3>
                     <div style="margin-top:10px;">
-                        <iframe style="border-radius:8px" src="https://open.spotify.com/playlist/37i9dQZF1EJK5xHvVELuly?si=vSWWP5uAQLSMZGb7Brr-Xw" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        <iframe style="border-radius:8px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EJK5xHvVELuly?utm_source=generator&theme=0" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
@@ -447,50 +447,99 @@
     </div>
 
     <script>
-        // BASE DE DATOS DE POEMAS
-        const misPoemas = {
-            "2026-07-05": { titulo: "Tus ojos", texto: "Escribo en el lienzo de la mañana\ncon trazos del azul que te contiene,\ntu mirada es la calma que me sana\ny el verso más tierno que me sostiene." },
-            "2026-07-04": { titulo: "Línea continua", texto: "Como un trazo eterno que no se detiene,\nmi amor por ti dibuja una silueta,\nun hilo invisible que nos mantiene\nen el dulce universo de este poeta." },
-            "2026-07-03": { titulo: "Refugio beige", texto: "El mundo afuera es un ruido lejano\nmientras grabo tu nombre en este papel,\ncaminar de cerca, tomar tu mano\nes la única paz que me queda fiel." }
-        };
+        // VARIABLE GLOBAL DONDE SE GUARDARÁN LOS POEMAS EXTRAÍDOS DEL TXT
+        let poemasGlobales = [];
 
-        // LÓGICA DE RENDERIZAR POEMAS
-        function renderizarTimeline(filtro = "todos") {
+        // NUEVO SISTEMA: CARGADOR INTELIGENTE DESDE ARCHIVO DE TEXTO PLANO
+        async function inicializarPoemasYTimeline(filtro = "todos") {
             const container = document.getElementById("timeline-container");
-            container.innerHTML = "";
-            const fechasOrdenadas = Object.keys(misPoemas).sort().reverse();
-            const hoy = new Date();
-            const fechaHoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
-            const prefijoMesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
-
-            fechasOrdenadas.forEach(fecha => {
-                if (fecha <= fechaHoyStr) {
-                    let pasa = filtro === "todos" || (filtro === "este-mes" && fecha.startsWith(prefijoMesActual));
-                    if (pasa) {
-                        const info = misPoemas[fecha];
-                        const partes = fecha.split('-');
-                        const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
-                        const fechaLegible = fObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-
-                        const card = document.createElement("div");
-                        card.className = "poem-card";
-                        card.innerHTML = `
-                            <div class="timeline-node">
-                                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"><path d="M12,2 C9,7 4,10 4,14 C4,18 7.5,21 12,21 C16.5,21 20,18 20,14 C20,10 15,7 12,2 Z" fill="#1e2d5a"/></svg>
-                            </div>
-                            <div class="poem-date">${fechaLegible}</div>
-                            <h2 class="poem-title">${info.titulo}</h2>
-                            <p class="poem-text">${info.texto}</p>
-                        `;
-                        container.appendChild(card);
-                    }
+            
+            try {
+                // Si aún no hemos cargado el archivo .txt, lo descargamos
+                if (poemasGlobales.length === 0) {
+                    const respuesta = await fetch('poemas.txt');
+                    if (!respuesta.ok) throw new Error("No se pudo leer el archivo poemas.txt");
+                    const todoElTexto = await respuesta.text();
+                    
+                    // Separamos los bloques usando el indicador '***'
+                    const bloques = todoElTexto.split('***');
+                    
+                    bloques.forEach(bloque => {
+                        if (!bloque.trim()) return;
+                        
+                        const lineas = bloque.trim().split('\n');
+                        let titulo = "Sin título";
+                        let fecha = "";
+                        let cuerpoLineas = [];
+                        
+                        lineas.forEach(linea => {
+                            if (linea.startsWith('Título:')) {
+                                titulo = linea.replace('Título:', '').trim();
+                            } else if (linea.startsWith('Fecha:')) {
+                                fecha = linea.replace('Fecha:', '').trim();
+                            } else {
+                                cuerpoLineas.push(linea);
+                            }
+                        });
+                        
+                        if (fecha) {
+                            poemasGlobales.push({
+                                fecha: fecha.trim(), // Formato esperado en el txt: AAAA-MM-DD (Ej: 2026-07-05)
+                                titulo: titulo,
+                                texto: cuerpoLineas.join('\n').trim()
+                            });
+                        }
+                    });
                 }
-            });
+
+                // Limpiamos el contenedor para pintar
+                container.innerHTML = "";
+                if (poemasGlobales.length === 0) {
+                    container.innerHTML = "<p style='text-align:center; opacity:0.6;'>No hay versos guardados en poemas.txt aún.</p>";
+                    return;
+                }
+
+                // Ordenamos las fechas de forma descendente (el más reciente primero)
+                const poemasOrdenados = [...poemasGlobales].sort((a, b) => b.fecha.localeCompare(a.fecha));
+                
+                const hoy = new Date();
+                const fechaHoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+                const prefijoMesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+
+                poemasOrdenados.forEach(poema => {
+                    // Ocultar poemas que tengan fecha del futuro por si acaso
+                    if (poema.fecha <= fechaHoyStr) {
+                        let pasaFiltro = filtro === "todos" || (filtro === "este-mes" && poema.fecha.startsWith(prefijoMesActual));
+                        
+                        if (pasaFiltro) {
+                            const partes = poema.fecha.split('-');
+                            const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
+                            const fechaLegible = fObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+                            const card = document.createElement("div");
+                            card.className = "poem-card";
+                            card.innerHTML = `
+                                <div class="timeline-node">
+                                    <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"><path d="M12,2 C9,7 4,10 4,14 C4,18 7.5,21 12,21 C16.5,21 20,18 20,14 C20,10 15,7 12,2 Z" fill="#1e2d5a"/></svg>
+                                </div>
+                                <div class="poem-date">${fechaLegible}</div>
+                                <h2 class="poem-title">${poema.titulo}</h2>
+                                <p class="poem-text">${poema.texto}</p>
+                            `;
+                            container.appendChild(card);
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = "<p style='text-align:center; color:red;'>Error al cargar poemas. Asegúrate de haber creado poemas.txt</p>";
+            }
         }
 
         // LÓGICA DE NAVEGACIÓN Y MENÚ LATERAL
         document.addEventListener("DOMContentLoaded", () => {
-            renderizarTimeline();
+            inicializarPoemasYTimeline();
             cargarNotas();
             cargarGaleria();
 
@@ -537,12 +586,12 @@
                 item.addEventListener("click", () => {
                     filterItems.forEach(i => i.classList.remove("active"));
                     item.classList.add("active");
-                    renderizarTimeline(item.getAttribute("data-filter"));
+                    inicializarPoemasYTimeline(item.getAttribute("data-filter"));
                     toggleMenu();
                 });
             });
 
-            // WIDGET: CONTADOR DE DÍAS CONFIGURABLE
+            // WIDGET: CONTADOR DE DÍAS CONFIGURABLE (Aniversario: 18 de Abril de 2026)
             const fechaInicio = new Date(2026, 3, 18); 
             const diasJuntos = Math.floor((new Date() - fechaInicio) / (1000 * 60 * 60 * 24));
             document.getElementById("love-counter").innerText = diasJuntos;
@@ -660,7 +709,7 @@
             }
         }); 
 
-        // REGISTRAR EL SERVICE WORKER (Para instalar la aplicación)
+        // REGISTRAR EL SERVICE WORKER
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')

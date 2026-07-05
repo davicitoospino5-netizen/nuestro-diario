@@ -1,5 +1,5 @@
-const CACHE_NAME = 'diario-cache-v1';
-const assets = ['./', './index.html', './manifest.json'];
+const CACHE_NAME = 'diario-cache-v3';
+const assets = ['./', './index.html', './manifest.json', './poemas.txt'];
 
 // Instalar el Service Worker
 self.addEventListener('install', event => {
@@ -12,7 +12,17 @@ self.addEventListener('install', event => {
 
 // Activar el Service Worker
 self.addEventListener('activate', event => {
-    event.waitUntil(self.clients.claim());
+    event.waitUntil(
+        caches.keys().then(keys => {
+            return Promise.all(
+                keys.map(key => {
+                    if (key !== CACHE_NAME) {
+                        return caches.delete(key);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
+    );
 });
 
 // Responder con caché si no hay internet
