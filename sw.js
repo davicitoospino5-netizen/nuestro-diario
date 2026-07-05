@@ -1,4 +1,4 @@
-const CACHE_NAME = 'diario-cache-v3';
+const CACHE_NAME = 'diario-cache-v4';
 const assets = ['./', './index.html', './manifest.json', './poemas.txt'];
 
 // Instalar el Service Worker
