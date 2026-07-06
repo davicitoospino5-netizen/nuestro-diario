@@ -75,7 +75,7 @@
         .gallery-item { width: 100%; border-radius: 8px; border: 1px solid rgba(30, 45, 90, 0.15); overflow: hidden; background-color: rgba(230, 222, 203, 0.2); }
         .gallery-item img { width: 100%; height: auto; display: block; }
 
-        /* NUEVOS ESTILOS: ESTUDIO DE MÚSICA */
+        /* ESTILOS DE LA PESTAÑA DE MÚSICA */
         .music-studio { width: 100%; display: flex; flex-direction: column; gap: 12px; background: rgba(30, 45, 90, 0.03); padding: 16px; border-radius: 16px; border: 1px solid rgba(30, 45, 90, 0.1); margin-top: 10px; }
         .seq-row { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; }
         .inst-label { width: 55px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #1e2d5a; opacity: 0.8; text-align: left; }
@@ -112,8 +112,9 @@
         <ul class="menu-options">
             <li class="menu-item active" data-view="view-poemas">Poemas Diarios</li>
             <li class="menu-item" data-view="view-widgets">Tablón de Widgets</li>
-            <li class="menu-item" data-view="view-notas">El Rincón de Fer 🍂</li>
+            <li class="menu-item" data-view="view-musica">Estudio de Ritmos 🎧</li>
             <li class="menu-item" data-view="view-dibujos">Lienzo e Ilustración</li>
+            <li class="menu-item" data-view="view-notas">El Rincón de Fer 🍂</li>
         </ul>
         
         <div class="sidebar-title" id="filter-title">Filtrar Poemas</div>
@@ -137,7 +138,6 @@
             <div class="timeline" id="timeline-container">Cargando versos...</div>
         </section>
 
-        <!-- PANELES DE WIDGETS CON NUEVO ESTUDIO DE MÚSICA -->
         <section id="view-widgets" class="view-section">
             <h2 class="section-heading">Detalles</h2>
             <div class="widget-grid">
@@ -145,62 +145,6 @@
                     <h3>Tiempo Juntos</h3>
                     <div class="counter-number" id="love-counter">0</div>
                     <p style="margin:0; font-size:0.85rem; opacity:0.7;">Días compartiendo universos</p>
-                </div>
-
-                <!-- NUEVO WIDGET: ESTUDIO DE RITMOS COMPARTIDO -->
-                <div class="widget-card">
-                    <h3>Estudio de Ritmos 🎧</h3>
-                    <p style="font-size:0.75rem; opacity:0.7; margin-bottom:12px; font-style:italic;">Crea loops, graba y comparte bases con Fer en tiempo real</p>
-                    
-                    <div class="music-studio">
-                        <!-- CANALES SECUENCIADORES -->
-                        <div class="seq-row" data-instrument="kick">
-                            <span class="inst-label">🥁 Kick</span>
-                            <div class="steps-container">
-                                <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
-                                <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
-                            </div>
-                        </div>
-                        <div class="seq-row" data-instrument="snare">
-                            <span class="inst-label">🥁 Snare</span>
-                            <div class="steps-container">
-                                <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
-                                <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
-                            </div>
-                        </div>
-                        <div class="seq-row" data-instrument="hat">
-                            <span class="inst-label">🎵 Hi-Hat</span>
-                            <div class="steps-container">
-                                <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
-                                <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
-                            </div>
-                        </div>
-                        <div class="seq-row" data-instrument="synth">
-                            <span class="inst-label">🎹 Synth</span>
-                            <div class="steps-container">
-                                <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
-                                <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
-                            </div>
-                        </div>
-
-                        <!-- AJUSTE DE TEMPO / VELOCIDAD -->
-                        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:5px; font-size:0.75rem;">
-                            <span>Velocidad: <b id="bpm-val">120</b> BPM</span>
-                            <input type="range" id="bpm-slider" min="60" max="180" value="120" style="flex:1; margin-left:10px; accent-color:#1e2d5a;">
-                        </div>
-
-                        <!-- BOTONES DE REPRODUCCIÓN -->
-                        <div class="studio-controls">
-                            <button id="play-beat-btn" class="btn-premium" style="flex:1; padding:8px;">▶️ Play</button>
-                            <button id="clear-beat-btn" class="btn-secondary" style="flex:1; padding:8px;">Reset</button>
-                        </div>
-                        <input type="text" id="track-name-input" class="text-box" style="padding:6px; font-size:0.8rem; margin:5px 0 0 0;" placeholder="Nombre de tu base...">
-                        <button id="save-beat-btn" class="btn-premium" style="background-color:#4a7c59; padding:8px;">💾 Grabar y guardar base</button>
-                    </div>
-
-                    <!-- BANCO DE BASES COMPARTIDO -->
-                    <h3 class="section-heading" style="font-size:0.9rem; margin-top:20px; text-align:center;">Bases Grabadas 📁</h3>
-                    <div id="tracks-cloud-container" style="display:flex; flex-direction:column; gap:8px;"></div>
                 </div>
 
                 <div class="widget-card">
@@ -219,6 +163,53 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section id="view-musica" class="view-section">
+            <h2 class="section-heading">Estudio de Ritmos 🎧</h2>
+            <p style="font-style: italic; font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">Crea loops, graba y comparte bases con Fer en tiempo real...</p>
+            <div class="music-studio">
+                <div class="seq-row" data-instrument="kick">
+                    <span class="inst-label">🥁 Kick</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div class="seq-row" data-instrument="snare">
+                    <span class="inst-label">🥁 Snare</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div class="seq-row" data-instrument="hat">
+                    <span class="inst-label">🎵 Hi-Hat</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div class="seq-row" data-instrument="synth">
+                    <span class="inst-label">🎹 Synth</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:5px; font-size:0.75rem;">
+                    <span>Velocidad: <b id="bpm-val">120</b> BPM</span>
+                    <input type="range" id="bpm-slider" min="60" max="180" value="120" style="flex:1; margin-left:10px; accent-color:#1e2d5a;">
+                </div>
+                <div class="studio-controls">
+                    <button id="play-beat-btn" class="btn-premium" style="flex:1; padding:8px;">▶️ Play</button>
+                    <button id="clear-beat-btn" class="btn-secondary" style="flex:1; padding:8px;">Reset</button>
+                </div>
+                <input type="text" id="track-name-input" class="text-box" style="padding:6px; font-size:0.8rem; margin:5px 0 0 0;" placeholder="Nombre de tu base...">
+                <button id="save-beat-btn" class="btn-premium" style="background-color:#4a7c59; padding:8px;">💾 Grabar y guardar base</button>
+            </div>
+            <h3 class="section-heading" style="font-size:0.9rem; margin-top:20px; text-align:center;">Bases Grabadas 📁</h3>
+            <div id="tracks-cloud-container" style="display:flex; flex-direction:column; gap:8px;"></div>
         </section>
 
         <section id="view-notas" class="view-section">
@@ -303,42 +294,30 @@
         const database = firebase.database();
         let poemasGlobales = [];
 
-        // LÓGICA DE PROGRAMACIÓN DE AUDIO SINTETIZADO NATIVO (WEB AUDIO API)
+        // CONTEXTO DE AUDIO PARA EL SECUENCIADOR NATIVO
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
         function playSound(type) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
+            osc.connect(gain); gain.connect(audioCtx.destination);
             const ahora = audioCtx.currentTime;
 
             if (type === 'kick') {
-                osc.frequency.setValueAtTime(120, ahora);
-                osc.frequency.exponentialRampToValueAtTime(0.01, ahora + 0.3);
-                gain.gain.setValueAtTime(1, ahora);
-                gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.3);
+                osc.frequency.setValueAtTime(120, ahora); osc.frequency.exponentialRampToValueAtTime(0.01, ahora + 0.3);
+                gain.gain.setValueAtTime(1, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.3);
                 osc.start(ahora); osc.stop(ahora + 0.3);
             } else if (type === 'snare') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(280, ahora);
-                gain.gain.setValueAtTime(0.7, ahora);
-                gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.25);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(280, ahora);
+                gain.gain.setValueAtTime(0.7, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.25);
                 osc.start(ahora); osc.stop(ahora + 0.25);
             } else if (type === 'hat') {
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(8000, ahora);
-                gain.gain.setValueAtTime(0.2, ahora);
-                gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.08);
+                osc.type = 'square'; osc.frequency.setValueAtTime(8000, ahora);
+                gain.gain.setValueAtTime(0.2, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.08);
                 osc.start(ahora); osc.stop(ahora + 0.08);
             } else if (type === 'synth') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(329.63, ahora); // Nota Mi (E4) jazzera
-                gain.gain.setValueAtTime(0.4, ahora);
-                gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.4);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(329.63, ahora);
+                gain.gain.setValueAtTime(0.4, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.4);
                 osc.start(ahora); osc.stop(ahora + 0.4);
             }
         }
@@ -416,14 +395,13 @@
         document.addEventListener("DOMContentLoaded", () => {
             inicializarPoemasYTimeline();
             escucharNotasTiempoReal();   
-            escucharGaleriaTiempoReal(); 
-            escucharBasesTiempoReal(); // Oído musical en Firebase
+            escucharGaleriaTiempoReal(); // CONEXIÓN HISTÓRICA CORREGIDA
+            escucharBasesTiempoReal();
 
             const menuToggle = document.getElementById("menu-toggle");
             const sidebarMenu = document.getElementById("sidebar-menu");
             const menuOverlay = document.getElementById("menu-overlay");
             const menuItems = document.querySelectorAll(".menu-item[data-view]");
-            const filterItems = document.querySelectorAll(".poem-filter-btn");
 
             function toggleMenu() {
                 menuToggle.classList.toggle("active");
@@ -475,7 +453,7 @@
                 database.ref('cartas_fer').orderByChild('timestamp').on('value', (snapshot) => {
                     container.innerHTML = "";
                     const cartas = [];
-                    snapshot.forEach((childSnapshot) => { cartas.push(childSnapshot.val()); });
+                    snapshot.forEach(child => { cartas.push(child.val()); });
                     cartas.reverse();
                     if (cartas.length === 0) {
                         container.innerHTML = "<p style='text-align:center; opacity:0.5;'>Aún no hay susurros...</p>";
@@ -487,14 +465,10 @@
                 });
             }
 
-            // LÓGICA DEL MOTOR SECUENCIADOR DE MÚSICA (LOOP)
+            // MOTOR SECUENCIADOR DE MÚSICA
             let beatGrid = { kick: Array(8).fill(false), snare: Array(8).fill(false), hat: Array(8).fill(false), synth: Array(8).fill(false) };
-            let playing = false;
-            let currentStep = 0;
-            let beatInterval = null;
-            let tempoBPM = 120;
+            let playing = false; let currentStep = 0; let beatInterval = null; let tempoBPM = 120;
 
-            // Manejo táctil e interactivo de los cuadritos de ritmo (Pads)
             document.querySelectorAll(".seq-row").forEach(row => {
                 const instrument = row.getAttribute("data-instrument");
                 const pads = row.querySelectorAll(".step-pad");
@@ -502,179 +476,102 @@
                     pad.addEventListener("click", () => {
                         beatGrid[instrument][index] = !beatGrid[instrument][index];
                         pad.classList.toggle("active-pad");
-                        // Tocar el sonido al armarlo para guiar el oído
                         if (beatGrid[instrument][index]) playSound(instrument);
                     });
                 });
             });
 
-            // Motor de tiempo de la caja de ritmos
             function runSequence() {
                 document.querySelectorAll(".step-pad").forEach(p => p.classList.remove("playing-now"));
-                
-                // Activar visualmente y tocar la nota activa del paso actual
                 Object.keys(beatGrid).forEach(inst => {
                     const row = document.querySelector(`.seq-row[data-instrument="${inst}"]`);
                     const pad = row.querySelector(`.step-pad[data-step="${currentStep}"]`);
                     pad.classList.add("playing-now");
-                    
-                    if (beatGrid[inst][currentStep]) {
-                        playSound(inst);
-                    }
+                    if (beatGrid[inst][currentStep]) playSound(inst);
                 });
-
                 currentStep = (currentStep + 1) % 8;
             }
 
-            // Controles de Play / Pause
             const playBtn = document.getElementById("play-beat-btn");
             playBtn.addEventListener("click", () => {
-                if (playing) {
-                    clearInterval(beatInterval);
-                    playBtn.innerText = "▶️ Play";
-                } else {
-                    const intervaloMs = (60000 / tempoBPM) / 2; // Sincronía de octavos
-                    beatInterval = setInterval(runSequence, intervaloMs);
-                    playBtn.innerText = "⏸️ Pausa";
-                }
+                if (playing) { clearInterval(beatInterval); playBtn.innerText = "▶️ Play"; } 
+                else { beatInterval = setInterval(runSequence, (60000 / tempoBPM) / 2); playBtn.innerText = "⏸️ Pausa"; }
                 playing = !playing;
             });
 
-            // Slider de tempo (BPM)
-            const bpmSlider = document.getElementById("bpm-slider");
-            bpmSlider.addEventListener("input", (e) => {
-                tempoBPM = e.target.value;
-                document.getElementById("bpm-val").innerText = tempoBPM;
-                if (playing) {
-                    clearInterval(beatInterval);
-                    beatInterval = setInterval(runSequence, (60000 / tempoBPM) / 2);
-                }
+            document.getElementById("bpm-slider").addEventListener("input", (e) => {
+                tempoBPM = e.target.value; document.getElementById("bpm-val").innerText = tempoBPM;
+                if (playing) { clearInterval(beatInterval); beatInterval = setInterval(runSequence, (60000 / tempoBPM) / 2); }
             });
 
-            // Resetear secuenciador
             document.getElementById("clear-beat-btn").addEventListener("click", () => {
                 Object.keys(beatGrid).forEach(inst => beatGrid[inst].fill(false));
                 document.querySelectorAll(".step-pad").forEach(p => p.classList.remove("active-pad", "playing-now"));
                 currentStep = 0;
             });
 
-            // GRABACIÓN Y ENVÍO A FIREBASE
             document.getElementById("save-beat-btn").addEventListener("click", () => {
                 const trackName = document.getElementById("track-name-input").value.trim() || "Base sin título";
-                
-                // Subir la matriz de ritmos codificada en JSON para reproducirla en cualquier celular
                 database.ref('estudio_musica').push({
-                    nombre: trackName,
-                    grid: JSON.stringify(beatGrid),
-                    bpm: tempoBPM,
-                    fecha: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
-                    timestamp: Date.now()
-                }).then(() => {
-                    document.getElementById("track-name-input").value = "";
-                    alert("¡Ritmo grabado y subido al estudio compartido!");
-                });
+                    nombre: trackName, grid: JSON.stringify(beatGrid), bpm: tempoBPM,
+                    fecha: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }), timestamp: Date.now()
+                }).then(() => { document.getElementById("track-name-input").value = ""; });
             });
 
-            // ESCUCHAR Y CARGAR BASES DESDE FIREBASE
             function escucharBasesTiempoReal() {
                 const cloudContainer = document.getElementById("tracks-cloud-container");
                 database.ref('estudio_musica').orderByChild('timestamp').on('value', (snapshot) => {
-                    cloudContainer.innerHTML = "";
-                    const bases = [];
-                    snapshot.forEach(child => {
-                        const data = child.val();
-                        data.key = child.key;
-                        bases.push(data);
-                    });
+                    cloudContainer.innerHTML = ""; const bases = [];
+                    snapshot.forEach(child => { const data = child.val(); data.key = child.key; bases.push(data); });
                     bases.reverse();
-
-                    if (bases.length === 0) {
-                        cloudContainer.innerHTML = "<p style='font-size:0.75rem; opacity:0.5; font-style:italic;'>Aún no hay ritmos en el banco.</p>";
-                        return;
-                    }
-
+                    if (bases.length === 0) { cloudContainer.innerHTML = "<p style='font-size:0.75rem; opacity:0.5;'>Ninguna base guardada.</p>"; return; }
                     bases.forEach(b => {
-                        const card = document.createElement("div");
-                        card.className = "audio-track-card";
-                        card.innerHTML = `
-                            <div class="track-info">
-                                <div class="track-title">🎵 ${b.nombre}</div>
-                                <div class="track-meta">${b.bpm} BPM • Grabado el ${b.fecha}</div>
-                            </div>
-                            <button class="btn-premium load-track-btn" style="padding:6px 12px; font-size:0.65rem; width:auto; background-color:#1e2d5a;" data-key="${b.key}">Cargar</button>
-                        `;
+                        const card = document.createElement("div"); card.className = "audio-track-card";
+                        card.innerHTML = `<div class="track-info"><div class="track-title">🎵 ${b.nombre}</div><div class="track-meta">${b.bpm} BPM • ${b.fecha}</div></div><button class="btn-premium load-track-btn" style="padding:6px 12px; font-size:0.65rem; width:auto;" data-key="${b.key}">Cargar</button>`;
                         cloudContainer.appendChild(card);
-
-                        // Lógica al darle clic a "Cargar" base de la nube
                         card.querySelector(".load-track-btn").addEventListener("click", () => {
-                            const datosBase = bases.find(x => x.key === b.key);
-                            beatGrid = JSON.parse(datosBase.grid);
-                            tempoBPM = datosBase.bpm;
-
-                            // Actualizar sliders e interfaz visual
-                            document.getElementById("bpm-slider").value = tempoBPM;
-                            document.getElementById("bpm-val").innerText = tempoBPM;
-                            
-                            // Pintar los bloques activos en la cuadrícula
+                            const datosBase = bases.find(x => x.key === b.key); beatGrid = JSON.parse(datosBase.grid); tempoBPM = datosBase.bpm;
+                            document.getElementById("bpm-slider").value = tempoBPM; document.getElementById("bpm-val").innerText = tempoBPM;
                             Object.keys(beatGrid).forEach(inst => {
                                 const row = document.querySelector(`.seq-row[data-instrument="${inst}"]`);
                                 const pads = row.querySelectorAll(".step-pad");
-                                pads.forEach((pad, index) => {
-                                    if (beatGrid[inst][index]) {
-                                        pad.classList.add("active-pad");
-                                    } else {
-                                        pad.classList.remove("active-pad");
-                                    }
-                                });
+                                pads.forEach((pad, index) => { if (beatGrid[inst][index]) pad.classList.add("active-pad"); else pad.classList.remove("active-pad"); });
                             });
-                            currentStep = 0;
-                            if(!playing) playBtn.click(); // Autoplay al cargar
+                            currentStep = 0; if(!playing) playBtn.click();
                         });
                     });
                 });
             }
 
-            // LIENZO DE DIBUJO CON TEXTURAS MEJORADAS
+            // MOTOR DEL LIENZO DE DIBUJO CONEXIÓN CORREGIDA
             const canvas = document.getElementById("drawing-canvas");
             const ctx = canvas.getContext("2d");
-            let dibujando = false;
-            let ultimasCoords = { x: 0, y: 0 };
-            let colorActual = "#1e2d5a";
-            let grosorActual = 2.5;
-            let texturaActual = "solido"; 
-            let esBorrador = false;
+            let dibujando = false; let ultimasCoords = { x: 0, y: 0 };
+            let colorActual = "#1e2d5a"; let grosorActual = 2.5; let texturaActual = "solido"; let esBorrador = false;
 
             function hexToRgbStr(hex) {
-                let c = hex.substring(1);
-                if (c.length === 3) c = c.split('').map(x => x + x).join('');
-                const num = parseInt(c, 16);
-                return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+                let c = hex.substring(1); if (c.length === 3) c = c.split('').map(x => x + x).join('');
+                const num = parseInt(c, 16); return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
             }
 
             function configurarEstiloPincel() {
                 ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.globalAlpha = 1.0;
-                if (esBorrador) {
-                    ctx.strokeStyle = "#f4efe6"; ctx.lineWidth = grosorActual * 2;
-                } else {
+                if (esBorrador) { ctx.strokeStyle = "#f4efe6"; ctx.lineWidth = grosorActual * 2; } 
+                else {
                     ctx.lineWidth = grosorActual;
-                    if (texturaActual === "acuarela") {
-                        ctx.strokeStyle = `rgba(${hexToRgbStr(colorActual)}, 0.12)`; ctx.lineWidth = grosorActual * 2.5;
-                    } else { ctx.strokeStyle = colorActual; }
+                    if (texturaActual === "acuarela") { ctx.strokeStyle = `rgba(${hexToRgbStr(colorActual)}, 0.12)`; ctx.lineWidth = grosorActual * 2.5; } 
+                    else { ctx.strokeStyle = colorActual; }
                 }
             }
 
             const swatchesWrapper = document.getElementById("swatches-wrapper");
             function vincularEventosMuestras() {
-                document.querySelectorAll(".color-swatch").forEach(swatch => {
-                    swatch.replaceWith(swatch.cloneNode(true));
-                });
+                document.querySelectorAll(".color-swatch").forEach(swatch => { swatch.replaceWith(swatch.cloneNode(true)); });
                 document.querySelectorAll(".color-swatch").forEach(swatch => {
                     swatch.addEventListener("click", () => {
-                        esBorrador = false;
-                        document.getElementById("tool-eraser").classList.remove("active-tool");
+                        esBorrador = false; document.getElementById("tool-eraser").classList.remove("active-tool");
                         document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active-tool"));
-                        swatch.classList.add("active-tool");
-                        colorActual = swatch.getAttribute("data-color");
+                        swatch.classList.add("active-tool"); colorActual = swatch.getAttribute("data-color");
                     });
                 });
             }
@@ -682,36 +579,27 @@
 
             document.getElementById("add-mix-btn").addEventListener("click", () => {
                 const colorMezclado = document.getElementById("color-mixer").value;
-                const nuevoSwatch = document.createElement("div");
-                nuevoSwatch.className = "color-swatch";
-                nuevoSwatch.setAttribute("data-color", colorMezclado);
-                nuevoSwatch.style.backgroundColor = colorMezclado;
-                swatchesWrapper.appendChild(nuevoSwatch);
-                vincularEventosMuestras();
-                nuevoSwatch.click();
+                const nuevoSwatch = document.createElement("div"); nuevoSwatch.className = "color-swatch"; nuevoSwatch.setAttribute("data-color", colorMezclado); nuevoSwatch.style.backgroundColor = colorMezclado;
+                swatchesWrapper.appendChild(nuevoSwatch); vincularEventosMuestras(); nuevoSwatch.click();
             });
 
             document.querySelectorAll(".texture-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
-                    esBorrador = false;
-                    document.getElementById("tool-eraser").classList.remove("active-tool");
+                    esBorrador = false; document.getElementById("tool-eraser").classList.remove("active-tool");
                     document.querySelectorAll(".texture-btn").forEach(b => b.classList.remove("active-tool"));
-                    btn.classList.add("active-tool");
-                    texturaActual = btn.getAttribute("data-texture");
+                    btn.classList.add("active-tool"); texturaActual = btn.getAttribute("data-texture");
                 });
             });
 
             document.querySelectorAll(".size-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
                     document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active-tool"));
-                    btn.classList.add("active-tool");
-                    grosorActual = parseFloat(btn.getAttribute("data-size"));
+                    btn.classList.add("active-tool"); grosorActual = parseFloat(btn.getAttribute("data-size"));
                 });
             });
 
             document.getElementById("tool-eraser").addEventListener("click", () => {
-                esBorrador = true;
-                document.querySelectorAll(".color-swatch, .texture-btn").forEach(el => el.classList.remove("active-tool"));
+                esBorrador = true; document.querySelectorAll(".color-swatch, .texture-btn").forEach(el => el.classList.remove("active-tool"));
                 document.getElementById("tool-eraser").classList.add("active-tool");
             });
 
@@ -723,64 +611,43 @@
             }
 
             function iniciarDibujo(e) {
-                dibujando = true;
-                ultimasCoords = obtenerCoordenadas(e);
+                dibujando = true; ultimasCoords = obtenerCoordenadas(e);
                 if (texturaActual === "solido" || texturaActual === "acuarela" || esBorrador) {
                     ctx.beginPath(); configurarEstiloPincel(); ctx.moveTo(ultimasCoords.x, ultimasCoords.y);
                 }
             }
 
             function dibujar(e) {
-                if (!dibujando) return;
-                e.preventDefault();
-                const coords = obtenerCoordenadas(e);
-                configurarEstiloPincel();
-
-                if (esBorrador || texturaActual === "solido" || texturaActual === "acuarela") {
-                    ctx.lineTo(coords.x, coords.y); ctx.stroke();
-                } else if (texturaActual === "carboncillo") {
+                if (!dibujando) return; e.preventDefault(); const coords = obtenerCoordenadas(e); configurarEstiloPincel();
+                if (esBorrador || texturaActual === "solido" || texturaActual === "acuarela") { ctx.lineTo(coords.x, coords.y); ctx.stroke(); } 
+                else if (texturaActual === "carboncillo") {
                     ctx.strokeStyle = colorActual;
                     for (let i = 0; i < 6; i++) {
-                        ctx.globalAlpha = Math.random() * 0.25;
-                        ctx.lineWidth = grosorActual * (Math.random() * 0.6 + 0.2);
-                        ctx.beginPath();
-                        ctx.moveTo(ultimasCoords.x + (Math.random() * 4 - 2), ultimasCoords.y + (Math.random() * 4 - 2));
-                        ctx.lineTo(coords.x + (Math.random() * 4 - 2), coords.y + (Math.random() * 4 - 2));
-                        ctx.stroke();
+                        ctx.globalAlpha = Math.random() * 0.25; ctx.lineWidth = grosorActual * (Math.random() * 0.6 + 0.2);
+                        ctx.beginPath(); ctx.moveTo(ultimasCoords.x + (Math.random() * 4 - 2), ultimasCoords.y + (Math.random() * 4 - 2));
+                        ctx.lineTo(coords.x + (Math.random() * 4 - 2), coords.y + (Math.random() * 4 - 2)); ctx.stroke();
                     }
                 } else if (texturaActual === "spray") {
-                    ctx.fillStyle = colorActual;
-                    const densidad = grosorActual * 3;
-                    const radioMuestreo = grosorActual * 2.5;
+                    ctx.fillStyle = colorActual; const densidad = grosorActual * 3; const radioMuestreo = grosorActual * 2.5;
                     for (let i = 0; i < densidad; i++) {
-                        const angulo = Math.random() * Math.PI * 2;
-                        const radio = Math.random() * radioMuestreo;
+                        const angulo = Math.random() * Math.PI * 2; const radio = Math.random() * radioMuestreo;
                         ctx.fillRect(coords.x + Math.cos(angulo)*radio, coords.y + Math.sin(angulo)*radio, 1.2, 1.2);
                     }
                 }
                 ultimasCoords = coords;
             }
 
-            canvas.addEventListener("mousedown", iniciarDibujo);
-            canvas.addEventListener("mousemove", dibujar);
-            window.addEventListener("mouseup", () => dibujando = false);
-            canvas.addEventListener("touchstart", iniciarDibujo);
-            canvas.addEventListener("touchmove", dibujar);
-            window.addEventListener("touchend", () => dibujando = false);
+            canvas.addEventListener("mousedown", iniciarDibujo); canvas.addEventListener("mousemove", dibujar); window.addEventListener("mouseup", () => dibujando = false);
+            canvas.addEventListener("touchstart", iniciarDibujo); canvas.addEventListener("touchmove", dibujar); window.addEventListener("touchend", () => dibujando = false);
 
             document.getElementById("clear-canvas").addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
             document.getElementById("save-canvas").addEventListener("click", () => {
-                subirImagenAFirebase(canvas.toDataURL('image/png', 0.5));
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                subirImagenAFirebase(canvas.toDataURL('image/png', 0.5)); ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
 
             document.getElementById("upload-image").addEventListener("change", (e) => {
                 const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => subirImagenAFirebase(event.target.result);
-                    reader.readAsDataURL(file);
-                }
+                if (file) { const reader = new FileReader(); reader.onload = (event) => subirImagenAFirebase(event.target.result); reader.readAsDataURL(file); }
             });
 
             function subirImagenAFirebase(base64Str) {
@@ -789,9 +656,9 @@
 
             function escucharGaleriaTiempoReal() {
                 const container = document.getElementById("gallery-container");
+                // ESCUCHANDO LA RUTA HISTÓRICA CORRECTA DE TU SERVIDOR
                 database.ref('galeria_compartida').orderByChild('timestamp').on('value', (snapshot) => {
-                    container.innerHTML = "";
-                    const imagenes = [];
+                    container.innerHTML = ""; const imagenes = [];
                     snapshot.forEach(child => imagenes.push(child.val()));
                     imagenes.reverse();
                     imagenes.forEach(imgData => {
@@ -802,9 +669,7 @@
         }); 
 
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.error(err));
-            });
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => console.error(err)); });
         }
     </script>
 </body>
