@@ -333,7 +333,7 @@
                     
                     bloques.forEach(bloque => {
                         if (!bloque.trim()) return;
-                        const lineas = bloque.trim().split('\n');
+                        const lineas = block = bloque.trim().split('\n');
                         let titulo = "Sin título";
                         let fecha = "";
                         let cuerpoLineas = [];
@@ -395,7 +395,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             inicializarPoemasYTimeline();
             escucharNotasTiempoReal();   
-            escucharGaleriaTiempoReal(); // CONEXIÓN HISTÓRICA CORREGIDA
+            escucharGaleriaTiempoReal();
             escucharBasesTiempoReal();
 
             const menuToggle = document.getElementById("menu-toggle");
@@ -416,9 +416,26 @@
                 item.addEventListener("click", () => {
                     menuItems.forEach(i => i.classList.remove("active"));
                     item.classList.add("active");
+        
                     const targetView = item.getAttribute("data-view");
                     document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active-view"));
-                    document.getElementById(targetView).classList.add("active-view");
+        
+                    const activeSection = document.getElementById(targetView);
+                    if (activeSection) {
+                        activeSection.classList.add("active-view");
+                    }
+
+                    // Si entras al lienzo, despierta a Firebase y refresca la galería
+                    if (targetView === "view-dibujos") {
+                        escucharGaleriaTiempoReal();
+                        const canvasObj = document.getElementById("drawing-canvas");
+                        if (canvasObj) {
+                            const ctxObj = canvasObj.getContext("2d");
+                            ctxObj.lineCap = "round";
+                            ctxObj.lineJoin = "round";
+                        }
+                    }
+        
                     toggleMenu();
                 });
             });
@@ -543,7 +560,7 @@
                 });
             }
 
-            // MOTOR DEL LIENZO DE DIBUJO CONEXIÓN CORREGIDA
+            // MOTOR DEL LIENZO DE DIBUJO
             const canvas = document.getElementById("drawing-canvas");
             const ctx = canvas.getContext("2d");
             let dibujando = false; let ultimasCoords = { x: 0, y: 0 };
@@ -656,7 +673,6 @@
 
             function escucharGaleriaTiempoReal() {
                 const container = document.getElementById("gallery-container");
-                // ESCUCHANDO LA RUTA HISTÓRICA CORRECTA DE TU SERVIDOR
                 database.ref('galeria_compartida').orderByChild('timestamp').on('value', (snapshot) => {
                     container.innerHTML = ""; const imagenes = [];
                     snapshot.forEach(child => imagenes.push(child.val()));
