@@ -52,17 +52,25 @@
         .fer-letter-text { font-style: italic; line-height: 1.6; color: #5c4a37; white-space: pre-line; margin: 0 0 12px 0; }
         .fer-letter-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(138, 109, 81, 0.6); }
         
-        /* BARRA DE HERRAMIENTAS LIENZO */
+        /* BARRA DE HERRAMIENTAS LIENZO AMPLIADA */
         .canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .canvas-toolbar { display: flex; flex-direction: column; gap: 10px; width: 100%; background: rgba(230, 222, 203, 0.3); padding: 12px; border-radius: 12px; border: 1px solid rgba(30, 45, 90, 0.1); }
-        .toolbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
-        .color-picker-container { display: flex; gap: 8px; align-items: center; }
-        .color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; }
-        .color-swatch.active-tool { transform: scale(1.15); border-color: #1e2d5a; }
+        .canvas-toolbar { display: flex; flex-direction: column; gap: 10px; width: 100%; background: rgba(230, 222, 203, 0.35); padding: 12px; border-radius: 12px; border: 1px solid rgba(30, 45, 90, 0.1); }
+        .toolbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; flex-wrap: wrap; }
+        .color-picker-container { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; max-width: 70%; }
+        .color-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; }
+        .color-swatch.active-tool { transform: scale(1.2); border-color: #1e2d5a; }
+        .mixer-area { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.4); padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(30,45,90,0.1); }
+        .custom-color-input { border: none; background: none; width: 28px; height: 28px; cursor: pointer; padding: 0; }
+        .mixer-add-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #1e2d5a; padding: 0 4px; }
+        
+        .texture-selector { display: flex; gap: 6px; width: 100%; margin-top: 2px; }
+        .texture-btn { flex: 1; background: white; border: 1px solid rgba(30, 45, 90, 0.2); padding: 6px 4px; border-radius: 6px; font-family: sans-serif; font-size: 0.65rem; text-transform: uppercase; cursor: pointer; color: #1e2d5a; text-align: center; }
+        .texture-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
+        
         .brush-sizes { display: flex; gap: 8px; align-items: center; }
-        .size-btn { background: none; border: 1px solid rgba(30, 45, 90, 0.3); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: #1e2d5a; }
+        .size-btn { background: white; border: 1px solid rgba(30, 45, 90, 0.2); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: #1e2d5a; }
         .size-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
-        .eraser-btn { display: flex; align-items: center; gap: 4px; background: none; border: 1px solid rgba(30, 45, 90, 0.3); border-radius: 6px; padding: 4px 8px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; color: #1e2d5a; }
+        .eraser-btn { display: flex; align-items: center; gap: 4px; background: white; border: 1px solid rgba(30, 45, 90, 0.2); border-radius: 6px; padding: 6px 10px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; color: #1e2d5a; }
         .eraser-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
         
         #drawing-canvas { background-color: #f4efe6; border: 1px solid rgba(30, 45, 90, 0.2); border-radius: 12px; box-shadow: inset 0 0 10px rgba(230, 222, 203, 0.5); cursor: crosshair; touch-action: none; }
@@ -163,24 +171,34 @@
         <section id="view-dibujos" class="view-section">
             <h2 class="section-heading">Trazos y Lienzo</h2>
             <div class="canvas-container">
-                <!-- BARRA DE HERRAMIENTAS NUEVA -->
                 <div class="canvas-toolbar">
                     <div class="toolbar-row">
-                        <div class="color-picker-container">
+                        <div class="color-picker-container" id="swatches-wrapper">
                             <div class="color-swatch active-tool" data-color="#1e2d5a" style="background-color: #1e2d5a;"></div>
                             <div class="color-swatch" data-color="#8a6d51" style="background-color: #8a6d51;"></div>
                             <div class="color-swatch" data-color="#c25953" style="background-color: #c25953;"></div>
                             <div class="color-swatch" data-color="#4a7c59" style="background-color: #4a7c59;"></div>
                         </div>
-                        <button class="eraser-btn" id="tool-eraser">🧽 Borrador</button>
+                        <div class="mixer-area">
+                            <input type="color" id="color-mixer" class="custom-color-input" value="#eeeae7">
+                            <button id="add-mix-btn" class="mixer-add-btn" title="Guardar mezcla">+</button>
+                        </div>
                     </div>
+                    
+                    <div class="texture-selector">
+                        <button class="texture-btn active-tool" data-texture="solido">✒️ Pluma</button>
+                        <button class="texture-btn" data-texture="carboncillo">✏️ Carboncillo</button>
+                        <button class="texture-btn" data-texture="pincel-seco">🖌️ Pincel Seco</button>
+                        <button class="texture-btn" data-texture="punteado">✨ Trazo</button>
+                    </div>
+
                     <div class="toolbar-row" style="margin-top: 5px;">
-                        <span style="font-size: 0.75rem; opacity: 0.7; font-family: sans-serif;">Pincel:</span>
                         <div class="brush-sizes">
                             <button class="size-btn active-tool" data-size="2.5">S</button>
                             <button class="size-btn" data-size="6">M</button>
-                            <button class="size-btn" data-size="12">L</button>
+                            <button class="size-btn" data-size="14">L</button>
                         </div>
+                        <button class="eraser-btn" id="tool-eraser">🧽 Borrador</button>
                     </div>
                 </div>
 
@@ -407,48 +425,101 @@
                 });
             }
 
-            // LÓGICA AVANZADA DEL LIENZO (COLORES, GROSOR Y BORRADOR)
+            // LÓGICA ULTRA AVANZADA DEL LIENZO (COLORES, TEXTURAS Y MEZCLADOR)
             const canvas = document.getElementById("drawing-canvas");
             const ctx = canvas.getContext("2d");
             let dibujando = false;
 
-            // Estados por defecto del pincel
+            // Variables de estado del pincel
             let colorActual = "#1e2d5a";
             let grosorActual = 2.5;
+            let texturaActual = "solido"; 
             let esBorrador = false;
 
-            ctx.strokeStyle = colorActual;
-            ctx.lineWidth = grosorActual;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
+            function restablecerConfiguracionContexto() {
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+                ctx.setLineDash([]); // Por defecto trazo continuo
+                ctx.globalAlpha = 1.0;
 
-            // Controladores de la barra de herramientas
-            const colorSwatches = document.querySelectorAll(".color-swatch");
-            const sizeBtns = document.querySelectorAll(".size-btn");
-            const eraserBtn = document.getElementById("tool-eraser");
+                if (esBorrador) {
+                    ctx.strokeStyle = "#f4efe6"; // Color del fondo
+                    ctx.lineWidth = grosorActual * 1.5; // Borrador ligeramente más grande
+                } else {
+                    ctx.strokeStyle = colorActual;
+                    ctx.lineWidth = grosorActual;
 
-            colorSwatches.forEach(swatch => {
-                swatch.addEventListener("click", () => {
+                    // Aplicación dinámica de texturas nativas
+                    if (texturaActual === "carboncillo") {
+                        ctx.globalAlpha = 0.4; // Textura suave, traslúcida
+                    } else if (texturaActual === "pincel-seco") {
+                        ctx.setLineDash([1, grosorActual * 1.8]); // Línea discontinua espaciada
+                    } else if (texturaActual === "punteado") {
+                        ctx.setLineDash([grosorActual, grosorActual]); // Estilo línea de trazos decorativa
+                    }
+                }
+            }
+
+            // Interfaz: Selección de muestras de color
+            const swatchesWrapper = document.getElementById("swatches-wrapper");
+            function vincularEventosMuestras() {
+                const swatches = document.querySelectorAll(".color-swatch");
+                swatches.forEach(swatch => {
+                    swatch.replaceWith(swatch.cloneNode(true)); // Limpiar listeners viejos
+                });
+                
+                document.querySelectorAll(".color-swatch").forEach(swatch => {
+                    swatch.addEventListener("click", () => {
+                        esBorrador = false;
+                        document.getElementById("tool-eraser").classList.remove("active-tool");
+                        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active-tool"));
+                        swatch.classList.add("active-tool");
+                        colorActual = swatch.getAttribute("data-color");
+                    });
+                });
+            }
+            vincularEventosMuestras();
+
+            // Interfaz: Mezclador Dinámico de Colores
+            document.getElementById("add-mix-btn").addEventListener("click", () => {
+                const colorMezclado = document.getElementById("color-mixer").value;
+                
+                // Creamos un nuevo elemento swatch de color
+                const nuevoSwatch = document.createElement("div");
+                nuevoSwatch.className = "color-swatch";
+                nuevoSwatch.setAttribute("data-color", colorMezclado);
+                nuevoSwatch.style.backgroundColor = colorMezclado;
+                
+                swatchesWrapper.appendChild(nuevoSwatch);
+                vincularEventosMuestras(); // Re-vincular eventos para incluir la mezcla
+                nuevoSwatch.click(); // Seleccionar automáticamente el color creado
+            });
+
+            // Interfaz: Selección de Texturas
+            document.querySelectorAll(".texture-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
                     esBorrador = false;
-                    eraserBtn.classList.remove("active-tool");
-                    colorSwatches.forEach(s => s.classList.remove("active-tool"));
-                    swatch.classList.add("active-tool");
-                    colorActual = swatch.getAttribute("data-color");
+                    document.getElementById("tool-eraser").classList.remove("active-tool");
+                    document.querySelectorAll(".texture-btn").forEach(b => b.classList.remove("active-tool"));
+                    btn.classList.add("active-tool");
+                    texturaActual = btn.getAttribute("data-texture");
                 });
             });
 
-            sizeBtns.forEach(btn => {
+            // Interfaz: Selección de Tamaños
+            document.querySelectorAll(".size-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
-                    sizeBtns.forEach(b => b.classList.remove("active-tool"));
+                    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active-tool"));
                     btn.classList.add("active-tool");
                     grosorActual = parseFloat(btn.getAttribute("data-size"));
                 });
             });
 
-            eraserBtn.addEventListener("click", () => {
+            // Interfaz: Borrador
+            document.getElementById("tool-eraser").addEventListener("click", () => {
                 esBorrador = true;
-                colorSwatches.forEach(s => s.classList.remove("active-tool"));
-                eraserBtn.classList.add("active-tool");
+                document.querySelectorAll(".color-swatch, .texture-btn").forEach(el => el.classList.remove("active-tool"));
+                document.getElementById("tool-eraser").classList.add("active-tool");
             });
 
             function obtenerCoordenadas(e) {
@@ -462,11 +533,7 @@
                 dibujando = true;
                 const coords = obtenerCoordenadas(e);
                 ctx.beginPath();
-                
-                // Configurar el contexto antes del trazo según la herramienta activa
-                ctx.strokeStyle = esBorrador ? "#f4efe6" : colorActual; 
-                ctx.lineWidth = grosorActual;
-                
+                restablecerConfiguracionContexto();
                 ctx.moveTo(coords.x, coords.y);
             }
 
