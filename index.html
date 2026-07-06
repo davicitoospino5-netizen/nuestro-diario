@@ -51,7 +51,20 @@
         .fer-letter-title { font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 600; color: #8a6d51; margin: 0 0 8px 0; }
         .fer-letter-text { font-style: italic; line-height: 1.6; color: #5c4a37; white-space: pre-line; margin: 0 0 12px 0; }
         .fer-letter-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(138, 109, 81, 0.6); }
+        
+        /* BARRA DE HERRAMIENTAS LIENZO */
         .canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .canvas-toolbar { display: flex; flex-direction: column; gap: 10px; width: 100%; background: rgba(230, 222, 203, 0.3); padding: 12px; border-radius: 12px; border: 1px solid rgba(30, 45, 90, 0.1); }
+        .toolbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
+        .color-picker-container { display: flex; gap: 8px; align-items: center; }
+        .color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; }
+        .color-swatch.active-tool { transform: scale(1.15); border-color: #1e2d5a; }
+        .brush-sizes { display: flex; gap: 8px; align-items: center; }
+        .size-btn { background: none; border: 1px solid rgba(30, 45, 90, 0.3); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: #1e2d5a; }
+        .size-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
+        .eraser-btn { display: flex; align-items: center; gap: 4px; background: none; border: 1px solid rgba(30, 45, 90, 0.3); border-radius: 6px; padding: 4px 8px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; color: #1e2d5a; }
+        .eraser-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
+        
         #drawing-canvas { background-color: #f4efe6; border: 1px solid rgba(30, 45, 90, 0.2); border-radius: 12px; box-shadow: inset 0 0 10px rgba(230, 222, 203, 0.5); cursor: crosshair; touch-action: none; }
         .canvas-controls { display: flex; gap: 10px; width: 100%; }
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; margin-top: 30px; }
@@ -116,18 +129,18 @@
                 <div class="widget-card">
                     <h3>Sintonía del Día</h3>
                     <div style="margin-top: 15px; padding: 10px; background: rgba(30, 45, 90, 0.03); border-radius: 12px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;">
-                    <span style="font-size: 1.5rem;">🎵</span>
-                    <div style="text-align: left;">
-                     <div style="font-size: 0.9rem; font-weight: 600;">Nuestra Playlist</div>
-                    <div style="font-size: 0.75rem; opacity: 0.6;">Sintonía para compartir</div>
-            </div>
-        </div>
-        <a href="https://open.spotify.com/playlist/37i9dQZF1EJK5xHvVELuly" target="_blank" class="btn-premium" style="background-color: #1DB954; color: white; text-decoration: none; text-align: center; display: block; font-weight: 600; padding: 10px 0;">
-            Abrir en Spotify
-        </a>
-    </div>
-</div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;">
+                            <span style="font-size: 1.5rem;">🎵</span>
+                            <div style="text-align: left;">
+                                <div style="font-size: 0.9rem; font-weight: 600;">Nuestra Playlist</div>
+                                <div style="font-size: 0.75rem; opacity: 0.6;">Sintonía para compartir</div>
+                            </div>
+                        </div>
+                        <a href="https://open.spotify.com/playlist/37i9dQZF1EJK5xHvVELuly" target="_blank" class="btn-premium" style="background-color: #1DB954; color: white; text-decoration: none; text-align: center; display: block; font-weight: 600; padding: 10px 0;">
+                            Abrir en Spotify
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -150,7 +163,29 @@
         <section id="view-dibujos" class="view-section">
             <h2 class="section-heading">Trazos y Lienzo</h2>
             <div class="canvas-container">
+                <!-- BARRA DE HERRAMIENTAS NUEVA -->
+                <div class="canvas-toolbar">
+                    <div class="toolbar-row">
+                        <div class="color-picker-container">
+                            <div class="color-swatch active-tool" data-color="#1e2d5a" style="background-color: #1e2d5a;"></div>
+                            <div class="color-swatch" data-color="#8a6d51" style="background-color: #8a6d51;"></div>
+                            <div class="color-swatch" data-color="#c25953" style="background-color: #c25953;"></div>
+                            <div class="color-swatch" data-color="#4a7c59" style="background-color: #4a7c59;"></div>
+                        </div>
+                        <button class="eraser-btn" id="tool-eraser">🧽 Borrador</button>
+                    </div>
+                    <div class="toolbar-row" style="margin-top: 5px;">
+                        <span style="font-size: 0.75rem; opacity: 0.7; font-family: sans-serif;">Pincel:</span>
+                        <div class="brush-sizes">
+                            <button class="size-btn active-tool" data-size="2.5">S</button>
+                            <button class="size-btn" data-size="6">M</button>
+                            <button class="size-btn" data-size="12">L</button>
+                        </div>
+                    </div>
+                </div>
+
                 <canvas id="drawing-canvas" width="320" height="320"></canvas>
+                
                 <div class="canvas-controls">
                     <button id="clear-canvas" class="btn-secondary">Limpiar</button>
                     <button id="save-canvas" class="btn-premium" style="flex:1;">Guardar trazo</button>
@@ -372,14 +407,49 @@
                 });
             }
 
+            // LÓGICA AVANZADA DEL LIENZO (COLORES, GROSOR Y BORRADOR)
             const canvas = document.getElementById("drawing-canvas");
             const ctx = canvas.getContext("2d");
             let dibujando = false;
 
-            ctx.strokeStyle = "#1e2d5a";
-            ctx.lineWidth = 2.5;
+            // Estados por defecto del pincel
+            let colorActual = "#1e2d5a";
+            let grosorActual = 2.5;
+            let esBorrador = false;
+
+            ctx.strokeStyle = colorActual;
+            ctx.lineWidth = grosorActual;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
+
+            // Controladores de la barra de herramientas
+            const colorSwatches = document.querySelectorAll(".color-swatch");
+            const sizeBtns = document.querySelectorAll(".size-btn");
+            const eraserBtn = document.getElementById("tool-eraser");
+
+            colorSwatches.forEach(swatch => {
+                swatch.addEventListener("click", () => {
+                    esBorrador = false;
+                    eraserBtn.classList.remove("active-tool");
+                    colorSwatches.forEach(s => s.classList.remove("active-tool"));
+                    swatch.classList.add("active-tool");
+                    colorActual = swatch.getAttribute("data-color");
+                });
+            });
+
+            sizeBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    sizeBtns.forEach(b => b.classList.remove("active-tool"));
+                    btn.classList.add("active-tool");
+                    grosorActual = parseFloat(btn.getAttribute("data-size"));
+                });
+            });
+
+            eraserBtn.addEventListener("click", () => {
+                esBorrador = true;
+                colorSwatches.forEach(s => s.classList.remove("active-tool"));
+                eraserBtn.classList.add("active-tool");
+            });
 
             function obtenerCoordenadas(e) {
                 const rect = canvas.getBoundingClientRect();
@@ -392,10 +462,14 @@
                 dibujando = true;
                 const coords = obtenerCoordenadas(e);
                 ctx.beginPath();
+                
+                // Configurar el contexto antes del trazo según la herramienta activa
+                ctx.strokeStyle = esBorrador ? "#f4efe6" : colorActual; 
+                ctx.lineWidth = grosorActual;
+                
                 ctx.moveTo(coords.x, coords.y);
             }
 
-            // Soporte multi-touch e interactivo completo
             function dibujar(e) {
                 if (!dibujando) return;
                 e.preventDefault();
