@@ -83,19 +83,21 @@
         .step-pad { flex: 1; aspect-ratio: 1; max-height: 32px; background-color: white; border: 1px solid rgba(30,45,90,0.2); border-radius: 6px; cursor: pointer; transition: all 0.1s; }
         .step-pad.active-pad { background-color: #1e2d5a; border-color: #1e2d5a; }
         .step-pad.playing-now { transform: scale(1.1); box-shadow: 0 0 8px rgba(30, 45, 90, 0.4); border-color: #c25953; }
-        
-        /* NUEVO: ESTILOS PARA EL PIANO VISUAL */
         .piano-container { width: 100%; background: #1e2d5a; padding: 10px; border-radius: 10px; display: flex; gap: 3px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .piano-key { flex: 1; height: 75px; background: white; border-radius: 0 0 4px 4px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: 0.65rem; font-weight: bold; color: #1e2d5a; user-select: none; transition: background 0.1s; }
         .piano-key:active { background: #eeeae7; height: 73px; margin-top: 2px; }
         .sound-selector-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.75rem; background: rgba(255,255,255,0.6); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(30,45,90,0.1); }
         .select-premium { background: white; border: 1px solid rgba(30,45,90,0.2); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; color: #1e2d5a; font-weight: 600; outline: none; }
-
         .studio-controls { display: flex; gap: 8px; width: 100%; margin-top: 5px; }
         .audio-track-card { background: white; border: 1px solid rgba(30, 45, 90, 0.1); padding: 12px; border-radius: 10px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; }
         .track-info { text-align: left; }
         .track-title { font-size: 0.85rem; font-weight: 600; color: #1e2d5a; }
         .track-meta { font-size: 0.7rem; opacity: 0.6; font-family: sans-serif; }
+
+        /* ESTILOS DE LA NUEVA PESTAÑA DE ANIVERSARIO */
+        .anniversary-card { background: #fdfbf7; border: 1px solid rgba(194, 89, 83, 0.3); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(194, 89, 83, 0.08); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #c25953; font-weight: bold; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.02); }
+        #rose-canvas { background: #0c0f1d; border-radius: 16px; border: 2px solid #1e2d5a; box-shadow: inset 0 0 20px rgba(0,0,0,0.6); width: 100%; max-width: 340px; aspect-ratio: 1; }
 
         footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; }
     </style>
@@ -123,6 +125,7 @@
             <li class="menu-item" data-view="view-musica">Estudio de Ritmos 🎧</li>
             <li class="menu-item" data-view="view-dibujos">Lienzo e Ilustración</li>
             <li class="menu-item" data-view="view-notas">El Rincón de Fer 🍂</li>
+            <li class="menu-item" data-view="view-aniversario" style="color: #c25953; font-weight: 600;">Feliz Aniversario Amor 🌹</li>
         </ul>
         
         <div class="sidebar-title" id="filter-title">Filtrar Poemas</div>
@@ -173,7 +176,6 @@
             </div>
         </section>
 
-        <!-- APARTADO DE MÚSICA CON PIANO Y SONIDOS EXTRA -->
         <section id="view-musica" class="view-section">
             <h2 class="section-heading">Estudio de Ritmos 🎧</h2>
             <p style="font-style: italic; font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">Crea loops, toca melodías y cambia los osciladores en tiempo real...</p>
@@ -207,7 +209,6 @@
                     </div>
                 </div>
 
-                <!-- NUEVO: SELECTOR DE TIPO DE SONIDO (OSCILADOR) -->
                 <div class="sound-selector-row">
                     <span>Tipo de Onda Synth:</span>
                     <select id="synth-wave-select" class="select-premium">
@@ -223,7 +224,6 @@
                     <input type="range" id="bpm-slider" min="60" max="180" value="120" style="flex:1; margin-left:10px; accent-color:#1e2d5a;">
                 </div>
 
-                <!-- NUEVO: PIANO INTERACTIVO VISUAL -->
                 <div style="text-align: left; font-size: 0.75rem; font-weight: bold; margin-top: 5px; opacity: 0.8;">Teclado de Piano 🎹</div>
                 <div class="piano-container">
                     <div class="piano-key" data-freq="261.63">Do</div>
@@ -307,6 +307,23 @@
             <div class="gallery-grid" id="gallery-container"></div>
         </section>
 
+        <!-- NUEVA SECCIÓN DE ANIVERSARIO CON LA ROSA MATEMÁTICA EN TIME-LAPSE -->
+        <section id="view-aniversario" class="view-section">
+            <div class="anniversary-card">
+                <h2 class="anniversary-title">Feliz Aniversario Amor 🌹</h2>
+                <p style="font-style: italic; font-size: 0.95rem; opacity: 0.8; margin: 0; line-height: 1.6;">
+                    "Una rosa matemática programada punto a punto, que crece y florece en un time-lapse eterno, tal como nuestro amor de cada día."
+                </p>
+                
+                <!-- Lienzo de renderizado 3D -->
+                <canvas id="rose-canvas" width="600" height="600"></canvas>
+                
+                <button id="restart-lapse-btn" class="btn-premium" style="background-color: #c25953; max-width: 260px;">
+                    🔄 Reiniciar Crecimiento (Time-Lapse)
+                </button>
+            </div>
+        </section>
+
         <footer>Hecho con amor, para siempre.</footer>
     </div>
 
@@ -327,13 +344,10 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         let poemasGlobales = [];
-
-        // VARIABLE GLOBAL DE CONFIGURACIÓN DE AUDIO
         let tipoOndaActual = 'triangle';
 
+        // CONTEXTO DE AUDIO
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // FUNCIÓN MEJORADA QUE SOPORTA FRECUENCIAS DINÁMICAS (PIANO) Y TIPOS DE ONDA
         function playSound(type, freqPersonalizada = null) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
@@ -354,7 +368,7 @@
                 gain.gain.setValueAtTime(0.2, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.08);
                 osc.start(ahora); osc.stop(ahora + 0.08);
             } else if (type === 'synth') {
-                osc.type = tipoOndaActual; // Usa la onda elegida en el selector
+                osc.type = tipoOndaActual;
                 const freq = freqPersonalizada ? freqPersonalizada : 329.63;
                 osc.frequency.setValueAtTime(freq, ahora);
                 gain.gain.setValueAtTime(0.4, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.4);
@@ -401,14 +415,13 @@
                         if (pasaFiltro) {
                             const partes = poema.fecha.split('-');
                             const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
+                            
                             const fechaLegible = fObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-
+                           
                             const card = document.createElement("div");
                             card.className = "poem-card";
                             card.innerHTML = `
-                                <div class="timeline-node">
-                                    <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"><path d="M12,2 C9,7 4,10 4,14 C4,18 7.5,21 12,21 C16.5,21 20,18 20,14 C20,10 15,7 12,2 Z" fill="#1e2d5a"/></svg>
-                                </div>
+                                <div class="timeline-node"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"><path d="M12,2 C9,7 4,10 4,14 C4,18 7.5,21 12,21 C16.5,21 20,18 20,14 C20,10 15,7 12,2 Z" fill="#1e2d5a"/></svg></div>
                                 <div class="poem-date">${fechaLegible}</div>
                                 <h2 class="poem-title">${poema.titulo}</h2>
                                 <p class="poem-text">${poema.texto}</p>
@@ -421,6 +434,112 @@
                 console.error(error);
                 container.innerHTML = "<p style='text-align:center; color:red;'>Error al cargar poemas.</p>";
             }
+        }
+
+        // MOTOR TRIDIMENSIONAL DE LA ROSA MATEMÁTICA CON TIME-LAPSE
+        let roseCanvas, roseCtx;
+        let animationFrameId;
+        let currentGrowth = 0.0; // Control de time-lapse (0.0 a 1.0)
+        let rotationAngle = 0;
+
+        function initRoseEngine() {
+            roseCanvas = document.getElementById("rose-canvas");
+            roseCtx = roseCanvas.getContext("2d");
+            currentGrowth = 0.0;
+            if(animationFrameId) cancelAnimationFrame(animationFrameId);
+            renderRoseLoop();
+        }
+
+        function renderRoseLoop() {
+            // Limpieza del fondo espacial profundo
+            roseCtx.fillStyle = "#0c0f1d";
+            roseCtx.fillRect(0, 0, roseCanvas.width, roseCanvas.height);
+
+            // Dibujo opcional de una grilla matemática limpia de fondo estilo radar/3D plot
+            roseCtx.strokeStyle = "rgba(30, 45, 90, 0.25)";
+            roseCtx.lineWidth = 1;
+            for(let i = 50; i < roseCanvas.width; i += 50) {
+                roseCtx.beginPath(); roseCtx.moveTo(i, 0); roseCtx.lineTo(i, roseCanvas.height); roseCtx.stroke();
+                roseCtx.beginPath(); roseCtx.moveTo(0, i); roseCtx.lineTo(roseCanvas.width, i); roseCtx.stroke();
+            }
+
+            // Simulación e incremento del time-lapse
+            if (currentGrowth < 1.0) {
+                currentGrowth += 0.006; // Velocidad del florecimiento
+            }
+            rotationAngle += 0.005; // Rotación constante sutil para apreciar el 3D
+
+            const centerX = roseCanvas.width / 2;
+            const centerY = roseCanvas.height / 2 + 30;
+
+            // Arreglo para proyectar y ordenar puntos por profundidad (Z-buffering plano)
+            let puntosProyectados = [];
+
+            // Ecuaciones de la superficie de la Rosa (Fórmula Rosa de Rose modificada)
+            // Recorremos t (ángulo angular) y r (radio axial)
+            for (let r = 0.0; r <= 1.0; r += 0.03) {
+                // Ajustamos el radio máximo proyectado en función del crecimiento actual
+                let rCrecimiento = r * currentGrowth;
+                
+                for (let theta = 0; theta < Math.PI * 16; theta += 0.15) {
+                    
+                    // Función armónica para modelar los pétalos ondulados superpuestos
+                    let deka = (Math.PI / 2) * Math.exp(-theta / (Math.PI * 8));
+                    let ph = 1 - (1/2) * Math.pow((5/4) * Math.pow(1 - ((3.6 * theta) % (Math.PI * 2)) / Math.PI, 2) - 1/4, 2);
+                    let A = 1.956528453 * rCrecimiento * rCrecimiento * Math.shadow = (1.2 * rCrecimiento - 0.3) * rCrecimiento;
+                    let yAxial = 1 - Math.sin(deka) * ph;
+                    
+                    // Coordenadas espaciales 3D antes de rotación
+                    let x3d = A * ph * Math.sin(theta);
+                    let z3d = A * ph * Math.cos(theta);
+                    let y3d = (deka * ph * Math.cos(deka) - yAxial) * 140 + 100; // Altura base escalada
+
+                    // Rotación en el eje Y espacial
+                    let rotX = x3d * Math.cos(rotationAngle) - z3d * Math.sin(rotationAngle);
+                    let rotZ = x3d * Math.sin(rotationAngle) + z3d * Math.cos(rotationAngle);
+
+                    // Multiplicador de escala de perspectiva
+                    let escalaPersp = 1.3; 
+                    let xProyectado = centerX + rotX * 130 * escalaPersp;
+                    let yProyectado = centerY - y3d * escalaPersp + (rotZ * 30); // inclinación isométrica sutil
+
+                    // Definición cromática basada en el radio y la profundidad ( degradado carmesí a rosa)
+                    let rojo = Math.floor(210 + (1 - r) * 45);
+                    let verde = Math.floor(20 * r + (1 - currentGrowth) * 40);
+                    let azul = Math.floor(30 * r + (1 - r) * 60);
+                    
+                    // Sombreado dinámico según la profundidad Z
+                    let factorLuz = (rotZ + 1.5) / 3;
+                    rojo = Math.floor(rojo * (0.4 + factorLuz * 0.6));
+                    verde = Math.floor(verde * (0.4 + factorLuz * 0.6));
+                    azul = Math.floor(azul * (0.4 + factorLuz * 0.6));
+
+                    puntosProyectados.push({
+                        x: xProyectado,
+                        y: y Proyectado = yProyectado,
+                        z: rotZ, // Almacenamos profundidad para ordenar
+                        color: `rgb(${rojo}, ${verde}, ${azul})`,
+                        radioPunto: Math.max(1, (1.5 - r) * 3)
+                    });
+                }
+            }
+
+            // Pintar ordenando por eje Z de atrás hacia adelante para que los pétalos frontales tapen a los traseros
+            puntosProyectados.sort((a, b) => a.z - b.z);
+
+            puntosProyectados.forEach(p => {
+                roseCtx.fillStyle = p.color;
+                roseCtx.beginPath();
+                roseCtx.arc(p.x, p.y, p.radioPunto, 0, Math.PI * 2);
+                roseCtx.fill();
+            });
+
+            // Texto de firma estilizado abajo a la derecha de la rosa
+            roseCtx.font = "bold 11px sans-serif";
+            roseCtx.fillStyle = "rgba(194, 89, 83, 0.4)";
+            roseCtx.fillText("@nuestro_universo", roseCanvas.width - 120, roseCanvas.height - 20);
+
+            animationFrameId = requestAnimationFrame(renderRoseLoop);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -454,6 +573,13 @@
                     const activeSection = document.getElementById(targetView);
                     if (activeSection) activeSection.classList.add("active-view");
 
+                    // DISPARADOR DE LA PESTAÑA ANIVERSARIO
+                    if (targetView === "view-aniversario") {
+                        setTimeout(initRoseEngine, 100);
+                    } else {
+                        if(animationFrameId) cancelAnimationFrame(animationFrameId);
+                    }
+
                     if (targetView === "view-dibujos") {
                         escucharGaleriaTiempoReal();
                         const canvasObj = document.getElementById("drawing-canvas");
@@ -466,26 +592,25 @@
                 });
             });
 
-            const fechaInicio = new Date(2026, 4, 18); 
+            document.getElementById("restart-lapse-btn").addEventListener("click", () => {
+                currentGrowth = 0.0; // Resetea el time-lapse para que florezca otra vez
+            });
+
+            const fechaInicio = new Date(2026, 3, 18); 
             const diasJuntos = Math.floor((new Date() - fechaInicio) / (1000 * 60 * 60 * 24));
             document.getElementById("love-counter").innerText = diasJuntos;
 
-            // INTERFAZ: ASIGNAR CAMBIO DE ONDA DEL SINTETIZADOR
             document.getElementById("synth-wave-select").addEventListener("change", (e) => {
                 tipoOndaActual = e.target.value;
             });
 
-            // INTERFAZ: TECLADO DE PIANO INTERACTIVO
             document.querySelectorAll(".piano-key").forEach(key => {
                 const tocarNota = () => {
                     const freq = parseFloat(key.getAttribute("data-freq"));
                     playSound('synth', freq);
                 };
                 key.addEventListener("mousedown", tocarNota);
-                key.addEventListener("touchstart", (e) => {
-                    e.preventDefault();
-                    tocarNota();
-                });
+                key.addEventListener("touchstart", (e) => { e.preventDefault(); tocarNota(); });
             });
 
             // FIREBASE: NOTAS
@@ -500,8 +625,7 @@
                         fecha: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }),
                         timestamp: Date.now()
                     });
-                    document.getElementById("note-title").value = "";
-                    document.getElementById("note-text").value = "";
+                    document.getElementById("note-title").value = ""; document.getElementById("note-text").value = "";
                 }
             });
 
@@ -525,7 +649,7 @@
                 });
             }
 
-            // MOTOR SECUENCIADOR DE MÚSICA (LOOP)
+            // MOTOR SECUENCIADOR DE MÚSICA
             let beatGrid = { kick: Array(8).fill(false), snare: Array(8).fill(false), hat: Array(8).fill(false), synth: Array(8).fill(false) };
             let playing = false; let currentStep = 0; let beatInterval = null; let tempoBPM = 120;
 
