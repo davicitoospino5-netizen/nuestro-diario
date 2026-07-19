@@ -94,7 +94,7 @@
         .track-title { font-size: 0.85rem; font-weight: 600; color: #1e2d5a; }
         .track-meta { font-size: 0.7rem; opacity: 0.6; font-family: sans-serif; }
 
-        /* ESTILOS DE LA NUEVA PESTAÑA DE ANIVERSARIO */
+        /* ESTILOS DE LA PESTAÑA DE ANIVERSARIO */
         .anniversary-card { background: #fdfbf7; border: 1px solid rgba(194, 89, 83, 0.3); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(194, 89, 83, 0.08); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #c25953; font-weight: bold; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.02); }
         #rose-canvas { background: #0c0f1d; border-radius: 16px; border: 2px solid #1e2d5a; box-shadow: inset 0 0 20px rgba(0,0,0,0.6); width: 100%; max-width: 340px; aspect-ratio: 1; }
@@ -307,17 +307,14 @@
             <div class="gallery-grid" id="gallery-container"></div>
         </section>
 
-        <!-- NUEVA SECCIÓN DE ANIVERSARIO CON LA ROSA MATEMÁTICA EN TIME-LAPSE -->
+        <!-- SECCIÓN DE ANIVERSARIO CORREGIDA -->
         <section id="view-aniversario" class="view-section">
             <div class="anniversary-card">
                 <h2 class="anniversary-title">Feliz Aniversario Amor 🌹</h2>
                 <p style="font-style: italic; font-size: 0.95rem; opacity: 0.8; margin: 0; line-height: 1.6;">
                     "Una rosa matemática programada punto a punto, que crece y florece en un time-lapse eterno, tal como nuestro amor de cada día."
                 </p>
-                
-                <!-- Lienzo de renderizado 3D -->
                 <canvas id="rose-canvas" width="600" height="600"></canvas>
-                
                 <button id="restart-lapse-btn" class="btn-premium" style="background-color: #c25953; max-width: 260px;">
                     🔄 Reiniciar Crecimiento (Time-Lapse)
                 </button>
@@ -402,7 +399,6 @@
                         }
                     });
                 }
-
                 container.innerHTML = "";
                 const poemasOrdenados = [...poemasGlobales].sort((a, b) => b.fecha.localeCompare(a.fecha));
                 const hoy = new Date();
@@ -415,9 +411,7 @@
                         if (pasaFiltro) {
                             const partes = poema.fecha.split('-');
                             const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
-                            
                             const fechaLegible = fObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-                           
                             const card = document.createElement("div");
                             card.className = "poem-card";
                             card.innerHTML = `
@@ -436,10 +430,10 @@
             }
         }
 
-        // MOTOR TRIDIMENSIONAL DE LA ROSA MATEMÁTICA CON TIME-LAPSE
+        // MOTOR TRIDIMENSIONAL DE LA ROSA MATEMÁTICA CORREGIDO
         let roseCanvas, roseCtx;
         let animationFrameId;
-        let currentGrowth = 0.0; // Control de time-lapse (0.0 a 1.0)
+        let currentGrowth = 0.0;
         let rotationAngle = 0;
 
         function initRoseEngine() {
@@ -451,11 +445,9 @@
         }
 
         function renderRoseLoop() {
-            // Limpieza del fondo espacial profundo
             roseCtx.fillStyle = "#0c0f1d";
             roseCtx.fillRect(0, 0, roseCanvas.width, roseCanvas.height);
 
-            // Dibujo opcional de una grilla matemática limpia de fondo estilo radar/3D plot
             roseCtx.strokeStyle = "rgba(30, 45, 90, 0.25)";
             roseCtx.lineWidth = 1;
             for(let i = 50; i < roseCanvas.width; i += 50) {
@@ -463,52 +455,39 @@
                 roseCtx.beginPath(); roseCtx.moveTo(0, i); roseCtx.lineTo(roseCanvas.width, i); roseCtx.stroke();
             }
 
-            // Simulación e incremento del time-lapse
             if (currentGrowth < 1.0) {
-                currentGrowth += 0.006; // Velocidad del florecimiento
+                currentGrowth += 0.006;
             }
-            rotationAngle += 0.005; // Rotación constante sutil para apreciar el 3D
+            rotationAngle += 0.005;
 
             const centerX = roseCanvas.width / 2;
             const centerY = roseCanvas.height / 2 + 30;
-
-            // Arreglo para proyectar y ordenar puntos por profundidad (Z-buffering plano)
             let puntosProyectados = [];
 
-            // Ecuaciones de la superficie de la Rosa (Fórmula Rosa de Rose modificada)
-            // Recorremos t (ángulo angular) y r (radio axial)
             for (let r = 0.0; r <= 1.0; r += 0.03) {
-                // Ajustamos el radio máximo proyectado en función del crecimiento actual
                 let rCrecimiento = r * currentGrowth;
                 
                 for (let theta = 0; theta < Math.PI * 16; theta += 0.15) {
-                    
-                    // Función armónica para modelar los pétalos ondulados superpuestos
-                    let deka = (Math.PI / 2) * Math.exp(-theta / (Math.PI * 8));
+                    let d = (Math.PI / 2) * Math.exp(-theta / (Math.PI * 8));
                     let ph = 1 - (1/2) * Math.pow((5/4) * Math.pow(1 - ((3.6 * theta) % (Math.PI * 2)) / Math.PI, 2) - 1/4, 2);
-                    let A = 1.956528453 * rCrecimiento * rCrecimiento * Math.shadow = (1.2 * rCrecimiento - 0.3) * rCrecimiento;
-                    let yAxial = 1 - Math.sin(deka) * ph;
+                    let A = 1.956528453 * rCrecimiento * rCrecimiento * (1.2 * rCrecimiento - 0.3);
+                    let yAxial = 1 - Math.sin(d) * ph;
                     
-                    // Coordenadas espaciales 3D antes de rotación
                     let x3d = A * ph * Math.sin(theta);
                     let z3d = A * ph * Math.cos(theta);
-                    let y3d = (deka * ph * Math.cos(deka) - yAxial) * 140 + 100; // Altura base escalada
+                    let y3d = (d * ph * Math.cos(d) - yAxial) * 140 + 100;
 
-                    // Rotación en el eje Y espacial
                     let rotX = x3d * Math.cos(rotationAngle) - z3d * Math.sin(rotationAngle);
                     let rotZ = x3d * Math.sin(rotationAngle) + z3d * Math.cos(rotationAngle);
 
-                    // Multiplicador de escala de perspectiva
                     let escalaPersp = 1.3; 
                     let xProyectado = centerX + rotX * 130 * escalaPersp;
-                    let yProyectado = centerY - y3d * escalaPersp + (rotZ * 30); // inclinación isométrica sutil
+                    let yProyectado = centerY - y3d * escalaPersp + (rotZ * 30);
 
-                    // Definición cromática basada en el radio y la profundidad ( degradado carmesí a rosa)
                     let rojo = Math.floor(210 + (1 - r) * 45);
                     let verde = Math.floor(20 * r + (1 - currentGrowth) * 40);
                     let azul = Math.floor(30 * r + (1 - r) * 60);
                     
-                    // Sombreado dinámico según la profundidad Z
                     let factorLuz = (rotZ + 1.5) / 3;
                     rojo = Math.floor(rojo * (0.4 + factorLuz * 0.6));
                     verde = Math.floor(verde * (0.4 + factorLuz * 0.6));
@@ -516,15 +495,14 @@
 
                     puntosProyectados.push({
                         x: xProyectado,
-                        y: y Proyectado = yProyectado,
-                        z: rotZ, // Almacenamos profundidad para ordenar
+                        y: yProyectado,
+                        z: rotZ,
                         color: `rgb(${rojo}, ${verde}, ${azul})`,
                         radioPunto: Math.max(1, (1.5 - r) * 3)
                     });
                 }
             }
 
-            // Pintar ordenando por eje Z de atrás hacia adelante para que los pétalos frontales tapen a los traseros
             puntosProyectados.sort((a, b) => a.z - b.z);
 
             puntosProyectados.forEach(p => {
@@ -534,7 +512,6 @@
                 roseCtx.fill();
             });
 
-            // Texto de firma estilizado abajo a la derecha de la rosa
             roseCtx.font = "bold 11px sans-serif";
             roseCtx.fillStyle = "rgba(194, 89, 83, 0.4)";
             roseCtx.fillText("@nuestro_universo", roseCanvas.width - 120, roseCanvas.height - 20);
@@ -573,7 +550,6 @@
                     const activeSection = document.getElementById(targetView);
                     if (activeSection) activeSection.classList.add("active-view");
 
-                    // DISPARADOR DE LA PESTAÑA ANIVERSARIO
                     if (targetView === "view-aniversario") {
                         setTimeout(initRoseEngine, 100);
                     } else {
@@ -593,7 +569,7 @@
             });
 
             document.getElementById("restart-lapse-btn").addEventListener("click", () => {
-                currentGrowth = 0.0; // Resetea el time-lapse para que florezca otra vez
+                currentGrowth = 0.0;
             });
 
             const fechaInicio = new Date(2026, 3, 18); 
