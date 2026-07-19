@@ -46,4 +46,807 @@
         .btn-premium:hover { opacity: 0.9; }
         .btn-secondary { width: 100%; padding: 10px; background: transparent; border: 1px solid #1e2d5a; color: #1e2d5a; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 6px; cursor: pointer; }
         .notes-list { display: flex; flex-direction: column; gap: 16px; }
-        .fer-letter-card { background-color: #fdfbf7; border: 1px solid rgbaSolo soy un modelo de lenguaje, así que no puedo hacer lo que me pides.
+        .fer-letter-card { background-color: #fdfbf7; border: 1px solid rgba(138, 109, 81, 0.2); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(138, 109, 81, 0.05); margin-bottom: 20px; position: relative; }
+        .fer-letter-card::before { content: '🍂'; position: absolute; top: 15px; right: 15px; font-size: 0.9rem; opacity: 0.5; }
+        .fer-letter-title { font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 600; color: #8a6d51; margin: 0 0 8px 0; }
+        .fer-letter-text { font-style: italic; line-height: 1.6; color: #5c4a37; white-space: pre-line; margin: 0 0 12px 0; }
+        .fer-letter-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(138, 109, 81, 0.6); }
+        
+        /* ESTILOS DEL LIENZO */
+        .canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .canvas-toolbar { display: flex; flex-direction: column; gap: 10px; width: 100%; background: rgba(230, 222, 203, 0.35); padding: 12px; border-radius: 12px; border: 1px solid rgba(30, 45, 90, 0.1); }
+        .toolbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; flex-wrap: wrap; }
+        .color-picker-container { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; max-width: 70%; }
+        .color-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; }
+        .color-swatch.active-tool { transform: scale(1.2); border-color: #1e2d5a; }
+        .mixer-area { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.4); padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(30,45,90,0.1); }
+        .custom-color-input { border: none; background: none; width: 28px; height: 28px; cursor: pointer; padding: 0; }
+        .mixer-add-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #1e2d5a; padding: 0 4px; }
+        .texture-selector { display: flex; gap: 6px; width: 100%; margin-top: 2px; }
+        .texture-btn { flex: 1; background: white; border: 1px solid rgba(30, 45, 90, 0.2); padding: 6px 4px; border-radius: 6px; font-family: sans-serif; font-size: 0.65rem; text-transform: uppercase; cursor: pointer; color: #1e2d5a; text-align: center; }
+        .texture-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
+        .brush-sizes { display: flex; gap: 8px; align-items: center; }
+        .size-btn { background: white; border: 1px solid rgba(30, 45, 90, 0.2); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: #1e2d5a; }
+        .size-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
+        .eraser-btn { display: flex; align-items: center; gap: 4px; background: white; border: 1px solid rgba(30, 45, 90, 0.2); border-radius: 6px; padding: 6px 10px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; color: #1e2d5a; }
+        .eraser-btn.active-tool { background-color: #1e2d5a; color: #f4efe6; border-color: #1e2d5a; }
+        #drawing-canvas { background-color: #f4efe6; border: 1px solid rgba(30, 45, 90, 0.2); border-radius: 12px; box-shadow: inset 0 0 10px rgba(230, 222, 203, 0.5); cursor: crosshair; touch-action: none; }
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; margin-top: 30px; }
+        .gallery-item { width: 100%; border-radius: 8px; border: 1px solid rgba(30, 45, 90, 0.15); overflow: hidden; background-color: rgba(230, 222, 203, 0.2); }
+        .gallery-item img { width: 100%; height: auto; display: block; }
+
+        /* ESTILOS DE LA PESTAÑA DE MÚSICA ENRIQUECIDA */
+        .music-studio { width: 100%; display: flex; flex-direction: column; gap: 12px; background: rgba(30, 45, 90, 0.03); padding: 16px; border-radius: 16px; border: 1px solid rgba(30, 45, 90, 0.1); margin-top: 10px; }
+        .seq-row { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; }
+        .inst-label { width: 55px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #1e2d5a; opacity: 0.8; text-align: left; }
+        .steps-container { display: flex; gap: 4px; flex: 1; justify-content: space-between; }
+        .step-pad { flex: 1; aspect-ratio: 1; max-height: 32px; background-color: white; border: 1px solid rgba(30,45,90,0.2); border-radius: 6px; cursor: pointer; transition: all 0.1s; }
+        .step-pad.active-pad { background-color: #1e2d5a; border-color: #1e2d5a; }
+        .step-pad.playing-now { transform: scale(1.1); box-shadow: 0 0 8px rgba(30, 45, 90, 0.4); border-color: #c25953; }
+        .piano-container { width: 100%; background: #1e2d5a; padding: 10px; border-radius: 10px; display: flex; gap: 3px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .piano-key { flex: 1; height: 75px; background: white; border-radius: 0 0 4px 4px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: 0.65rem; font-weight: bold; color: #1e2d5a; user-select: none; transition: background 0.1s; }
+        .piano-key:active { background: #eeeae7; height: 73px; margin-top: 2px; }
+        .sound-selector-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.75rem; background: rgba(255,255,255,0.6); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(30,45,90,0.1); }
+        .select-premium { background: white; border: 1px solid rgba(30,45,90,0.2); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; color: #1e2d5a; font-weight: 600; outline: none; }
+        .studio-controls { display: flex; gap: 8px; width: 100%; margin-top: 5px; }
+        .audio-track-card { background: white; border: 1px solid rgba(30, 45, 90, 0.1); padding: 12px; border-radius: 10px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; }
+        .track-info { text-align: left; }
+        .track-title { font-size: 0.85rem; font-weight: 600; color: #1e2d5a; }
+        .track-meta { font-size: 0.7rem; opacity: 0.6; font-family: sans-serif; }
+
+        /* ESTILOS DE LA PESTAÑA DE ANIVERSARIO */
+        .anniversary-card { background: #fff5f5; border: 1px solid rgba(244, 63, 94, 0.2); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(244, 63, 94, 0.05); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; color: #1e2d5a; }
+        .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #e11d48; font-weight: bold; margin: 0; }
+        #rose-canvas { background: #fff5f5; border-radius: 16px; width: 100%; max-width: 340px; aspect-ratio: 1; }
+
+        footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="notebook-lines"></div>
+    <div class="overlay" id="menu-overlay"></div>
+
+    <button class="menu-btn" id="menu-toggle" aria-label="Abrir menú">
+        <svg viewBox="0 0 40 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="6" r="1" fill="#1e2d5a" opacity="0.3"/>
+            <circle cx="21" cy="11" r="1.2" fill="#1e2d5a" opacity="0.45"/>
+            <circle cx="25" cy="17" r="1.5" fill="#1e2d5a" opacity="0.6"/>
+            <path d="M 25,18 C 22,24 14,26 12,32 C 10,38 13,44 20,44 C 28,44 32,38 30,30 C 29,24 27,20 25,18 Z" stroke="#1e2d5a" stroke-width="1.2" fill="none"/>
+            <path d="M 23,24 C 20,29 18,34 20,41" stroke="#1e2d5a" stroke-width="0.8" opacity="0.4"/>
+        </svg>
+    </button>
+
+    <nav class="sidebar" id="sidebar-menu">
+        <div class="sidebar-title">Rincones</div>
+        <ul class="menu-options">
+            <li class="menu-item active" data-view="view-poemas">Poemas Diarios</li>
+            <li class="menu-item" data-view="view-widgets">Tablón de Widgets</li>
+            <li class="menu-item" data-view="view-musica">Estudio de Ritmos 🎧</li>
+            <li class="menu-item" data-view="view-dibujos">Lienzo e Ilustración</li>
+            <li class="menu-item" data-view="view-notas">El Rincón de Fer 🍂</li>
+            <li class="menu-item" data-view="view-aniversario" style="color: #e11d48; font-weight: 600;">Feliz Aniversario Amor 🌹</li>
+        </ul>
+        
+        <div class="sidebar-title" id="filter-title">Filtrar Poemas</div>
+        <ul class="menu-options" id="poem-filters">
+            <li class="menu-item poem-filter-btn active" data-filter="todos">Todos los versos</li>
+            <li class="menu-item poem-filter-btn" data-filter="este-mes">Este mes</li>
+        </ul>
+    </nav>
+
+    <div class="app-container">
+        <header>
+            <div class="logo-container">
+                <svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50,85 C50,70 48,55 46,42 C44,30 48,22 55,18 C62,15 68,18 64,26 C60,32 50,34 43,30 C36,26 38,16 48,14 C58,12 65,22 60,33 C54,42 42,44 36,36 C32,30 35,22 42,21 C48,20 52,25 49,30 C46,34 40,33 42,27" stroke="#1e2d5a" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1 class="app-title">Nuestro Diario</h1>
+        </header>
+
+        <section id="view-poemas" class="view-section active-view">
+            <div class="timeline" id="timeline-container">Cargando versos...</div>
+        </section>
+
+        <section id="view-widgets" class="view-section">
+            <h2 class="section-heading">Detalles</h2>
+            <div class="widget-grid">
+                <div class="widget-card">
+                    <h3>Tiempo Juntos</h3>
+                    <div class="counter-number" id="love-counter">0</div>
+                    <p style="margin:0; font-size:0.85rem; opacity:0.7;">Días compartiendo universos</p>
+                </div>
+
+                <div class="widget-card">
+                    <h3>Sintonía del Día</h3>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(30, 45, 90, 0.03); border-radius: 12px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;">
+                            <span style="font-size: 1.5rem;">🎵</span>
+                            <div style="text-align: left;">
+                                <div style="font-size: 0.9rem; font-weight: 600;">Nuestra Playlist</div>
+                                <div style="font-size: 0.75rem; opacity: 0.6;">Sintonía para compartir</div>
+                            </div>
+                        </div>
+                        <a href="https://open.spotify.com/playlist/37i9dQZF1EJK5xHvVELuly" target="_blank" class="btn-premium" style="background-color: #1DB954; color: white; text-decoration: none; text-align: center; display: block; font-weight: 600; padding: 10px 0;">
+                            Abrir en Spotify
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-musica" class="view-section">
+            <h2 class="section-heading">Estudio de Ritmos 🎧</h2>
+            <p style="font-style: italic; font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">Crea loops, toca melodías y cambia los osciladores en tiempo real...</p>
+            <div class="music-studio">
+                <div class="seq-row" data-instrument="kick">
+                    <span class="inst-label">🥁 Kick</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div class="seq-row" data-instrument="snare">
+                    <span class="inst-label">🥁 Snare</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div class="seq-row" data-instrument="hat">
+                    <span class="inst-label">🎵 Hi-Hat</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+                <div class="seq-row" data-instrument="synth">
+                    <span class="inst-label">🎹 Synth Loop</span>
+                    <div class="steps-container">
+                        <div class="step-pad" data-step="0"></div><div class="step-pad" data-step="1"></div><div class="step-pad" data-step="2"></div><div class="step-pad" data-step="3"></div>
+                        <div class="step-pad" data-step="4"></div><div class="step-pad" data-step="5"></div><div class="step-pad" data-step="6"></div><div class="step-pad" data-step="7"></div>
+                    </div>
+                </div>
+
+                <div class="sound-selector-row">
+                    <span>Tipo de Onda Synth:</span>
+                    <select id="synth-wave-select" class="select-premium">
+                        <option value="sine">🎵 Sinusoidal (Suave/Jazz)</option>
+                        <option value="triangle" selected>🔺 Triangular (Cálido/Lo-Fi)</option>
+                        <option value="sawtooth">⚡ Diente de Sierra (Trap/Lead)</option>
+                        <option value="square">🔲 Cuadrada (8-Bit/Retro)</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; align-items:center; justify-content:space-between; width:100%; font-size:0.75rem; color:#1e2d5a;">
+                    <span>Velocidad: <b id="bpm-val">120</b> BPM</span>
+                    <input type="range" id="bpm-slider" min="60" max="180" value="120" style="flex:1; margin-left:10px; accent-color:#1e2d5a;">
+                </div>
+
+                <div style="text-align: left; font-size: 0.75rem; font-weight: bold; margin-top: 5px; opacity: 0.8; color:#1e2d5a;">Teclado de Piano 🎹</div>
+                <div class="piano-container">
+                    <div class="piano-key" data-freq="261.63">Do</div>
+                    <div class="piano-key" data-freq="293.66">Re</div>
+                    <div class="piano-key" data-freq="329.63">Mi</div>
+                    <div class="piano-key" data-freq="349.23">Fa</div>
+                    <div class="piano-key" data-freq="392.00">Sol</div>
+                    <div class="piano-key" data-freq="440.00">La</div>
+                    <div class="piano-key" data-freq="493.88">Si</div>
+                </div>
+
+                <div class="studio-controls">
+                    <button id="play-beat-btn" class="btn-premium" style="flex:1; padding:8px;">▶️ Play</button>
+                    <button id="clear-beat-btn" class="btn-secondary" style="flex:1; padding:8px; border-color:#1e2d5a; color:#1e2d5a;">Reset</button>
+                </div>
+                <input type="text" id="track-name-input" class="text-box" style="padding:6px; font-size:0.8rem; margin:5px 0 0 0;" placeholder="Nombre de tu base...">
+                <button id="save-beat-btn" class="btn-premium" style="background-color:#4a7c59; padding:8px;">💾 Grabar y guardar base</button>
+            </div>
+            <h3 class="section-heading" style="font-size:0.9rem; margin-top:20px; text-align:center;">Bases Grabadas 📁</h3>
+            <div id="tracks-cloud-container" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </section>
+
+        <section id="view-notas" class="view-section">
+            <h2 class="section-heading" style="color: #8a6d51; border-bottom-color: rgba(138, 109, 81, 0.3);">Tu Rincón Secreto (Fer)</h2>
+            <p style="font-style: italic; font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px; color: #8a6d51;">
+                Este es tu espacio, Fer. Cada pensamiento, verso o promesa que dejes aquí se guardará en tu lienzo de susurros...
+            </p>
+            <div class="note-input-area">
+                <input type="text" id="note-title" class="text-box" style="font-weight: 600;" placeholder="Título de tu carta o verso...">
+                <textarea id="note-text" class="text-box" rows="5" placeholder="Escribe aquí lo que dicte tu corazón..."></textarea>
+                <button id="add-note-btn" class="btn-premium" style="background-color: #8a6d51; color: #f4efe6;">Guardar en mis susurros</button>
+                <button id="clear-notes-btn" class="btn-secondary" style="margin-top: 10px; color: #8a6d51; border-color: #8a6d51;">Borrar todos los susurros</button>
+            </div>
+            <h3 class="section-heading" style="font-size: 1.1rem; margin-top: 30px; color: #8a6d51; border-bottom: none;">Mis cartas para ti</h3>
+            <div class="notes-list" id="notes-container"></div>
+        </section>
+
+        <section id="view-dibujos" class="view-section">
+            <h2 class="section-heading">Trazos y Lienzo</h2>
+            <div class="canvas-container">
+                <div class="canvas-toolbar">
+                    <div class="toolbar-row">
+                        <div class="color-picker-container" id="swatches-wrapper">
+                            <div class="color-swatch active-tool" data-color="#1e2d5a" style="background-color: #1e2d5a;"></div>
+                            <div class="color-swatch" data-color="#8a6d51" style="background-color: #8a6d51;"></div>
+                            <div class="color-swatch" data-color="#c25953" style="background-color: #c25953;"></div>
+                            <div class="color-swatch" data-color="#4a7c59" style="background-color: #4a7c59;"></div>
+                        </div>
+                        <div class="mixer-area">
+                            <input type="color" id="color-mixer" class="custom-color-input" value="#eeeae7">
+                            <button id="add-mix-btn" class="mixer-add-btn" title="Guardar mezcla">+</button>
+                        </div>
+                    </div>
+                    <div class="texture-selector">
+                        <button class="texture-btn active-tool" data-texture="solido">✒️ Pluma</button>
+                        <button class="texture-btn" data-texture="carboncillo">✏️ Carboncillo</button>
+                        <button class="texture-btn" data-texture="acuarela">🎨 Acuarela</button>
+                        <button class="texture-btn" data-texture="spray">✨ Spray</button>
+                    </div>
+                    <div class="toolbar-row" style="margin-top: 5px;">
+                        <div class="brush-sizes">
+                            <button class="size-btn active-tool" data-size="2.5">S</button>
+                            <button class="size-btn" data-size="6">M</button>
+                            <button class="size-btn" data-size="14">L</button>
+                        </div>
+                        <button class="eraser-btn" id="tool-eraser">🧽 Borrador</button>
+                    </div>
+                </div>
+
+                <canvas id="drawing-canvas" width="320" height="320"></canvas>
+                <div class="canvas-controls">
+                    <button id="clear-canvas" class="btn-secondary" style="color:#1e2d5a; border-color:#1e2d5a;">Limpiar</button>
+                    <button id="save-canvas" class="btn-premium" style="flex:1;">Guardar trazo</button>
+                </div>
+                <div style="width:100%; margin-top:15px; text-align:center;">
+                    <label for="upload-image" class="btn-secondary" style="display:block; width:100%; text-align:center; color:#1e2d5a; border-color:#1e2d5a;">Subir un dibujo/foto</label>
+                    <input type="file" id="upload-image" accept="image/*" style="display:none;">
+                </div>
+            </div>
+            <h3 class="section-heading" style="font-size:1.1rem; margin-top:40px;">Galería de Arte</h3>
+            <div class="gallery-grid" id="gallery-container"></div>
+        </section>
+
+        <section id="view-aniversario" class="view-section">
+            <div class="anniversary-card">
+                <h2 class="anniversary-title">Feliz Aniversario Amor 🌹</h2>
+                <p style="font-style: italic; font-size: 0.95rem; opacity: 0.8; margin: 0; line-height: 1.6;">
+                    "Cada curva y trazo florece a tu lado de forma perfecta, creando la silueta de nuestra propia historia."
+                </p>
+                <canvas id="rose-canvas" width="600" height="600"></canvas>
+                <button id="restart-lapse-btn" class="btn-premium" style="background-color: #e11d48; max-width: 260px;">
+                    ✨ Reanimar Trazos
+                </button>
+            </div>
+        </section>
+
+        <footer id="app-footer" style="color: rgba(30, 45, 90, 0.4);">Hecho con amor, para siempre.</footer>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBkcbOf9oXR7Gt_DEql_Q09epDhsTsi1yo",
+        authDomain: "nuestro-diario-fer.firebaseapp.com",
+        projectId: "nuestro-diario-fer",
+        storageBucket: "nuestro-diario-fer.firebasestorage.app",
+        messagingSenderId: "440739775091",
+        appId: "1:440739775091:web:aad9afcb1ba42ab6086006",
+        measurementId: "G-MP49ZYX4WT"
+    };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        let poemasGlobales = [];
+        let tipoOndaActual = 'triangle';
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type, freqPersonalizada = null) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            const ahora = audioCtx.currentTime;
+
+            if (type === 'kick') {
+                osc.frequency.setValueAtTime(120, ahora); osc.frequency.exponentialRampToValueAtTime(0.01, ahora + 0.3);
+                gain.gain.setValueAtTime(1, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.3);
+                osc.start(ahora); osc.stop(ahora + 0.3);
+            } else if (type === 'snare') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(280, ahora);
+                gain.gain.setValueAtTime(0.7, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.25);
+                osc.start(ahora); osc.stop(ahora + 0.25);
+            } else if (type === 'hat') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(8000, ahora);
+                gain.gain.setValueAtTime(0.2, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.08);
+                osc.start(ahora); osc.stop(ahora + 0.08);
+            } else if (type === 'synth') {
+                osc.type = tipoOndaActual;
+                const freq = freqPersonalizada ? freqPersonalizada : 329.63;
+                osc.frequency.setValueAtTime(freq, ahora);
+                gain.gain.setValueAtTime(0.4, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.4);
+                osc.start(ahora); osc.stop(ahora + 0.4);
+            }
+        }
+
+        async function inicializarPoemasYTimeline(filtro = "todos") {
+            const container = document.getElementById("timeline-container");
+            try {
+                if (poemasGlobales.length === 0) {
+                    const respuesta = await fetch('poemas.txt');
+                    if (!respuesta.ok) throw new Error("No se pudo leer poemas.txt");
+                    const todoElTexto = await respuesta.text();
+                    const bloques = todoElTexto.split('***');
+                    
+                    bloques.forEach(bloque => {
+                        if (!bloque.trim()) return;
+                        const lineas = bloque.trim().split('\n');
+                        let titulo = "Sin título"; let fecha = ""; let cuerpoLineas = [];
+                        
+                        lineas.forEach(linea => {
+                            if (linea.startsWith('Título:') || linea.startsWith('Titulo:')) {
+                                titulo = linea.replace(/T[ií]tulo:/, '').trim();
+                            } else if (linea.startsWith('Fecha:')) {
+                                fecha = linea.replace('Fecha:', '').trim();
+                            } else { cuerpoLineas.push(linea); }
+                        });
+                        if (fecha) {
+                            poemasGlobales.push({ fecha: fecha.trim(), titulo: titulo, texto: cuerpoLineas.join('\n').trim() });
+                        }
+                    });
+                }
+                container.innerHTML = "";
+                const poemasOrdenados = [...poemasGlobales].sort((a, b) => b.fecha.localeCompare(a.fecha));
+                const hoy = new Date();
+                const fechaHoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+                const prefijoMesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+
+                poemasOrdenados.forEach(poema => {
+                    if (poema.fecha <= fechaHoyStr) {
+                        let pasaFiltro = filtro === "todos" || (filtro === "este-mes" && poema.fecha.startsWith(prefijoMesActual));
+                        if (pasaFiltro) {
+                            const partes = poema.fecha.split('-');
+                            const fObj = new Date(partes[0], partes[1] - 1, partes[2]);
+                            const fechaLegible = fObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                            const card = document.createElement("div");
+                            card.className = "poem-card";
+                            card.innerHTML = `
+                                <div class="timeline-node"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"><path d="M12,2 C9,7 4,10 4,14 C4,18 7.5,21 12,21 C16.5,21 20,18 20,14 C20,10 15,7 12,2 Z" fill="#1e2d5a"/></svg></div>
+                                <div class="poem-date">${fechaLegible}</div>
+                                <h2 class="poem-title">${poema.titulo}</h2>
+                                <p class="poem-text">${poema.texto}</p>
+                            `;
+                            container.appendChild(card);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = "<p style='text-align:center; color:red;'>Error al cargar poemas.</p>";
+            }
+        }
+
+        // MOTOR VECTORIAL REPARADO Y CON ANIMACIÓN FLUIDA EN RADIANES
+        let roseCanvas, roseCtx;
+        let animationFrameId;
+        let growthProgress = 0.0;
+
+        function initRoseEngine() {
+            roseCanvas = document.getElementById("rose-canvas");
+            roseCtx = roseCanvas.getContext("2d");
+            growthProgress = 0.0;
+            if(animationFrameId) cancelAnimationFrame(animationFrameId);
+            renderRoseLoop();
+        }
+
+        function drawBezierPetal(ctx, fillGrad, strokeColor, points) {
+            ctx.fillStyle = fillGrad;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(points[0][0], points[0][1]);
+            for (let i = 1; i < points.length; i += 3) {
+                ctx.bezierCurveTo(points[i][0], points[i][1], points[i+1][0], points[i+1][1], points[i+2][0], points[i+2][1]);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        function renderRoseLoop() {
+            roseCtx.clearRect(0, 0, roseCanvas.width, roseCanvas.height);
+            
+            if (growthProgress < 1.0) {
+                growthProgress += 0.015;
+            }
+
+            roseCtx.save();
+            roseCtx.scale(growthProgress, growthProgress);
+            const transX = (roseCanvas.width / 2) * (1 - growthProgress);
+            const transY = (roseCanvas.height / 2) * (1 - growthProgress);
+            roseCtx.translate(transX, transY);
+
+            // 1. ENREDADERAS VERDES DE FONDO
+            roseCtx.strokeStyle = "#84cc16";
+            roseCtx.lineWidth = 4;
+            roseCtx.lineCap = "round";
+            
+            roseCtx.beginPath();
+            roseCtx.moveTo(300, 300);
+            roseCtx.bezierCurveTo(420, 180, 520, 220, 480, 120);
+            roseCtx.bezierCurveTo(450, 60, 380, 140, 420, 180);
+            roseCtx.stroke();
+
+            roseCtx.beginPath();
+            roseCtx.moveTo(300, 300);
+            roseCtx.bezierCurveTo(180, 420, 100, 350, 140, 250);
+            roseCtx.bezierCurveTo(170, 180, 240, 280, 200, 330);
+            roseCtx.stroke();
+
+            // 2. HOJAS CON DEGRADADOS DE COLOR VIVO
+            let gradHoja = roseCtx.createRadialGradient(240, 200, 5, 220, 180, 70);
+            gradHoja.addColorStop(0, "#a3e635");
+            gradHoja.addColorStop(1, "#65a30d");
+
+            roseCtx.fillStyle = gradHoja;
+            roseCtx.beginPath();
+            roseCtx.moveTo(250, 220);
+            roseCtx.bezierCurveTo(200, 170, 160, 180, 140, 220);
+            roseCtx.bezierCurveTo(170, 270, 220, 260, 250, 220);
+            roseCtx.fill(); roseCtx.stroke();
+
+            let gradHoja2 = roseCtx.createRadialGradient(380, 380, 5, 390, 390, 70);
+            gradHoja2.addColorStop(0, "#a3e635");
+            gradHoja2.addColorStop(1, "#65a30d");
+            roseCtx.fillStyle = gradHoja2;
+            roseCtx.beginPath();
+            roseCtx.moveTo(350, 350);
+            roseCtx.bezierCurveTo(410, 340, 440, 370, 450, 410);
+            roseCtx.bezierCurveTo(390, 430, 360, 390, 350, 350);
+            roseCtx.fill(); roseCtx.stroke();
+
+            // 3. ESTRUCTURA COMPUESTA DE PÉTALOS CON BORDES DEFINIDOS
+            const strokeRosa = "#ffcbd7";
+
+            // Pétalos Base Externos
+            let gradExt1 = roseCtx.createLinearGradient(150, 200, 450, 450);
+            gradExt1.addColorStop(0, "#db2777"); gradExt1.addColorStop(1, "#9d174d");
+            drawBezierPetal(roseCtx, gradExt1, strokeRosa, [[220,380],[140,320],[130,220],[240,180],[320,150],[460,180],[460,300],[410,380],[330,440],[250,430],[220,380]]);
+
+            // Pétalos Medios Intercalados
+            let gradMed = roseCtx.createLinearGradient(200, 220, 400, 400);
+            gradMed.addColorStop(0, "#f43f5e"); gradMed.addColorStop(1, "#be123c");
+            drawBezierPetal(roseCtx, gradMed, strokeRosa, [[250,230],[300,160],[410,210],[420,310],[380,390],[260,380],[200,320],[220,260],[250,230]]);
+
+            // Pétalos Internos Abrazantes
+            let gradInt = roseCtx.createLinearGradient(240, 240, 360, 360);
+            gradInt.addColorStop(0, "#f43f5e"); gradInt.addColorStop(1, "#9f1239");
+            drawBezierPetal(roseCtx, gradInt, strokeRosa, [[260,280],[280,220],[360,230],[380,300],[350,360],[280,350],[250,310],[260,280]]);
+
+            // Corazón Central Cerrado
+            let gradCentro = roseCtx.createLinearGradient(280, 260, 340, 320);
+            gradCentro.addColorStop(0, "#fda4af"); gradCentro.addColorStop(1, "#e11d48");
+            drawBezierPetal(roseCtx, gradCentro, strokeRosa, [[290,290],[310,260],[340,270],[340,310],[320,330],[290,320],[285,300],[290,290]]);
+
+            roseCtx.restore();
+            animationFrameId = requestAnimationFrame(renderRoseLoop);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            inicializarPoemasYTimeline();
+            escucharNotasTiempoReal();   
+            escucharGaleriaTiempoReal();
+            escucharBasesTiempoReal();
+
+            const menuToggle = document.getElementById("menu-toggle");
+            const sidebarMenu = document.getElementById("sidebar-menu");
+            const menuOverlay = document.getElementById("menu-overlay");
+            const menuItems = document.querySelectorAll(".menu-item[data-view]");
+
+            function toggleMenu() {
+                menuToggle.classList.toggle("active");
+                sidebarMenu.classList.toggle("open");
+                menuOverlay.classList.toggle("show");
+            }
+
+            menuToggle.addEventListener("click", toggleMenu);
+            menuOverlay.addEventListener("click", toggleMenu);
+
+            menuItems.forEach(item => {
+                item.addEventListener("click", () => {
+                    menuItems.forEach(i => i.classList.remove("active"));
+                    item.classList.add("active");
+        
+                    const targetView = item.getAttribute("data-view");
+                    document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active-view"));
+        
+                    const activeSection = document.getElementById(targetView);
+                    if (activeSection) activeSection.classList.add("active-view");
+
+                    if (targetView === "view-aniversario") {
+                        setTimeout(initRoseEngine, 100);
+                    } else {
+                        if(animationFrameId) cancelAnimationFrame(animationFrameId);
+                    }
+
+                    if (targetView === "view-dibujos") {
+                        escucharGaleriaTiempoReal();
+                        const canvasObj = document.getElementById("drawing-canvas");
+                        if (canvasObj) {
+                            const ctxObj = canvasObj.getContext("2d");
+                            ctxObj.lineCap = "round"; ctxObj.lineJoin = "round";
+                        }
+                    }
+                    toggleMenu();
+                });
+            });
+
+            document.getElementById("restart-lapse-btn").addEventListener("click", () => {
+                growthProgress = 0.0;
+            });
+
+            const fechaInicio = new Date(2026, 3, 18); 
+            const diasJuntos = Math.floor((new Date() - fechaInicio) / (1000 * 60 * 60 * 24));
+            document.getElementById("love-counter").innerText = diasJuntos;
+
+            document.getElementById("synth-wave-select").addEventListener("change", (e) => {
+                tipoOndaActual = e.target.value;
+            });
+
+            document.querySelectorAll(".piano-key").forEach(key => {
+                const tocarNota = () => {
+                    const freq = parseFloat(key.getAttribute("data-freq"));
+                    playSound('synth', freq);
+                };
+                key.addEventListener("mousedown", tocarNota);
+                key.addEventListener("touchstart", (e) => { e.preventDefault(); tocarNota(); });
+            });
+
+            // FIREBASE: NOTAS
+            const addNoteBtn = document.getElementById("add-note-btn");
+            const clearNotesBtn = document.getElementById("clear-notes-btn");
+            addNoteBtn.addEventListener("click", () => {
+                const text = document.getElementById("note-text").value.trim();
+                if(text) {
+                    database.ref('cartas_fer').push({
+                        titulo: document.getElementById("note-title").value.trim() || "Verso de Fer",
+                        texto: text,
+                        fecha: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }),
+                        timestamp: Date.now()
+                    });
+                    document.getElementById("note-title").value = ""; document.getElementById("note-text").value = "";
+                }
+            });
+
+            clearNotesBtn.addEventListener("click", () => {
+                if (confirm("¿Borrar todo?")) database.ref('cartas_fer').remove();
+            });
+
+            function escucharNotasTiempoReal() {
+                const container = document.getElementById("notes-container");
+                database.ref('cartas_fer').orderByChild('timestamp').on('value', (snapshot) => {
+                    container.innerHTML = ""; const cartas = [];
+                    snapshot.forEach(child => { cartas.push(child.val()); });
+                    cartas.reverse();
+                    if (cartas.length === 0) {
+                        container.innerHTML = "<p style='text-align:center; opacity:0.5;'>Aún no hay susurros...</p>";
+                        return;
+                    }
+                    cartas.forEach(c => {
+                        container.innerHTML += `<div class="fer-letter-card"><h4 class="fer-letter-title">${c.titulo}</h4><p class="fer-letter-text">${c.texto}</p><div class="fer-letter-date">${c.fecha}</div></div>`;
+                    });
+                });
+            }
+
+            // MOTOR SECUENCIADOR DE MÚSICA
+            let beatGrid = { kick: Array(8).fill(false), snare: Array(8).fill(false), hat: Array(8).fill(false), synth: Array(8).fill(false) };
+            let playing = false; let currentStep = 0; let beatInterval = null; let tempoBPM = 120;
+
+            document.querySelectorAll(".seq-row").forEach(row => {
+                const instrument = row.getAttribute("data-instrument");
+                const pads = row.querySelectorAll(".step-pad");
+                pads.forEach((pad, index) => {
+                    pad.addEventListener("click", () => {
+                        beatGrid[instrument][index] = !beatGrid[instrument][index];
+                        pad.classList.toggle("active-pad");
+                        if (beatGrid[instrument][index]) playSound(instrument);
+                    });
+                });
+            });
+
+            function runSequence() {
+                document.querySelectorAll(".step-pad").forEach(p => p.classList.remove("playing-now"));
+                Object.keys(beatGrid).forEach(inst => {
+                    const row = document.querySelector(`.seq-row[data-instrument="${inst}"]`);
+                    const pad = row.querySelector(`.step-pad[data-step="${currentStep}"]`);
+                    pad.classList.add("playing-now");
+                    if (beatGrid[inst][currentStep]) playSound(inst);
+                });
+                currentStep = (currentStep + 1) % 8;
+            }
+
+            const playBtn = document.getElementById("play-beat-btn");
+            playBtn.addEventListener("click", () => {
+                if (playing) { clearInterval(beatInterval); playBtn.innerText = "▶️ Play"; } 
+                else { beatInterval = setInterval(runSequence, (60000 / tempoBPM) / 2); playBtn.innerText = "⏸️ Pausa"; }
+                playing = !playing;
+            });
+
+            document.getElementById("bpm-slider").addEventListener("input", (e) => {
+                tempoBPM = e.target.value; document.getElementById("bpm-val").innerText = tempoBPM;
+                if (playing) { clearInterval(beatInterval); beatInterval = setInterval(runSequence, (60000 / tempoBPM) / 2); }
+            });
+
+            document.getElementById("clear-beat-btn").addEventListener("click", () => {
+                Object.keys(beatGrid).forEach(inst => beatGrid[inst].fill(false));
+                document.querySelectorAll(".step-pad").forEach(p => p.classList.remove("active-pad", "playing-now"));
+                currentStep = 0;
+            });
+
+            document.getElementById("save-beat-btn").addEventListener("click", () => {
+                const trackName = document.getElementById("track-name-input").value.trim() || "Base sin título";
+                database.ref('estudio_musica').push({
+                    nombre: trackName, grid: JSON.stringify(beatGrid), bpm: tempoBPM,
+                    fecha: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }), timestamp: Date.now()
+                }).then(() => { document.getElementById("track-name-input").value = ""; });
+            });
+
+            function escucharBasesTiempoReal() {
+                const cloudContainer = document.getElementById("tracks-cloud-container");
+                database.ref('estudio_musica').orderByChild('timestamp').on('value', (snapshot) => {
+                    cloudContainer.innerHTML = ""; const bases = [];
+                    snapshot.forEach(child => { const data = child.val(); data.key = child.key; bases.push(data); });
+                    bases.reverse();
+                    if (bases.length === 0) { cloudContainer.innerHTML = "<p style='font-size:0.75rem; opacity:0.5;'>Ninguna base guardada.</p>"; return; }
+                    bases.forEach(b => {
+                        const card = document.createElement("div"); card.className = "audio-track-card";
+                        card.innerHTML = `<div class="track-info"><div class="track-title">🎵 ${b.nombre}</div><div class="track-meta">${b.bpm} BPM • ${b.fecha}</div></div><button class="btn-premium load-track-btn" style="padding:6px 12px; font-size:0.65rem; width:auto;" data-key="${b.key}">Cargar</button>`;
+                        cloudContainer.appendChild(card);
+                        card.querySelector(".load-track-btn").addEventListener("click", () => {
+                            const datosBase = bases.find(x => x.key === b.key); beatGrid = JSON.parse(datosBase.grid); tempoBPM = datosBase.bpm;
+                            document.getElementById("bpm-slider").value = tempoBPM; document.getElementById("bpm-val").innerText = tempoBPM;
+                            Object.keys(beatGrid).forEach(inst => {
+                                const row = document.querySelector(`.seq-row[data-instrument="${inst}"]`);
+                                const pads = row.querySelectorAll(".step-pad");
+                                pads.forEach((pad, index) => { if (beatGrid[inst][index]) pad.classList.add("active-pad"); else pad.classList.remove("active-pad"); });
+                            });
+                            currentStep = 0; if(!playing) playBtn.click();
+                        });
+                    });
+                });
+            }
+
+            // MOTOR DEL LIENZO DE DIBUJO
+            const canvas = document.getElementById("drawing-canvas");
+            const ctx = canvas.getContext("2d");
+            let dibujando = false; let ultimasCoords = { x: 0, y: 0 };
+            let colorActual = "#1e2d5a"; let grosorActual = 2.5; let texturaActual = "solido"; let esBorrador = false;
+
+            function hexToRgbStr(hex) {
+                let c = hex.substring(1); if (c.length === 3) c = c.split('').map(x => x + x).join('');
+                const num = parseInt(c, 16); return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+            }
+
+            function configurarEstiloPincel() {
+                ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.globalAlpha = 1.0;
+                if (esBorrador) { ctx.strokeStyle = "#f4efe6"; ctx.lineWidth = grosorActual * 2; } 
+                else {
+                    ctx.lineWidth = grosorActual;
+                    if (texturaActual === "acuarela") { ctx.strokeStyle = `rgba(${hexToRgbStr(colorActual)}, 0.12)`; ctx.lineWidth = grosorActual * 2.5; } 
+                    else { ctx.strokeStyle = colorActual; }
+                }
+            }
+
+            const swatchesWrapper = document.getElementById("swatches-wrapper");
+            function vincularEventosMuestras() {
+                document.querySelectorAll(".color-swatch").forEach(swatch => { swatch.replaceWith(swatch.cloneNode(true)); });
+                document.querySelectorAll(".color-swatch").forEach(swatch => {
+                    swatch.addEventListener("click", () => {
+                        esBorrador = false; document.getElementById("tool-eraser").classList.remove("active-tool");
+                        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active-tool"));
+                        swatch.classList.add("active-tool"); colorActual = swatch.getAttribute("data-color");
+                    });
+                });
+            }
+            vincularEventosMuestras();
+
+            document.getElementById("add-mix-btn").addEventListener("click", () => {
+                const colorMezclado = document.getElementById("color-mixer").value;
+                const nuevoSwatch = document.createElement("div"); nuevoSwatch.className = "color-swatch"; nuevoSwatch.setAttribute("data-color", colorMezclado); nuevoSwatch.style.backgroundColor = colorMezclado;
+                swatchesWrapper.appendChild(nuevoSwatch); vincularEventosMuestras(); nuevoSwatch.click();
+            });
+
+            document.querySelectorAll(".texture-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    esBorrador = false; document.getElementById("tool-eraser").classList.remove("active-tool");
+                    document.querySelectorAll(".texture-btn").forEach(b => b.classList.remove("active-tool"));
+                    btn.classList.add("active-tool"); texturaActual = btn.getAttribute("data-texture");
+                });
+            });
+
+            document.querySelectorAll(".size-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active-tool"));
+                    btn.classList.add("active-tool"); grosorActual = parseFloat(btn.getAttribute("data-size"));
+                });
+            });
+
+            document.getElementById("tool-eraser").addEventListener("click", () => {
+                esBorrador = true; document.querySelectorAll(".color-swatch, .texture-btn").forEach(el => el.classList.remove("active-tool"));
+                document.getElementById("tool-eraser").classList.add("active-tool");
+            });
+
+            function obtenerCoordenadas(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clienteX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clienteY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clienteX - rect.left, y: clienteY - rect.top };
+            }
+
+            function iniciarDibujo(e) {
+                dibujando = true; ultimasCoords = obtenerCoordenadas(e);
+                if (texturaActual === "solido" || texturaActual === "acuarela" || esBorrador) {
+                    ctx.beginPath(); configurarEstiloPincel(); ctx.moveTo(ultimasCoords.x, ultimasCoords.y);
+                }
+            }
+
+            function dibujar(e) {
+                if (!dibujando) return; e.preventDefault(); const coords = obtenerCoordenadas(e); configurarEstiloPincel();
+                if (esBorrador || texturaActual === "solido" || texturaActual === "acuarela") { ctx.lineTo(coords.x, coords.y); ctx.stroke(); } 
+                else if (texturaActual === "carboncillo") {
+                    ctx.strokeStyle = colorActual;
+                    for (let i = 0; i < 6; i++) {
+                        ctx.globalAlpha = Math.random() * 0.25; ctx.lineWidth = grosorActual * (Math.random() * 0.6 + 0.2);
+                        ctx.beginPath(); ctx.moveTo(ultimasCoords.x + (Math.random() * 4 - 2), ultimasCoords.y + (Math.random() * 4 - 2));
+                        ctx.lineTo(coords.x + (Math.random() * 4 - 2), coords.y + (Math.random() * 4 - 2)); ctx.stroke();
+                    }
+                } else if (texturaActual === "spray") {
+                    ctx.fillStyle = colorActual; const densidad = grosorActual * 3; const radioMuestreo = grosorActual * 2.5;
+                    for (let i = 0; i < densidad; i++) {
+                        const angulo = Math.random() * Math.PI * 2; const radio = Math.random() * radioMuestreo;
+                        ctx.fillRect(coords.x + Math.cos(angulo)*radio, coords.y + Math.sin(angulo)*radio, 1.2, 1.2);
+                    }
+                }
+                ultimasCoords = coords;
+            }
+
+            canvas.addEventListener("mousedown", iniciarDibujo); canvas.addEventListener("mousemove", dibujar); window.addEventListener("mouseup", () => dibujando = false);
+            canvas.addEventListener("touchstart", iniciarDibujo); canvas.addEventListener("touchmove", dibujar); window.addEventListener("touchend", () => dibujando = false);
+
+            document.getElementById("clear-canvas").addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+            document.getElementById("save-canvas").addEventListener("click", () => {
+                subirImagenAFirebase(canvas.toDataURL('image/png', 0.5)); ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            document.getElementById("upload-image").addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) { const reader = new FileReader(); reader.onload = (event) => subirImagenAFirebase(event.target.result); reader.readAsDataURL(file); }
+            });
+
+            function subirImagenAFirebase(base64Str) {
+                database.ref('galeria_compartida').push({ src: base64Str, timestamp: Date.now() });
+            }
+
+            function escucharGaleriaTiempoReal() {
+                const container = document.getElementById("gallery-container");
+                database.ref('galeria_compartida').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
+                    container.innerHTML = ""; const imagenes = [];
+                    snapshot.forEach(child => { imagenes.push(child.val()); });
+                    imagenes.reverse();
+                    imagenes.forEach(imgData => {
+                        if (imgData && imgData.src) {
+                            container.innerHTML += `<div class="gallery-item"><img src="${imgData.src}" alt="Arte compartido"></div>`;
+                        }
+                    });
+                });
+            }
+        }); 
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => console.error(err)); });
+        }
+    </script>
+</body>
+</html>
