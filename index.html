@@ -95,9 +95,9 @@
         .track-meta { font-size: 0.7rem; opacity: 0.6; font-family: sans-serif; }
 
         /* ESTILOS DE LA PESTAÑA DE ANIVERSARIO */
-        .anniversary-card { background: #fdfbf7; border: 1px solid rgba(194, 89, 83, 0.3); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(194, 89, 83, 0.08); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #c25953; font-weight: bold; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.02); }
-        #rose-canvas { background: #0c0f1d; border-radius: 16px; border: 2px solid #1e2d5a; box-shadow: inset 0 0 20px rgba(0,0,0,0.6); width: 100%; max-width: 340px; aspect-ratio: 1; }
+        .anniversary-card { background: #000000; border: 1px solid rgba(194, 89, 83, 0.3); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; color: #f4efe6; }
+        .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #c25953; font-weight: bold; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+        #rose-canvas { background: #000000; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); width: 100%; max-width: 340px; aspect-ratio: 1; }
 
         footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; }
     </style>
@@ -219,12 +219,12 @@
                     </select>
                 </div>
 
-                <div style="display:flex; align-items:center; justify-content:space-between; width:100%; font-size:0.75rem;">
+                <div style="display:flex; align-items:center; justify-content:space-between; width:100%; font-size:0.75rem; color:#1e2d5a;">
                     <span>Velocidad: <b id="bpm-val">120</b> BPM</span>
                     <input type="range" id="bpm-slider" min="60" max="180" value="120" style="flex:1; margin-left:10px; accent-color:#1e2d5a;">
                 </div>
 
-                <div style="text-align: left; font-size: 0.75rem; font-weight: bold; margin-top: 5px; opacity: 0.8;">Teclado de Piano 🎹</div>
+                <div style="text-align: left; font-size: 0.75rem; font-weight: bold; margin-top: 5px; opacity: 0.8; color:#1e2d5a;">Teclado de Piano 🎹</div>
                 <div class="piano-container">
                     <div class="piano-key" data-freq="261.63">Do</div>
                     <div class="piano-key" data-freq="293.66">Re</div>
@@ -237,7 +237,7 @@
 
                 <div class="studio-controls">
                     <button id="play-beat-btn" class="btn-premium" style="flex:1; padding:8px;">▶️ Play</button>
-                    <button id="clear-beat-btn" class="btn-secondary" style="flex:1; padding:8px;">Reset</button>
+                    <button id="clear-beat-btn" class="btn-secondary" style="flex:1; padding:8px; border-color:#1e2d5a; color:#1e2d5a;">Reset</button>
                 </div>
                 <input type="text" id="track-name-input" class="text-box" style="padding:6px; font-size:0.8rem; margin:5px 0 0 0;" placeholder="Nombre de tu base...">
                 <button id="save-beat-btn" class="btn-premium" style="background-color:#4a7c59; padding:8px;">💾 Grabar y guardar base</button>
@@ -295,11 +295,11 @@
 
                 <canvas id="drawing-canvas" width="320" height="320"></canvas>
                 <div class="canvas-controls">
-                    <button id="clear-canvas" class="btn-secondary">Limpiar</button>
+                    <button id="clear-canvas" class="btn-secondary" style="color:#1e2d5a; border-color:#1e2d5a;">Limpiar</button>
                     <button id="save-canvas" class="btn-premium" style="flex:1;">Guardar trazo</button>
                 </div>
                 <div style="width:100%; margin-top:15px; text-align:center;">
-                    <label for="upload-image" class="btn-secondary" style="display:block; width:100%; text-align:center;">Subir un dibujo/foto</label>
+                    <label for="upload-image" class="btn-secondary" style="display:block; width:100%; text-align:center; color:#1e2d5a; border-color:#1e2d5a;">Subir un dibujo/foto</label>
                     <input type="file" id="upload-image" accept="image/*" style="display:none;">
                 </div>
             </div>
@@ -307,12 +307,12 @@
             <div class="gallery-grid" id="gallery-container"></div>
         </section>
 
-        <!-- SECCIÓN DE ANIVERSARIO CORREGIDA -->
+        <!-- SECCIÓN DE ANIVERSARIO CONFIGURADA SEGÚN LA FOTO -->
         <section id="view-aniversario" class="view-section">
             <div class="anniversary-card">
                 <h2 class="anniversary-title">Feliz Aniversario Amor 🌹</h2>
                 <p style="font-style: italic; font-size: 0.95rem; opacity: 0.8; margin: 0; line-height: 1.6;">
-                    "Una rosa matemática programada punto a punto, que crece y florece en un time-lapse eterno, tal como nuestro amor de cada día."
+                    "Cada punto en el espacio sigue una regla matemática perfecta, tal como cada día a tu lado."
                 </p>
                 <canvas id="rose-canvas" width="600" height="600"></canvas>
                 <button id="restart-lapse-btn" class="btn-premium" style="background-color: #c25953; max-width: 260px;">
@@ -321,7 +321,7 @@
             </div>
         </section>
 
-        <footer>Hecho con amor, para siempre.</footer>
+        <footer id="app-footer">Hecho con amor, para siempre.</footer>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -430,11 +430,11 @@
             }
         }
 
-        // MOTOR TRIDIMENSIONAL DE LA ROSA MATEMÁTICA CORREGIDO
+        // MOTOR TRIDIMENSIONAL PREMIUM ACTUALIZADO (REJILLA COMPLETA + DEGRADADO EXACTO)
         let roseCanvas, roseCtx;
         let animationFrameId;
         let currentGrowth = 0.0;
-        let rotationAngle = 0;
+        let rotationAngle = -0.4; // Ángulo inicial óptimo para ver la perspectiva de la caja
 
         function initRoseEngine() {
             roseCanvas = document.getElementById("rose-canvas");
@@ -445,79 +445,166 @@
         }
 
         function renderRoseLoop() {
-            roseCtx.fillStyle = "#0c0f1d";
+            // Fondo oscuro puro de simulación matemática
+            roseCtx.fillStyle = "#000000";
             roseCtx.fillRect(0, 0, roseCanvas.width, roseCanvas.height);
 
-            roseCtx.strokeStyle = "rgba(30, 45, 90, 0.25)";
-            roseCtx.lineWidth = 1;
-            for(let i = 50; i < roseCanvas.width; i += 50) {
-                roseCtx.beginPath(); roseCtx.moveTo(i, 0); roseCtx.lineTo(i, roseCanvas.height); roseCtx.stroke();
-                roseCtx.beginPath(); roseCtx.moveTo(0, i); roseCtx.lineTo(roseCanvas.width, i); roseCtx.stroke();
-            }
-
             if (currentGrowth < 1.0) {
-                currentGrowth += 0.006;
+                currentGrowth += 0.005; // Crecimiento progresivo (Time-lapse)
             }
-            rotationAngle += 0.005;
+            rotationAngle += 0.004; // Rotación lenta idéntica a los plots de código
 
-            const centerX = roseCanvas.width / 2;
-            const centerY = roseCanvas.height / 2 + 30;
-            let puntosProyectados = [];
+            const cx = roseCanvas.width / 2;
+            const cy = roseCanvas.height / 2 + 40;
+            let bufferObjetos3D = [];
 
-            for (let r = 0.0; r <= 1.0; r += 0.03) {
+            // FUNCIÓN AUXILIAR DE PROYECCIÓN 3D CON PERSPECTIVA SUTIL E INCLINACIÓN
+            function proyectarPunto(x, y, z) {
+                // Rotación en el eje Y espacial
+                let rotX = x * Math.cos(rotationAngle) - z * Math.sin(rotationAngle);
+                let rotZ = x * Math.sin(rotationAngle) + z * Math.cos(rotationAngle);
+                
+                // Rotación fija inclinada hacia abajo (Eje X) para ver desde arriba
+                let anguloInclinacion = 0.5;
+                let rotY = y * Math.cos(anguloInclinacion) - rotZ * Math.sin(anguloInclinacion);
+                let finalZ = y * Math.sin(anguloInclinacion) + rotZ * Math.cos(anguloInclinacion);
+
+                let distVista = 400;
+                let escalaPersp = distVista / (distVista + finalZ);
+                
+                return {
+                    x: cx + rotX * 135 * escalaPersp,
+                    y: cy - rotY * 135 * escalaPersp,
+                    z: finalZ
+                };
+            }
+
+            // 1. GENERAR LAS LÍNEAS DE LA CAJA DE REJILLA 3D (Piso y paredes traseras)
+            let colorRejilla = "rgba(255, 255, 255, 0.12)";
+            let limitesRejilla = [-1.3, -0.9, -0.5, -0.1, 0.3, 0.7, 1.1, 1.5];
+
+            // Líneas del suelo (Plano Y = -1)
+            limitesRejilla.forEach(coord => {
+                bufferObjetos3D.push({ tipo: 'linea', p1: {x: coord, y: -1, z: -1.3}, p2: {x: coord, y: -1, z: 1.5}, z: 0, color: colorRejilla });
+                bufferObjetos3D.push({ tipo: 'linea', p1: {x: -1.3, y: -1, z: coord}, p2: {x: 1.5, y: -1, z: coord}, z: 0, color: colorRejilla });
+            });
+
+            // Líneas de la pared trasera izquierda (Plano X = -1.3)
+            limitesRejilla.forEach(coord => {
+                bufferObjetos3D.push({ tipo: 'linea', p1: {x: -1.3, y: coord, z: -1.3}, p2: {x: -1.3, y: coord, z: 1.5}, z: 0, color: colorRejilla });
+                bufferObjetos3D.push({ tipo: 'linea', p1: {x: -1.3, y: -1, z: coord}, p2: {x: -1.3, y: 1.5, z: coord}, z: 0, color: colorRejilla });
+            });
+
+            // Líneas de la pared trasera derecha (Plano Z = -1.3)
+            limitesRejilla.forEach(coord => {
+                bufferObjetos3D.push({ tipo: 'linea', p1: {x: -1.3, y: coord, z: -1.3}, p2: {x: 1.5, y: coord, z: -1.3}, z: 0, color: colorRejilla });
+                bufferObjetos3D.push({ tipo: 'linea', p1: {x: coord, y: -1, z: -1.3}, p2: {x: coord, y: 1.5, z: -1.3}, z: 0, color: colorRejilla });
+            });
+
+            // 2. GENERAR LOS PUNTOS DE LA ROSA MATEMÁTICA PARAMÉTRICA
+            // r controla las capas verticales y u controla el giro helicoidal de los pétalos
+            for (let r = 0.01; r <= 1.0; r += 0.02) {
                 let rCrecimiento = r * currentGrowth;
                 
-                for (let theta = 0; theta < Math.PI * 16; theta += 0.15) {
-                    let d = (Math.PI / 2) * Math.exp(-theta / (Math.PI * 8));
+                for (let theta = 0; theta < Math.PI * 18; theta += 0.12) {
+                    let d = (Math.PI / 2) * Math.exp(-theta / (Math.PI * 7));
                     let ph = 1 - (1/2) * Math.pow((5/4) * Math.pow(1 - ((3.6 * theta) % (Math.PI * 2)) / Math.PI, 2) - 1/4, 2);
-                    let A = 1.956528453 * rCrecimiento * rCrecimiento * (1.2 * rCrecimiento - 0.3);
-                    let yAxial = 1 - Math.sin(d) * ph;
+                    
+                    // Ecuación modificada para generar la copa ensanchada abajo y compacta arriba
+                    let A = 1.85 * rCrecimiento * rCrecimiento * (1.1 * rCrecimiento - 0.2);
+                    let yAxial = 1.0 - Math.sin(d) * ph;
                     
                     let x3d = A * ph * Math.sin(theta);
                     let z3d = A * ph * Math.cos(theta);
-                    let y3d = (d * ph * Math.cos(d) - yAxial) * 140 + 100;
+                    // y3d modela la altura de cada punto
+                    let y3d = (d * ph * Math.cos(d) - yAxial) * 1.3 + 0.4; 
 
-                    let rotX = x3d * Math.cos(rotationAngle) - z3d * Math.sin(rotationAngle);
-                    let rotZ = x3d * Math.sin(rotationAngle) + z3d * Math.cos(rotationAngle);
+                    let proy = proyectarPunto(x3d, y3d, z3d);
 
-                    let escalaPersp = 1.3; 
-                    let xProyectado = centerX + rotX * 130 * escalaPersp;
-                    let yProyectado = centerY - y3d * escalaPersp + (rotZ * 30);
+                    // SISTEMA DE COLOR DE TRES ETAPAS (Idéntico al renderizado de la imagen)
+                    let rojo = 240, verde = 40, azul = 45; // Base por defecto
 
-                    let rojo = Math.floor(210 + (1 - r) * 45);
-                    let verde = Math.floor(20 * r + (1 - currentGrowth) * 40);
-                    let azul = Math.floor(30 * r + (1 - r) * 60);
+                    if (y3d > 0.3) {
+                        // Núcleo Superior: Rojo carmesí intenso y puro
+                        let factorAlto = Math.min(1, (y3d - 0.3) / 0.5);
+                        rojo = Math.floor(190 + factorAlto * 65);
+                        verde = Math.floor(10 * (1 - factorAlto));
+                        azul = Math.floor(15 * (1 - factorAlto));
+                    } else if (y3d <= 0.3 && y3d > -0.1) {
+                        // Zona Media: Degradado hacia coral / salmón encendido
+                        let factorMedio = (y3d - (-0.1)) / 0.4;
+                        rojo = 255;
+                        verde = Math.floor(80 + factorMedio * 40);
+                        azul = Math.floor(90 + factorMedio * 30);
+                    } else {
+                        // Pétalos de la Base: Fading suave a rosa blanquecino / crema pálido
+                        let factorBajo = Math.min(1, Math.abs(y3d - (-0.1)) / 0.5);
+                        rojo = Math.floor(255 - factorBajo * 15);
+                        verde = Math.floor(120 + factorBajo * 90);
+                        azul = Math.floor(120 + factorBajo * 85);
+                    }
                     
-                    let factorLuz = (rotZ + 1.5) / 3;
-                    rojo = Math.floor(rojo * (0.4 + factorLuz * 0.6));
-                    verde = Math.floor(verde * (0.4 + factorLuz * 0.6));
-                    azul = Math.floor(azul * (0.4 + factorLuz * 0.6));
+                    // Efecto de sombreado e iluminación por profundidad Z
+                    let iluminacion = (proy.z + 180) / 360;
+                    rojo = Math.clamp(Math.floor(rojo * (0.5 + iluminacion * 0.5)), 0, 255);
+                    verde = Math.clamp(Math.floor(verde * (0.5 + iluminacion * 0.5)), 0, 255);
+                    azul = Math.clamp(Math.floor(azul * (0.5 + iluminacion * 0.5)), 0, 255);
 
-                    puntosProyectados.push({
-                        x: xProyectado,
-                        y: yProyectado,
-                        z: rotZ,
+                    bufferObjetos3D.push({
+                        tipo: 'punto',
+                        x: proy.x,
+                        y: proy.y,
+                        z: proy.z,
                         color: `rgb(${rojo}, ${verde}, ${azul})`,
-                        radioPunto: Math.max(1, (1.5 - r) * 3)
+                        radio: Math.max(1.1, (1.4 - r) * 3.2)
                     });
                 }
             }
 
-            puntosProyectados.sort((a, b) => a.z - b.z);
-
-            puntosProyectados.forEach(p => {
-                roseCtx.fillStyle = p.color;
-                roseCtx.beginPath();
-                roseCtx.arc(p.x, p.y, p.radioPunto, 0, Math.PI * 2);
-                roseCtx.fill();
+            // 3. ORDENAR TODO EL BUFFER POR PROFUNDIDAD (Z-buffering para mezclar líneas de rejilla y puntos correctamente)
+            // Calculamos una Z aproximada para las líneas basándonos en sus puntos intermedios proyectados
+            bufferObjetos3D.forEach(obj => {
+                if(obj.tipo === 'linea') {
+                    let p1Proy = proyectarPunto(obj.p1.x, obj.p1.y, obj.p1.z);
+                    let p2Proy = proyectarPunto(obj.p2.x, obj.p2.y, obj.p2.z);
+                    obj.z = (p1Proy.z + p2Proy.z) / 2;
+                    obj.p1Proy = p1Proy;
+                    obj.p2Proy = p2Proy;
+                }
             });
 
-            roseCtx.font = "bold 11px sans-serif";
-            roseCtx.fillStyle = "rgba(194, 89, 83, 0.4)";
-            roseCtx.fillText("@nuestro_universo", roseCanvas.width - 120, roseCanvas.height - 20);
+            // Pintamos de atrás hacia adelante (los valores Z más lejanos se procesan primero)
+            bufferObjetos3D.sort((a, b) => b.z - a.z);
+
+            // 4. RENDERIZAR EN PANTALLA
+            bufferObjetos3D.forEach(obj => {
+                if (obj.tipo === 'linea') {
+                    roseCtx.strokeStyle = obj.color;
+                    roseCtx.lineWidth = 1;
+                    roseCtx.beginPath();
+                    roseCtx.moveTo(obj.p1Proy.x, obj.p1Proy.y);
+                    roseCtx.lineTo(obj.p2Proy.x, obj.p2Proy.y);
+                    roseCtx.stroke();
+                } else if (obj.tipo === 'punto') {
+                    roseCtx.fillStyle = obj.color;
+                    roseCtx.beginPath();
+                    roseCtx.arc(obj.x, obj.y, obj.radio, 0, Math.PI * 2);
+                    roseCtx.fill();
+                }
+            });
+
+            // Marca de agua estilizada idéntica a los scripts gráficos de colección
+            roseCtx.font = "11px monospace";
+            roseCtx.fillStyle = "rgba(255, 255, 255, 0.2)";
+            roseCtx.fillText("@sandreke99", roseCanvas.width - 100, roseCanvas.height - 25);
 
             animationFrameId = requestAnimationFrame(renderRoseLoop);
         }
+
+        // Functión clamp de seguridad matemática
+        Math.clamp = function(val, min, max) {
+            return Math.min(Math.max(val, min), max);
+        };
 
         document.addEventListener("DOMContentLoaded", () => {
             inicializarPoemasYTimeline();
@@ -550,9 +637,12 @@
                     const activeSection = document.getElementById(targetView);
                     if (activeSection) activeSection.classList.add("active-view");
 
+                    // Manejo específico de la vista de Aniversario
                     if (targetView === "view-aniversario") {
+                        document.getElementById("app-footer").style.color = "rgba(255,255,255,0.3)";
                         setTimeout(initRoseEngine, 100);
                     } else {
+                        document.getElementById("app-footer").style.color = "rgba(30, 45, 90, 0.4)";
                         if(animationFrameId) cancelAnimationFrame(animationFrameId);
                     }
 
