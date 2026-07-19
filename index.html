@@ -46,7 +46,7 @@
         .btn-premium:hover { opacity: 0.9; }
         .btn-secondary { width: 100%; padding: 10px; background: transparent; border: 1px solid #1e2d5a; color: #1e2d5a; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 6px; cursor: pointer; }
         .notes-list { display: flex; flex-direction: column; gap: 16px; }
-        .fer-letter-card { background-color: #fdfbf7; border: 1px solid rgba(138, 109, 81, 0.2); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(138, 109, 81, 0.05); margin-bottom: 20px; position: relative; }
+        .fer-letter-card { background-color: #fdfbf7; border: 1px solid rgba(138, 109, 81, 0.2); border-radius: 166; padding: 20px; box-shadow: 0 4px 15px rgba(138, 109, 81, 0.05); margin-bottom: 20px; position: relative; }
         .fer-letter-card::before { content: '🍂'; position: absolute; top: 15px; right: 15px; font-size: 0.9rem; opacity: 0.5; }
         .fer-letter-title { font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 600; color: #8a6d51; margin: 0 0 8px 0; }
         .fer-letter-text { font-style: italic; line-height: 1.6; color: #5c4a37; white-space: pre-line; margin: 0 0 12px 0; }
@@ -98,8 +98,8 @@
         .anniversary-card { background: #fff5f5; border: 1px solid rgba(244, 63, 94, 0.2); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(244, 63, 94, 0.05); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; color: #1e2d5a; }
         .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #e11d48; font-weight: bold; margin: 0; }
         
-        /* CORRECCIÓN DE RESOLUCIÓN DEL CANVAS */
-        #rose-canvas { background: #fff5f5; border-radius: 16px; width: 100%; max-width: 340px; aspect-ratio: 1; display: block; }
+        /* ALTA RESOLUCIÓN: SINCRONIZACIÓN DE HTML Y CSS */
+        #rose-canvas { background: #fff5f5; border-radius: 16px; width: 100%; max-width: 380px; aspect-ratio: 1; display: block; border: 1px solid rgba(244, 63, 94, 0.15); }
 
         footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; }
     </style>
@@ -309,15 +309,15 @@
             <div class="gallery-grid" id="gallery-container"></div>
         </section>
 
-        <!-- SECCIÓN DE ANIVERSARIO VECTORIAL INTEGRADA (400x400 NATIVO) -->
+        <!-- SECCIÓN DE ANIVERSARIO DE ALTA RESOLUCIÓN INTEGRADA (1000x1000 NATIVO) -->
         <section id="view-aniversario" class="view-section">
             <div class="anniversary-card">
                 <h2 class="anniversary-title">Feliz Aniversario Amor 🌹</h2>
                 <p style="font-style: italic; font-size: 0.95rem; opacity: 0.8; margin: 0; line-height: 1.6;">
                     "Cada curva y trazo florece a tu lado de forma perfecta, creando la silueta de nuestra propia historia."
                 </p>
-                <!-- ASIGNACIÓN EXPLÍCITA DE RESOLUCIÓN INTERNA -->
-                <canvas id="rose-canvas" width="400" height="400"></canvas>
+                <!-- ASIGNACIÓN EXPLÍCITA DE ALTA RESOLUCIÓN INTERNA (Ffactor x2.5) -->
+                <canvas id="rose-canvas" width="1000" height="1000"></canvas>
                 <button id="restart-lapse-btn" class="btn-premium" style="background-color: #e11d48; max-width: 260px;">
                     ✨ Reanimar Trazos
                 </button>
@@ -432,7 +432,7 @@
             }
         }
 
-        // MOTOR VECTORIAL OPTIMIZADO PARA LIENZO DE 400x400 NATIVO
+        // MOTOR VECTORIAL REESCRITO PARA ALTA RESOLUCIÓN (factor x2.5)
         let roseCanvas, roseCtx;
         let animationFrameId;
         let growthProgress = 0.0;
@@ -448,7 +448,7 @@
         function drawBezierPetal(ctx, fillGrad, strokeColor, points) {
             ctx.fillStyle = fillGrad;
             ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = 2.0;
+            ctx.lineWidth = 4.5; // Ajuste de grosor para alta resolución
             ctx.beginPath();
             ctx.moveTo(points[0][0], points[0][1]);
             for (let i = 1; i < points.length; i += 3) {
@@ -463,77 +463,77 @@
             roseCtx.clearRect(0, 0, roseCanvas.width, roseCanvas.height);
             
             if (growthProgress < 1.0) {
-                growthProgress += 0.02; // Animación ágil
+                growthProgress += 0.012; // Animación nítida y controlada
             }
 
             roseCtx.save();
-            // Animación de escala centralizada basada en el pivote central (200, 200)
-            roseCtx.translate(200, 200);
+            // Animación de escala centralizada basada en el pivote central (500, 500)
+            roseCtx.translate(500, 500);
             roseCtx.scale(growthProgress, growthProgress);
-            roseCtx.translate(-200, -200);
+            roseCtx.translate(-500, -500);
 
-            // 1. ENREDADERAS VERDES DINÁMICAS (AJUSTADAS A ESCALA 400x400)
+            // 1. ENREDADERAS VERDES DINÁMICAS (COORDENADAS REESCALADAS factor x2.5)
             roseCtx.strokeStyle = "#84cc16";
-            roseCtx.lineWidth = 3;
+            roseCtx.lineWidth = 6.5; // Ajuste de grosor
             roseCtx.lineCap = "round";
             
-            // Lazo Derecho
+            // Lazo Derecho (Reescalado de 200, 200 a 500, 500)
             roseCtx.beginPath();
-            roseCtx.moveTo(200, 200);
-            roseCtx.bezierCurveTo(280, 120, 350, 150, 320, 80);
-            roseCtx.bezierCurveTo(300, 40, 250, 90, 280, 120);
+            roseCtx.moveTo(500, 500);
+            roseCtx.bezierCurveTo(700, 300, 875, 375, 800, 200);
+            roseCtx.bezierCurveTo(750, 100, 625, 225, 700, 300);
             roseCtx.stroke();
 
             // Lazo Izquierdo
             roseCtx.beginPath();
-            roseCtx.moveTo(200, 200);
-            roseCtx.bezierCurveTo(120, 280, 60, 230, 90, 160);
-            roseCtx.bezierCurveTo(110, 120, 160, 180, 130, 220);
+            roseCtx.moveTo(500, 500);
+            roseCtx.bezierCurveTo(300, 700, 150, 575, 225, 400);
+            roseCtx.bezierCurveTo(275, 300, 400, 450, 325, 550);
             roseCtx.stroke();
 
-            // 2. HOJAS CON GRADIENTES CÁLIDOS
-            let gradHoja = roseCtx.createRadialGradient(160, 130, 3, 140, 120, 50);
+            // 2. HOJAS CON GRADIENTES CÁLIDOS (COORDENADAS REESCALADAS factor x2.5)
+            let gradHoja = roseCtx.createRadialGradient(400, 325, 10, 350, 300, 125);
             gradHoja.addColorStop(0, "#a3e635");
             gradHoja.addColorStop(1, "#65a30d");
             roseCtx.fillStyle = gradHoja;
             roseCtx.beginPath();
-            roseCtx.moveTo(170, 150);
-            roseCtx.bezierCurveTo(130, 110, 100, 120, 90, 150);
-            roseCtx.bezierCurveTo(110, 180, 150, 180, 170, 150);
+            roseCtx.moveTo(425, 375);
+            roseCtx.bezierCurveTo(325, 275, 250, 300, 225, 375);
+            roseCtx.bezierCurveTo(275, 450, 375, 450, 425, 375);
             roseCtx.fill(); roseCtx.stroke();
 
-            let gradHoja2 = roseCtx.createRadialGradient(250, 250, 3, 260, 260, 50);
+            let gradHoja2 = roseCtx.createRadialGradient(625, 625, 10, 650, 650, 125);
             gradHoja2.addColorStop(0, "#a3e635");
             gradHoja2.addColorStop(1, "#65a30d");
             roseCtx.fillStyle = gradHoja2;
             roseCtx.beginPath();
-            roseCtx.moveTo(230, 230);
-            roseCtx.bezierCurveTo(270, 220, 290, 240, 300, 270);
-            roseCtx.bezierCurveTo(260, 280, 240, 260, 230, 230);
+            roseCtx.moveTo(575, 575);
+            roseCtx.bezierCurveTo(675, 550, 725, 600, 750, 675);
+            roseCtx.bezierCurveTo(650, 700, 600, 650, 575, 575);
             roseCtx.fill(); roseCtx.stroke();
 
-            // 3. CAPAS DE PÉTALOS VECTORIALES COMPACTOS
+            // 3. CAPAS DE PÉTALOS VECTORIALES COMPACTOS (COORDENADAS REESCALADAS factor x2.5)
             const strokeRosa = "#ffcbd7";
 
-            // Pétalos Externos Basales
-            let gradExt = roseCtx.createLinearGradient(100, 130, 300, 300);
+            // Pétalos Externos Basales ( factor x2.5)
+            let gradExt = roseCtx.createLinearGradient(250, 325, 750, 750);
             gradExt.addColorStop(0, "#db2777"); gradExt.addColorStop(1, "#9d174d");
-            drawBezierPetal(roseCtx, gradExt, strokeRosa, [[140,250],[90,210],[80,140],[160,120],[210,100],[310,120],[310,200],[270,250],[220,290],[160,280],[140,250]]);
+            drawBezierPetal(roseCtx, gradExt, strokeRosa, [[350,625],[225,525],[200,350],[400,300],[525,250],[775,300],[775,500],[675,625],[550,725],[400,700],[350,625]]);
 
             // Pétalos Intermedios
-            let gradMed = roseCtx.createLinearGradient(130, 150, 270, 270);
+            let gradMed = roseCtx.createLinearGradient(325, 375, 675, 675);
             gradMed.addColorStop(0, "#f43f5e"); gradMed.addColorStop(1, "#be123c");
-            drawBezierPetal(roseCtx, gradMed, strokeRosa, [[160,150],[200,100],[270,140],[280,210],[250,260],[170,250],[130,210],[140,170],[160,150]]);
+            drawBezierPetal(roseCtx, gradMed, strokeRosa, [[400,375],[500,250],[675,350],[700,525],[625,650],[425,625],[325,525],[350,425],[400,375]]);
 
             // Corazón Interno Abrazante
-            let gradInt = roseCtx.createLinearGradient(160, 160, 240, 240);
+            let gradInt = roseCtx.createLinearGradient(400, 400, 600, 600);
             gradInt.addColorStop(0, "#f43f5e"); gradInt.addColorStop(1, "#9f1239");
-            drawBezierPetal(roseCtx, gradInt, strokeRosa, [[170,180],[180,140],[240,150],[250,200],[230,240],[180,230],[160,200],[170,180]]);
+            drawBezierPetal(roseCtx, gradInt, strokeRosa, [[425,450],[450,350],[600,375],[625,500],[575,600],[450,575],[400,500],[425,450]]);
 
             // Capullo Central Cerrado
-            let gradCentro = roseCtx.createLinearGradient(180, 170, 220, 210);
+            let gradCentro = roseCtx.createLinearGradient(450, 425, 550, 525);
             gradCentro.addColorStop(0, "#fda4af"); gradCentro.addColorStop(1, "#e11d48");
-            drawBezierPetal(roseCtx, gradCentro, strokeRosa, [[190,195],[205,175],[225,180],[225,205],[215,220],[195,215],[190,200],[190,195]]);
+            drawBezierPetal(roseCtx, gradCentro, strokeRosa, [[475,487],[512,437],[562,450],[562,512],[537,550],[487,537],[475,500],[475,487]]);
 
             roseCtx.restore();
             animationFrameId = requestAnimationFrame(renderRoseLoop);
