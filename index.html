@@ -366,7 +366,7 @@
                 osc.type = tipoOndaActual;
                 const freq = freqPersonalizada ? freqPersonalizada : 329.63;
                 osc.frequency.setValueAtTime(freq, ahora);
-                gain.gain.setValueAtTime(0.4, ahora); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.4);
+                gain.gain.setValueAtTime(0.4,Hex); gain.gain.exponentialRampToValueAtTime(0.01, ahora + 0.4);
                 osc.start(ahora); osc.stop(ahora + 0.4);
             }
         }
@@ -428,7 +428,7 @@
             }
         }
 
-        // MOTOR TRIDIMENSIONAL PERFECCIONADO (ÓPTIMO ORDEN DE CAPAS Y SUPRESIÓN DE FIRMA)
+        // MOTOR TRIDIMENSIONAL PREMIUM - REESCRITO SIN CADENAS DE FIRMA Y CON Z-INDEX CORRECTO
         let roseCanvas, roseCtx;
         let animationFrameId;
         let currentGrowth = 0.0;
@@ -472,21 +472,20 @@
                 };
             }
 
-            // DIBUJAR REJILLA DE FONDO 3D
+            // REJILLA MATEMÁTICA TRASERA
             let colorCaja = "rgba(255, 255, 255, 0.1)";
             let marcas = [-1.2, -0.8, -0.4, 0.0, 0.4, 0.8, 1.2];
             marcas.forEach(m => {
-                pipeline3D.push({ tipo: 'linea', z: 300, color: colorCaja, p1: transformar3D(m, -1, -1.2), p2: transformar3D(m, -1, 1.2) });
-                pipeline3D.push({ tipo: 'linea', z: 300, color: colorCaja, p1: transformar3D(-1.2, -1, m), p2: transformar3D(1.2, -1, m) });
-                pipeline3D.push({ tipo: 'linea', z: 300, color: colorCaja, p1: transformar3D(-1.2, m, -1.2), p2: transformar3D(-1.2, m, 1.2) });
-                pipeline3D.push({ tipo: 'linea', z: 300, color: colorCaja, p1: transformar3D(-1.2, -1, m), p2: transformar3D(-1.2, 1.2, m) });
-                pipeline3D.push({ tipo: 'linea', z: 300, color: colorCaja, p1: transformar3D(-1.2, m, -1.2), p2: transformar3D(1.2, m, -1.2) });
-                pipeline3D.push({ tipo: 'linea', z: 300, color: colorCaja, p1: transformar3D(m, -1, -1.2), p2: transformar3D(m, 1.2, -1.2) });
+                pipeline3D.push({ tipo: 'linea', depthVal: 1000, color: colorCaja, p1: transformar3D(m, -1, -1.2), p2: transformar3D(m, -1, 1.2) });
+                pipeline3D.push({ tipo: 'linea', depthVal: 1000, color: colorCaja, p1: transformar3D(-1.2, -1, m), p2: transformar3D(1.2, -1, m) });
+                pipeline3D.push({ tipo: 'linea', depthVal: 1000, color: colorCaja, p1: transformar3D(-1.2, m, -1.2), p2: transformar3D(-1.2, m, 1.2) });
+                pipeline3D.push({ tipo: 'linea', depthVal: 1000, color: colorCaja, p1: transformar3D(-1.2, -1, m), p2: transformar3D(-1.2, 1.2, m) });
+                pipeline3D.push({ tipo: 'linea', depthVal: 1000, color: colorCaja, p1: transformar3D(-1.2, m, -1.2), p2: transformar3D(1.2, m, -1.2) });
+                pipeline3D.push({ tipo: 'linea', depthVal: 1000, color: colorCaja, p1: transformar3D(m, -1, -1.2), p2: transformar3D(m, 1.2, -1.2) });
             });
 
-            // AUMENTO DE DENSIDAD PARA LOGRAR MÁXIMA CURVATURA Y NATURALIDAD
-            const pasosR = 40; 
-            const pasosTheta = 120; 
+            const pasosR = 45; 
+            const pasosTheta = 125; 
             let matrizPuntos = [];
 
             for (let i = 0; i <= pasosR; i++) {
@@ -510,7 +509,7 @@
                 }
             }
 
-            // CREACIÓN DE CARAS CON COHERENCIA DE REVESTIMIENTO
+            // ENTRADA AL PIPELINE DE PROCESAMIENTO GEOMÉTRICO
             for (let i = 0; i < pasosR; i++) {
                 for (let j = 0; j < pasosTheta; j++) {
                     let n1 = matrizPuntos[i][j];
@@ -519,6 +518,7 @@
                     let n4 = matrizPuntos[i][j+1];
 
                     if(n1 && n2 && n3 && n4) {
+                        // El cálculo exacto del baricentro espacial Z determina qué cara tapa a cuál
                         let zZIndex = (n1.coord.z + n2.coord.z + n3.coord.z + n4.coord.z) / 4;
                         let yPromedio = (n1.altura + n2.altura + n3.altura + n4.altura) / 4;
 
@@ -541,7 +541,7 @@
 
                         pipeline3D.push({
                             tipo: 'cara',
-                            z: zZIndex,
+                            depthVal: zZIndex, // Guardamos el valor puro para el algoritmo del pintor
                             puntos: [n1.coord, n2.coord, n3.coord, n4.coord],
                             color: `rgb(${rColor}, ${gColor}, ${bColor})`,
                             colorLinea: `rgba(${rColor + 15}, ${gColor + 10}, ${bColor + 10}, 0.08)`
@@ -550,9 +550,10 @@
                 }
             }
 
-            // CORRECCIÓN CLAVE: El Z más cercano (negativo) se dibuja AL FINAL para que quede arriba
-            pipeline3D.sort((a, b) => b.z - a.z);
+            // ALGORITMO DEL PINTOR ESTRICTO: Las geometrías con mayor valor depthVal (más lejanas) se dibujan PRIMERO.
+            pipeline3D.sort((a, b) => b.depthVal - a.depthVal);
 
+            // RENDERIZADO FINAL SIN MARCAS DE AGUA
             pipeline3D.forEach(elem => {
                 if (elem.tipo === 'linea') {
                     roseCtx.strokeStyle = elem.color;
