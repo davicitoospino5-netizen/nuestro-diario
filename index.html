@@ -51,7 +51,7 @@
         .fer-letter-title { font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 600; color: #8a6d51; margin: 0 0 8px 0; }
         .fer-letter-text { font-style: italic; line-height: 1.6; color: #5c4a37; white-space: pre-line; margin: 0 0 12px 0; }
         .fer-letter-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(138, 109, 81, 0.6); }
-        
+
         /* ESTILOS DEL LIENZO */
         .canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .canvas-toolbar { display: flex; flex-direction: column; gap: 10px; width: 100%; background: rgba(230, 222, 203, 0.35); padding: 12px; border-radius: 12px; border: 1px solid rgba(30, 45, 90, 0.1); }
@@ -432,7 +432,7 @@
             }
         }
 
-        // MOTOR VECTORIAL BLINDADO CONTRA ERRORES DE BÚCLE
+        // MOTOR VECTORIAL DE ROSA: PÉTALOS REUTILIZABLES ROTADOS (SIN BULLSEYE)
         let roseCanvas, roseCtx;
         let animationFrameId;
         let growthProgress = 0.0;
@@ -445,43 +445,42 @@
             renderRoseLoop();
         }
 
-        function drawBezierPetal(ctx, fillGrad, strokeColor, points) {
-            ctx.fillStyle = fillGrad;
+        // Dibuja UN pétalo en espacio local: base ancha (evita huecos en el centro), punta en (0,-length)
+        function drawPetalShape(ctx, length, width, colorInner, colorOuter, strokeColor) {
+            const grad = ctx.createLinearGradient(0, 0, 0, -length);
+            grad.addColorStop(0, colorInner);
+            grad.addColorStop(1, colorOuter);
+            ctx.fillStyle = grad;
             ctx.strokeStyle = strokeColor;
             ctx.lineWidth = 4.5;
+            const hb = width * 0.32; // media base: la base no converge en un punto
             ctx.beginPath();
-            ctx.moveTo(points[0][0], points[0][1]);
-            
-            let i = 1;
-            while (i < points.length) {
-                // Función de seguridad: Si faltan puntos para completar la curva cúbica,
-                // intenta usar una cuadrática, o simplemente cierra con una línea.
-                if (i + 2 < points.length) {
-                    ctx.bezierCurveTo(points[i][0], points[i][1], points[i+1][0], points[i+1][1], points[i+2][0], points[i+2][1]);
-                    i += 3;
-                } else if (i + 1 < points.length) {
-                    ctx.quadraticCurveTo(points[i][0], points[i][1], points[i+1][0], points[i+1][1]);
-                    i += 2;
-                } else {
-                    ctx.lineTo(points[i][0], points[i][1]);
-                    i += 1;
-                }
-            }
+            ctx.moveTo(hb, 0);
+            ctx.bezierCurveTo(width * 0.62, -length * 0.14, width * 0.56, -length * 0.6, 0, -length);
+            ctx.bezierCurveTo(-width * 0.56, -length * 0.6, -width * 0.62, -length * 0.14, -hb, 0);
+            ctx.bezierCurveTo(-hb * 0.5, hb * 0.6, hb * 0.5, hb * 0.6, hb, 0);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
         }
 
+        // Coloca un pétalo en (cx, cy) rotado angleDeg grados
+        function drawPetalAt(ctx, cx, cy, angleDeg, length, width, colorInner, colorOuter, strokeColor) {
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angleDeg * Math.PI / 180);
+            drawPetalShape(ctx, length, width, colorInner, colorOuter, strokeColor);
+            ctx.restore();
+        }
+
         function renderRoseLoop() {
             roseCtx.clearRect(0, 0, roseCanvas.width, roseCanvas.height);
-            
+
             if (growthProgress < 1.0) {
-                growthProgress += 0.012; // Crecimiento constante
+                growthProgress += 0.012;
             }
 
             roseCtx.save();
-            
-            // Animación de escala desde el pivote central (500, 500)
             roseCtx.translate(500, 500);
             roseCtx.scale(growthProgress, growthProgress);
             roseCtx.translate(-500, -500);
@@ -490,7 +489,7 @@
             roseCtx.strokeStyle = "#84cc16";
             roseCtx.lineWidth = 6.5;
             roseCtx.lineCap = "round";
-            
+
             roseCtx.beginPath();
             roseCtx.moveTo(500, 500);
             roseCtx.bezierCurveTo(700, 300, 875, 375, 800, 200);
@@ -524,24 +523,24 @@
             roseCtx.bezierCurveTo(650, 700, 600, 650, 575, 575);
             roseCtx.fill(); roseCtx.stroke();
 
-            // 3. CAPAS DE PÉTALOS VECTORIALES
+            // 3. ROSA: PÉTALOS DISTRIBUIDOS EN ANILLOS ROTADOS ALREDEDOR DEL CENTRO
             const strokeRosa = "#ffcbd7";
+            const anguloBase = -90; // un pétalo apunta hacia arriba
 
-            let gradExt = roseCtx.createLinearGradient(250, 325, 750, 750);
-            gradExt.addColorStop(0, "#db2777"); gradExt.addColorStop(1, "#9d174d");
-            drawBezierPetal(roseCtx, gradExt, strokeRosa, [[350,625],[225,525],[200,350],[400,300],[525,250],[775,300],[775,500],[675,625],[550,725],[400,700],[350,625]]);
+            // Anillo externo: 5 pétalos grandes
+            for (let k = 0; k < 5; k++) {
+                drawPetalAt(roseCtx, 500, 500, anguloBase + k * 72, 260, 250, "#f472b6", "#9d174d", strokeRosa);
+            }
 
-            let gradMed = roseCtx.createLinearGradient(325, 375, 675, 675);
-            gradMed.addColorStop(0, "#f43f5e"); gradMed.addColorStop(1, "#be123c");
-            drawBezierPetal(roseCtx, gradMed, strokeRosa, [[400,375],[500,250],[675,350],[700,525],[625,650],[425,625],[325,525],[350,425],[400,375]]);
+            // Anillo medio: 5 pétalos intercalados, más pequeños
+            for (let k = 0; k < 5; k++) {
+                drawPetalAt(roseCtx, 500, 500, anguloBase + 36 + k * 72, 185, 185, "#fb7185", "#be123c", strokeRosa);
+            }
 
-            let gradInt = roseCtx.createLinearGradient(400, 400, 600, 600);
-            gradInt.addColorStop(0, "#f43f5e"); gradInt.addColorStop(1, "#9f1239");
-            drawBezierPetal(roseCtx, gradInt, strokeRosa, [[425,450],[450,350],[600,375],[625,500],[575,600],[450,575],[400,500],[425,450]]);
-
-            let gradCentro = roseCtx.createLinearGradient(450, 425, 550, 525);
-            gradCentro.addColorStop(0, "#fda4af"); gradCentro.addColorStop(1, "#e11d48");
-            drawBezierPetal(roseCtx, gradCentro, strokeRosa, [[475,487],[512,437],[562,450],[562,512],[537,550],[487,537],[475,500],[475,487]]);
+            // Capullo interno: 3 pétalos pequeños enrollados
+            for (let k = 0; k < 3; k++) {
+                drawPetalAt(roseCtx, 500, 500, anguloBase + 20 + k * 120, 95, 95, "#fda4af", "#e11d48", strokeRosa);
+            }
 
             roseCtx.restore();
             animationFrameId = requestAnimationFrame(renderRoseLoop);
