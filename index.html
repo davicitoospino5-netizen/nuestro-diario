@@ -2,31 +2,40 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Nuestro Diario</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e2d5a">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; background-color: #f4efe6; color: #1e2d5a; font-family: 'Georgia', serif; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
-        .notebook-lines { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(#e6decb 1px, transparent 1px); background-size: 100% 28px; pointer-events: none; z-index: 1; opacity: 0.4; }
-        .menu-btn { position: fixed; top: 24px; right: 24px; width: 44px; height: 54px; z-index: 100; cursor: pointer; background: none; border: none; padding: 0; outline: none; display: flex; flex-direction: column; align-items: center; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; background-color: #f4efe6; color: #1e2d5a; font-family: 'Georgia', serif; overflow-y: auto !important; -webkit-overflow-scrolling: touch; transition: background-color 0.5s ease; }
+        
+        .notebook-lines { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(#e6decb 1px, transparent 1px); background-size: 100% 28px; pointer-events: none; z-index: 1; opacity: 0.4; transition: opacity 0.5s ease; }
+        
+        /* BOTÓN DE MENÚ ADAPTABLE */
+        .menu-btn { position: fixed; top: 24px; right: 24px; width: 48px; height: 54px; z-index: 100; cursor: pointer; background: none; border: none; padding: 0; outline: none; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .menu-btn.active { transform: translateY(6px) rotate(25px) scale(0.95); }
+        .menu-btn.girasol-theme { background: rgba(255, 210, 63, 0.15); box-shadow: 0 0 15px rgba(255, 210, 63, 0.4); border: 1px solid rgba(255, 210, 63, 0.3); }
+
         .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; background-color: #f4efe6; box-shadow: -5px 0 25px rgba(30, 45, 90, 0.08); border-left: 1px solid rgba(30, 45, 90, 0.15); z-index: 90; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 90px 24px 40px 24px; display: flex; flex-direction: column; }
         .sidebar.open { right: 0; }
         .sidebar-title { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(30, 45, 90, 0.5); margin-bottom: 20px; border-bottom: 1px solid rgba(30, 45, 90, 0.1); padding-bottom: 8px; margin-top: 15px; }
         .menu-options { list-style: none; padding: 0; margin: 0; }
         .menu-item { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 0; color: rgba(30, 45, 90, 0.7); cursor: pointer; transition: all 0.2s ease; border-bottom: 1px solid rgba(30, 45, 90, 0.04); }
         .menu-item:hover, .menu-item.active { color: #1e2d5a; font-weight: 600; padding-left: 6px; }
+        
         .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(30, 45, 90, 0.05); z-index: 80; opacity: 0; visibility: hidden; transition: all 0.4s ease; }
         .overlay.show { opacity: 1; visibility: visible; }
         .app-container { width: 100%; max-width: 480px; margin: 0 auto; padding: 60px 24px; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+        
         .view-section { display: none; width: 100%; }
         .view-section.active-view { display: block; }
+        
         header { text-align: center; margin-bottom: 40px; width: 100%; }
         .logo-container { width: 70px; height: 70px; margin: 0 auto 12px auto; }
         .app-title { font-size: 0.8rem; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; color: #1e2d5a; margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; opacity: 0.8; }
         .section-heading { font-size: 1.4rem; font-weight: 600; margin: 0 0 25px 0; text-align: left; border-bottom: 1px dashed rgba(30, 45, 90, 0.2); padding-bottom: 10px; }
+        
         .timeline { position: relative; width: 100%; }
         .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 1px; background-color: rgba(30, 45, 90, 0.25); }
         .poem-card { position: relative; padding-left: 50px; margin-bottom: 45px; }
@@ -34,10 +43,12 @@
         .poem-date { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(30, 45, 90, 0.6); margin-bottom: 6px; }
         .poem-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 12px 0; }
         .poem-text { font-size: 1.05rem; line-height: 1.8; white-space: pre-line; margin: 0; font-style: italic; }
+        
         .widget-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; }
         .widget-card { background-color: rgba(230, 222, 203, 0.25); border: 1px solid rgba(30, 45, 90, 0.15); border-radius: 12px; padding: 20px; text-align: center; }
         .widget-card h3 { margin: 0 0 10px 0; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(30, 45, 90, 0.6); }
         .counter-number { font-size: 2.2rem; font-weight: 600; margin: 5px 0; }
+        
         #view-notas .text-box { background-color: rgba(230, 222, 203, 0.3); border: 1px dashed rgba(138, 109, 81, 0.4); color: #5c4a37; }
         #view-notas .text-box:focus { border-color: #8a6d51; background-color: rgba(230, 222, 203, 0.5); }
         .note-input-area { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
@@ -97,25 +108,42 @@
         /* ESTILOS DE LA PESTAÑA DE ANIVERSARIO */
         .anniversary-card { background: #fff5f5; border: 1px solid rgba(244, 63, 94, 0.2); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(244, 63, 94, 0.05); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; color: #1e2d5a; }
         .anniversary-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #e11d48; font-weight: bold; margin: 0; }
-        
-        /* ALTA RESOLUCIÓN: SINCRONIZACIÓN DE HTML Y CSS */
         #rose-canvas { background: #fff5f5; border-radius: 16px; width: 100%; max-width: 380px; aspect-ratio: 1; display: block; border: 1px solid rgba(244, 63, 94, 0.15); }
 
-        footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; }
+        /* ESTILOS DEL APARTADO GIRASOLES NOCTURNOS (INTEGRADO) */
+        .girasol-card { background: radial-gradient(ellipse at 50% 0%, #0d1230 0%, #05060f 100%); border: 1px solid rgba(255, 210, 63, 0.2); padding: 25px 15px; border-radius: 24px; box-shadow: 0 15px 35px rgba(5, 6, 15, 0.5); text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; color: #f4e9c9; position: relative; overflow: hidden; }
+        .girasol-title { font-family: 'Georgia', serif; font-size: 1.6rem; color: #ffd23f; font-weight: bold; margin: 0; text-shadow: 0 0 12px rgba(255,210,63,0.4); }
+        .girasol-sky { position: relative; width: 100%; max-width: 400px; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; background: linear-gradient(to bottom, #05060f 0%, #0d1230 50%, #1a2454 100%); border: 1px solid rgba(255,210,63,0.15); }
+        .girasol-sky .stars { position: absolute; inset: 0; pointer-events: none; }
+        .girasol-sky .stars span { position: absolute; width: 2px; height: 2px; background: #ffffff; border-radius: 50%; opacity: .7; animation: twinkle 3s ease-in-out infinite; }
+        @keyframes twinkle { 0%,100%{opacity:.15;} 50%{opacity:.9;} }
+        .shooting { position: absolute; width: 120px; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0)); border-radius: 2px; transform: rotate(-35deg); opacity: 0; animation: shoot 5.5s linear infinite; pointer-events: none; }
+        @keyframes shoot { 0%{ transform:translate(0,0) rotate(-35deg); opacity:0; } 3%{ opacity:1; } 18%{ transform:translate(-420px,300px) rotate(-35deg); opacity:0; } 100%{ opacity:0; } }
+        .shooting.s1{top:8%; left:85%; animation-delay:0s;}
+        .shooting.s2{top:18%; left:60%; animation-delay:1.8s; width:90px;}
+        .shooting.s3{top:2%; left:100%; animation-delay:3.4s; width:140px;}
+        .shooting.s4{top:30%; left:40%; animation-delay:5s; width:80px;}
+        
+        svg.bouquet { width: 100%; height: 100%; overflow: visible; animation: rise 1.4s cubic-bezier(.19,1,.22,1) both, sway 6s ease-in-out 1.4s infinite; transform-origin: 50% 100%; }
+        @keyframes rise { from{ transform:translateY(40px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+        @keyframes sway { 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(0.8deg); } }
+        .flower-glow { filter: drop-shadow(0 0 18px rgba(255,210,63,0.55)) drop-shadow(0 0 40px rgba(255,180,30,0.25)); }
+
+        footer { margin-top: 50px; text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(30, 45, 90, 0.4); width: 100%; transition: color 0.5s ease; }
     </style>
 </head>
 <body>
 
-    <div class="notebook-lines"></div>
+    <div class="notebook-lines" id="bg-lines"></div>
     <div class="overlay" id="menu-overlay"></div>
 
     <button class="menu-btn" id="menu-toggle" aria-label="Abrir menú">
-        <svg viewBox="0 0 40 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="6" r="1" fill="#1e2d5a" opacity="0.3"/>
-            <circle cx="21" cy="11" r="1.2" fill="#1e2d5a" opacity="0.45"/>
-            <circle cx="25" cy="17" r="1.5" fill="#1e2d5a" opacity="0.6"/>
-            <path d="M 25,18 C 22,24 14,26 12,32 C 10,38 13,44 20,44 C 28,44 32,38 30,30 C 29,24 27,20 25,18 Z" stroke="#1e2d5a" stroke-width="1.2" fill="none"/>
-            <path d="M 23,24 C 20,29 18,34 20,41" stroke="#1e2d5a" stroke-width="0.8" opacity="0.4"/>
+        <svg id="menu-icon-svg" viewBox="0 0 40 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="6" r="1" fill="#1e2d5a" opacity="0.3" class="menu-svg-part"/>
+            <circle cx="21" cy="11" r="1.2" fill="#1e2d5a" opacity="0.45" class="menu-svg-part"/>
+            <circle cx="25" cy="17" r="1.5" fill="#1e2d5a" opacity="0.6" class="menu-svg-part"/>
+            <path d="M 25,18 C 22,24 14,26 12,32 C 10,38 13,44 20,44 C 28,44 32,38 30,30 C 29,24 27,20 25,18 Z" stroke="#1e2d5a" stroke-width="1.2" fill="none" class="menu-svg-part"/>
+            <path d="M 23,24 C 20,29 18,34 20,41" stroke="#1e2d5a" stroke-width="0.8" opacity="0.4" class="menu-svg-part"/>
         </svg>
     </button>
 
@@ -128,6 +156,7 @@
             <li class="menu-item" data-view="view-dibujos">Lienzo e Ilustración</li>
             <li class="menu-item" data-view="view-notas">El Rincón de Fer 🍂</li>
             <li class="menu-item" data-view="view-aniversario" style="color: #e11d48; font-weight: 600;">Feliz Aniversario Amor 🌹</li>
+            <li class="menu-item" data-view="view-girasoles" style="color: #ffd23f; font-weight: 600; text-shadow: 0 0 8px rgba(255,210,63,0.3);">Girasoles Nocturnos 🌻</li>
         </ul>
         
         <div class="sidebar-title" id="filter-title">Filtrar Poemas</div>
@@ -141,10 +170,10 @@
         <header>
             <div class="logo-container">
                 <svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50,85 C50,70 48,55 46,42 C44,30 48,22 55,18 C62,15 68,18 64,26 C60,32 50,34 43,30 C36,26 38,16 48,14 C58,12 65,22 60,33 C54,42 42,44 36,36 C32,30 35,22 42,21 C48,20 52,25 49,30 C46,34 40,33 42,27" stroke="#1e2d5a" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M50,85 C50,70 48,55 46,42 C44,30 48,22 55,18 C62,15 68,18 64,26 C60,32 50,34 43,30 C36,26 38,16 48,14 C58,12 65,22 60,33 C54,42 42,44 36,36 C32,30 35,22 42,21 C48,20 52,25 49,30 C46,34 40,33 42,27" stroke="#1e2d5a" stroke-width="1.5" stroke-linecap="round" id="logo-path"/>
                 </svg>
             </div>
-            <h1 class="app-title">Nuestro Diario</h1>
+            <h1 class="app-title" id="app-title-text">Nuestro Diario</h1>
         </header>
 
         <section id="view-poemas" class="view-section active-view">
@@ -316,11 +345,97 @@
                 <p style="font-style: italic; font-size: 0.95rem; opacity: 0.8; margin: 0; line-height: 1.6;">
                     "Cada curva y trazo florece a tu lado de forma perfecta, creando la silueta de nuestra propia historia."
                 </p>
-                <!-- ASIGNACIÓN EXPLÍCITA DE ALTA RESOLUCIÓN INTERNA -->
                 <canvas id="rose-canvas" width="1000" height="1000"></canvas>
                 <button id="restart-lapse-btn" class="btn-premium" style="background-color: #e11d48; max-width: 260px;">
                     ✨ Reanimar Trazos
                 </button>
+            </div>
+        </section>
+
+        <!-- NUEVO APARTADO: GIRASOLES BAJO LA NOCHE INTEGRADO -->
+        <section id="view-girasoles" class="view-section">
+            <div class="girasol-card">
+                <h2 class="girasol-title">Girasoles Bajo La Noche 🌻</h2>
+                <p style="font-style: italic; font-size: 0.9rem; opacity: 0.85; margin: 0; line-height: 1.5; color: #f4e9c9;">
+                    "Como los girasoles que buscan la luz, incluso en la noche más estrellada, mi corazón siempre encuentra el camino hacia ti."
+                </p>
+
+                <div class="girasol-sky">
+                    <div class="stars" id="girasol-stars"></div>
+                    <div class="shooting s1"></div>
+                    <div class="shooting s2"></div>
+                    <div class="shooting s3"></div>
+                    <div class="shooting s4"></div>
+
+                    <svg class="bouquet flower-glow" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="petalGrad" cx="50%" cy="40%" r="65%">
+                                <stop offset="0%" stop-color="#fff4c2"/>
+                                <stop offset="55%" stop-color="#ffd23f"/>
+                                <stop offset="100%" stop-color="#f4a400"/>
+                            </radialGradient>
+                            <radialGradient id="centerGrad" cx="45%" cy="40%" r="65%">
+                                <stop offset="0%" stop-color="#8a5a20"/>
+                                <stop offset="60%" stop-color="#5a3414"/>
+                                <stop offset="100%" stop-color="#2e1c0c"/>
+                            </radialGradient>
+                            <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4f9a48"/>
+                                <stop offset="100%" stop-color="#2c5a29"/>
+                            </linearGradient>
+                            <linearGradient id="stemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#4f9a48"/>
+                                <stop offset="100%" stop-color="#2c5a29"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- TALLOS -->
+                        <g stroke="url(#stemGrad)" stroke-width="6" fill="none" stroke-linecap="round">
+                            <path d="M200 500 C198 420, 175 360, 155 300"/>
+                            <path d="M200 500 C202 410, 210 340, 205 260"/>
+                            <path d="M200 500 C205 430, 235 370, 255 305"/>
+                            <path d="M200 500 C190 440, 150 400, 110 345"/>
+                            <path d="M200 500 C210 445, 255 405, 295 350"/>
+                        </g>
+
+                        <!-- HOJAS INFERIORES -->
+                        <g fill="url(#leafGrad)">
+                            <path d="M170 470 C130 460, 95 480, 80 445 C120 440, 150 445, 170 470 Z"/>
+                            <path d="M170 490 C140 490, 115 505, 105 480 C135 475, 155 478, 170 490 Z"/>
+                            <path d="M230 470 C270 460, 305 480, 320 445 C280 440, 250 445, 230 470 Z"/>
+                            <path d="M225 495 C255 500, 275 515, 290 495 C260 488, 240 490, 225 495 Z"/>
+                        </g>
+
+                        <!-- HOJAS LATERALES -->
+                        <g fill="url(#leafGrad)">
+                            <path d="M160 360 C130 355, 115 375, 130 390 C145 380, 155 370, 160 360 Z"/>
+                            <path d="M245 340 C275 333, 292 352, 278 368 C263 358, 252 350, 245 340 Z"/>
+                            <path d="M140 400 C112 400, 100 420, 118 432 C130 420, 137 410, 140 400 Z"/>
+                        </g>
+
+                        <!-- PLANTILLA GIRASOL REUTILIZABLE -->
+                        <g id="flowerGroup">
+                            <g id="girasol-petals"></g>
+                            <circle cx="0" cy="0" r="22" fill="url(#centerGrad)"/>
+                            <g stroke="#1c1006" stroke-width="1" opacity="0.5">
+                                <circle cx="0" cy="0" r="16"/>
+                                <circle cx="0" cy="0" r="10"/>
+                                <circle cx="0" cy="0" r="4"/>
+                            </g>
+                        </g>
+
+                        <!-- FLORES DISPUESTAS -->
+                        <use href="#flowerGroup" transform="translate(155,110) scale(0.85)"/>
+                        <use href="#flowerGroup" transform="translate(255,95) scale(1.05)"/>
+                        <use href="#flowerGroup" transform="translate(205,190) scale(1.15)"/>
+                        <use href="#flowerGroup" transform="translate(115,255) scale(0.9)"/>
+                        <use href="#flowerGroup" transform="translate(290,255) scale(0.9)"/>
+                    </svg>
+                </div>
+                
+                <div style="font-family: 'Georgia', serif; font-size: 0.9rem; letter-spacing: 2px; color: #ffd23f; margin-top: 5px;">
+                    PARA TI 🌻
+                </div>
             </div>
         </section>
 
@@ -445,7 +560,6 @@
             renderRoseLoop();
         }
 
-        // Dibuja UN pétalo en espacio local: base ancha (evita huecos en el centro), punta en (0,-length)
         function drawPetalShape(ctx, length, width, colorInner, colorOuter, strokeColor) {
             const grad = ctx.createLinearGradient(0, 0, 0, -length);
             grad.addColorStop(0, colorInner);
@@ -453,7 +567,7 @@
             ctx.fillStyle = grad;
             ctx.strokeStyle = strokeColor;
             ctx.lineWidth = 4.5;
-            const hb = width * 0.32; // media base: la base no converge en un punto
+            const hb = width * 0.32;
             ctx.beginPath();
             ctx.moveTo(hb, 0);
             ctx.bezierCurveTo(width * 0.62, -length * 0.14, width * 0.56, -length * 0.6, 0, -length);
@@ -464,7 +578,6 @@
             ctx.stroke();
         }
 
-        // Coloca un pétalo en (cx, cy) rotado angleDeg grados
         function drawPetalAt(ctx, cx, cy, angleDeg, length, width, colorInner, colorOuter, strokeColor) {
             ctx.save();
             ctx.translate(cx, cy);
@@ -523,27 +636,62 @@
             roseCtx.bezierCurveTo(650, 700, 600, 650, 575, 575);
             roseCtx.fill(); roseCtx.stroke();
 
-            // 3. ROSA: PÉTALOS DISTRIBUIDOS EN ANILLOS ROTADOS ALREDEDOR DEL CENTRO
+            // 3. ROSA
             const strokeRosa = "#ffcbd7";
-            const anguloBase = -90; // un pétalo apunta hacia arriba
+            const anguloBase = -90;
 
-            // Anillo externo: 5 pétalos grandes
             for (let k = 0; k < 5; k++) {
                 drawPetalAt(roseCtx, 500, 500, anguloBase + k * 72, 260, 250, "#f472b6", "#9d174d", strokeRosa);
             }
-
-            // Anillo medio: 5 pétalos intercalados, más pequeños
             for (let k = 0; k < 5; k++) {
                 drawPetalAt(roseCtx, 500, 500, anguloBase + 36 + k * 72, 185, 185, "#fb7185", "#be123c", strokeRosa);
             }
-
-            // Capullo interno: 3 pétalos pequeños enrollados
             for (let k = 0; k < 3; k++) {
                 drawPetalAt(roseCtx, 500, 500, anguloBase + 20 + k * 120, 95, 95, "#fda4af", "#e11d48", strokeRosa);
             }
 
             roseCtx.restore();
             animationFrameId = requestAnimationFrame(renderRoseLoop);
+        }
+
+        // CONSTRUCCIÓN DE GIRASOLES
+        function initGirasolEngine() {
+            const starsContainer = document.getElementById('girasol-stars');
+            if(starsContainer && starsContainer.children.length === 0) {
+                for(let i = 0; i < 75; i++) {
+                    const s = document.createElement('span');
+                    s.style.top = Math.random() * 100 + '%';
+                    s.style.left = Math.random() * 100 + '%';
+                    const size = Math.random() * 1.5 + 1;
+                    s.style.width = size + 'px';
+                    s.style.height = size + 'px';
+                    s.style.animationDelay = (Math.random() * 3) + 's';
+                    s.style.animationDuration = (2 + Math.random() * 3) + 's';
+                    starsContainer.appendChild(s);
+                }
+            }
+
+            const petalsContainer = document.getElementById('girasol-petals');
+            if(petalsContainer && petalsContainer.innerHTML === '') {
+                const numPetals = 11;
+                const outerR = 95, innerR = 26, petalWidth = 32;
+                let petalMarkup = '';
+                for(let i = 0; i < numPetals; i++) {
+                    const angle = (i / numPetals) * Math.PI * 2;
+                    const tipX = Math.cos(angle) * outerR;
+                    const tipY = Math.sin(angle) * outerR;
+                    const baseX1 = Math.cos(angle - 0.28) * innerR;
+                    const baseY1 = Math.sin(angle - 0.28) * innerR;
+                    const baseX2 = Math.cos(angle + 0.28) * innerR;
+                    const baseY2 = Math.sin(angle + 0.28) * innerR;
+                    const ctrlX1 = Math.cos(angle - 0.15) * (outerR * 0.6);
+                    const ctrlY1 = Math.sin(angle - 0.15) * (outerR * 0.6);
+                    const ctrlX2 = Math.cos(angle + 0.15) * (outerR * 0.6);
+                    const ctrlY2 = Math.sin(angle + 0.15) * (outerR * 0.6);
+                    petalMarkup += `<path d="M ${baseX1} ${baseY1} Q ${ctrlX1} ${ctrlY1} ${tipX} ${tipY} Q ${ctrlX2} ${ctrlY2} ${baseX2} ${baseY2} Z" fill="url(#petalGrad)" stroke="#e0940a" stroke-width="0.6"/>`;
+                }
+                petalsContainer.innerHTML = petalMarkup;
+            }
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -576,6 +724,32 @@
         
                     const activeSection = document.getElementById(targetView);
                     if (activeSection) activeSection.classList.add("active-view");
+
+                    // CAMBIO DE TEMA DINÁMICO DE LA APLICACIÓN SEGÚN EL APARTADO
+                    const menuSvgParts = document.querySelectorAll(".menu-svg-part");
+                    const logoPath = document.getElementById("logo-path");
+                    const appTitleText = document.getElementById("app-title-text");
+                    const appFooter = document.getElementById("app-footer");
+                    const bgLines = document.getElementById("bg-lines");
+
+                    if (targetView === "view-girasoles") {
+                        document.body.style.backgroundColor = "#05060f";
+                        menuToggle.classList.add("girasol-theme");
+                        menuSvgParts.forEach(p => { if(p.getAttribute('fill')) p.setAttribute('fill', '#ffd23f'); if(p.getAttribute('stroke')) p.setAttribute('stroke', '#ffd23f'); });
+                        logoPath.setAttribute('stroke', '#ffd23f');
+                        appTitleText.style.color = '#ffd23f';
+                        appFooter.style.color = 'rgba(255, 210, 63, 0.4)';
+                        bgLines.style.opacity = '0.05';
+                        setTimeout(initGirasolEngine, 100);
+                    } else {
+                        document.body.style.backgroundColor = "#f4efe6";
+                        menuToggle.classList.remove("girasol-theme");
+                        menuSvgParts.forEach(p => { if(p.getAttribute('fill')) p.setAttribute('fill', '#1e2d5a'); if(p.getAttribute('stroke')) p.setAttribute('stroke', '#1e2d5a'); });
+                        logoPath.setAttribute('stroke', '#1e2d5a');
+                        appTitleText.style.color = '#1e2d5a';
+                        appFooter.style.color = 'rgba(30, 45, 90, 0.4)';
+                        bgLines.style.opacity = '0.4';
+                    }
 
                     if (targetView === "view-aniversario") {
                         setTimeout(initRoseEngine, 100);
